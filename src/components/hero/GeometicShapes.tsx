@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 const GeometricShapes: FC = () => {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none ">
       <motion.div
         className="absolute top-20 left-10 w-20 h-20 border border-cyan-400/20 rounded-full"
         animate={{

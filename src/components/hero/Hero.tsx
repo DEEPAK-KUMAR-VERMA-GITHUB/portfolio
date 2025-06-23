@@ -128,7 +128,7 @@ const Hero = () => {
                   className="text-xl md:text-3xl mb-8 font-medium flex items-center gap-1"
                 >
                   <span className="text-white/80">{subtitle}</span>
-                  {i % 2 === 0 && (
+                  {i !== 3 && (
                     <motion.span
                       className="text-cyan-400"
                       animate={{ opacity: [1, 0.3, 1] }}

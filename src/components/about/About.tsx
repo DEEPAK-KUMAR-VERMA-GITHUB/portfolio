@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 
 export default function About() {
-  const [boxHeight, setBoxHeight] = useState<number>(0);
+  const [boxHeight, setBoxHeight] = useState<number>(500);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
 
@@ -32,9 +32,9 @@ export default function About() {
 
   return (
     <section id="about" className="py-20 bg-black/40 backdrop-blur-sm relative overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-30">
+      <div className="absolute inset-0 opacity-30 z-200 ">
         <motion.div
-          className="absolute top-1/4 left-1/4 w-48 h-48 bg-cyan-500/20 rounded-full filter blur-xl"
+          className="z-200 absolute top-1/4 left-1/4 w-48 h-48 bg-cyan-500/20 rounded-full filter blur-xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.6, 0.3],
@@ -42,7 +42,7 @@ export default function About() {
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute top-1/2 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full filter blur-xl"
+          className="z-200 absolute top-1/2 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full filter blur-xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.6, 0.3, 0.6],
@@ -50,7 +50,7 @@ export default function About() {
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
         />
         <motion.div
-          className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-pink-500/20 rounded-full filter blur-xl"
+          className="z-200 absolute bottom-1/4 left-1/3 w-56 h-56 bg-pink-500/20 rounded-full filter blur-xl"
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.4, 0.7, 0.4],
@@ -89,14 +89,14 @@ export default function About() {
           </motion.p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center ">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="cyan">
-              <div className="p-8 flex flex-col justify-evenly" ref={leftRef} style={{ height: boxHeight }}>
+              <div className="p-8 flex flex-col justify-evenly " ref={leftRef} style={{ minHeight: boxHeight }}>
                 <h3 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white flex items-center gap-3">
                   <motion.div
                     animate={{ rotate: [0, 360] }}
@@ -149,7 +149,7 @@ export default function About() {
             viewport={{ once: true }}
           >
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="purple">
-              <div className="p-8 flex flex-col justify-evenly" ref={rightRef} style={{ height: boxHeight }}>
+              <div className="p-8 flex flex-col justify-evenly " ref={rightRef} style={{ minHeight: boxHeight }}>
                 <h3 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-white flex items-center gap-3">
                   <motion.div
                     animate={{
