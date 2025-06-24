@@ -18,16 +18,14 @@ const Hero = () => {
   const border = useMotionTemplate`1px solid ${color}`;
   const boxShadow = useMotionTemplate`0px 4px 24px ${color}`;
 
-
   useEffect(() => {
-    animate(color, COLORS_TOP,{
+    animate(color, COLORS_TOP, {
       ease: 'easeInOut',
       duration: 5,
       repeat: Infinity,
       repeatType: 'mirror',
-    })
+    });
   }, []);
-
 
   return (
     <>
@@ -118,28 +116,31 @@ const Hero = () => {
 
           {/* Animated subtitle */}
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            {['🚀 Full Stack Developer', '🎓 MCA Final Year Student', '💻 Competitive Programmer', '🎮 Tech Enthusiast'].map(
-              (subtitle, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 + i * 0.2, ease: 'easeOut' }}
-                  className="text-xl md:text-3xl mb-8 font-medium flex items-center gap-1"
-                >
-                  <span className="text-white/80">{subtitle}</span>
-                  {i !== 3 && (
-                    <motion.span
-                      className="text-cyan-400"
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      &nbsp;|&nbsp;
-                    </motion.span>
-                  )}
-                </motion.div>
-              )
-            )}
+            {[
+              '🚀 Full Stack Developer',
+              '🎓 MCA Final Year Student',
+              '💻 Competitive Programmer',
+              '🎮 Tech Enthusiast',
+            ].map((subtitle, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 + i * 0.2, ease: 'easeOut' }}
+                className="text-xl md:text-3xl mb-8 font-medium flex items-center gap-1"
+              >
+                <span className="text-white/80">{subtitle}</span>
+                {i !== 3 && (
+                  <motion.span
+                    className="text-cyan-400"
+                    animate={{ opacity: [1, 0.3, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    &nbsp;|&nbsp;
+                  </motion.span>
+                )}
+              </motion.div>
+            ))}
           </div>
 
           {/* Enhanced description */}
@@ -193,7 +194,6 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* Enhanced 3D stars background */}
         <div className="absolute inset-0 z-0">
           <Canvas>
             <Stars radius={50} count={2500} factor={4} fade speed={2} />

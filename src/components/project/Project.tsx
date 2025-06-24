@@ -82,7 +82,7 @@ export default function Project() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 ">
           <AnimatePresence mode="wait">
             {filteredProjects.map((project, index) => (
               <motion.div
@@ -93,16 +93,17 @@ export default function Project() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <NeonBorder
-                  className="h-full flex flex-col overflow-hidden transform transition-all duration-500 group"
+                  className="h-full grid grid-flow-row overflow-hidden transform transition-all duration-500 group"
                   glowColor="cyan"
                 >
-                  <div className="relative overflow-hidden flex-1/2 ">
+                  <div className="relative overflow-hidden   ">
                     <motion.img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-52 object-cover"
+                      className="w-full h-52 object-cover aspect-video "
                       whileHover={{ scale: 1.1 }}
                       transition={{ duration: 0.5 }}
                     />
@@ -110,7 +111,7 @@ export default function Project() {
 
                     {project.featured && (
                       <motion.div
-                        className="absolute top-3 right-3 flex-1/2"
+                        className="absolute top-3 right-3"
                         animate={{
                           boxShadow: [
                             '0 0 0 rgba(255, 215, 0, 0)',
@@ -133,11 +134,13 @@ export default function Project() {
                     )}
                   </div>
 
-                  <div className="p-6 flex-grow flex flex-col">
+                  <div className="p-6 flex flex-col ">
                     <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
-                    <p className="text-white/70 text-sm mb-4 flex-grow">{project.description}</p>
+                    <p className="text-white/70 text-sm mb-4 flex-grow text-justify line-clamp-4 ">
+                      {project.description}
+                    </p>
 
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    <div className="flex flex-wrap gap-2 mb-6 items-center justify-center ">
                       {project.techStack.map((tech, techIndex) => (
                         <motion.div
                           key={tech}

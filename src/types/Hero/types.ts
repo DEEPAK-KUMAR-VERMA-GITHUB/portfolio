@@ -39,4 +39,5 @@ export interface TimelineItem {
   period: string;
   description: string;
   type: 'education' | 'experience' | 'project';
+  icon?: React.ReactNode; // Optional custom icon component
 }

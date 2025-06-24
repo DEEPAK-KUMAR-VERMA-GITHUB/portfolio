@@ -31,10 +31,10 @@ export default function About() {
   }, []);
 
   return (
-    <section id="about" className="py-20 bg-black/40 backdrop-blur-sm relative overflow-hidden">
-      <div className="absolute inset-0 opacity-30 z-200 ">
+    <section id="about" className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-30 ">
         <motion.div
-          className="z-200 absolute top-1/4 left-1/4 w-48 h-48 bg-cyan-500/20 rounded-full filter blur-xl"
+          className="absolute top-1/4 left-1/4 w-48 h-48 bg-cyan-500/20 rounded-full filter blur-xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.6, 0.3],
@@ -42,7 +42,7 @@ export default function About() {
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="z-200 absolute top-1/2 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full filter blur-xl"
+          className="absolute top-1/2 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full filter blur-xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.6, 0.3, 0.6],
@@ -50,7 +50,7 @@ export default function About() {
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
         />
         <motion.div
-          className="z-200 absolute bottom-1/4 left-1/3 w-56 h-56 bg-pink-500/20 rounded-full filter blur-xl"
+          className="absolute bottom-1/4 left-1/3 w-56 h-56 bg-pink-500/20 rounded-full filter blur-xl"
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.4, 0.7, 0.4],
