@@ -1,33 +1,13 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import GeometricShapes from '@/components/hero/GeometicShapes';
 import NeonBorder from '@/components/hero/NeonBorder';
-import { Star } from 'lucide-react';
 import { achievements } from '@/constants/constants';
+import { motion } from 'framer-motion';
+import { Star } from 'lucide-react';
 
 export default function Achievement() {
   return (
     <section id="achievements" className="py-20 relative overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-30">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-48 h-48 bg-yellow-500/20 rounded-full filter blur-xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.7, 0.3],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        />
-        <motion.div
-          className="absolute top-1/2 right-1/4 w-64 h-64 bg-orange-500/20 rounded-full filter blur-xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.6, 0.3, 0.6],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-        />
-        <GeometricShapes />
-      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

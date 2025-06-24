@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import FloatingParticles from '@/components/hero/FloatingParticles';
 import NeonBorder from '@/components/hero/NeonBorder';
 import { Briefcase, Code, Download, GraduationCap } from 'lucide-react';
 import { timeline } from '@/constants/constants';
@@ -9,10 +8,6 @@ import { timeline } from '@/constants/constants';
 export default function Resume() {
   return (
     <section id="resume" className="py-20 relative overflow-hidden bg-black/20">
-      <div className="absolute inset-0 z-0 opacity-20">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZG90cyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSIxIiBmaWxsPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMSkiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZG90cykiLz48L3N2Zz4=')] bg-repeat"></div>
-        <FloatingParticles />
-      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -40,7 +35,7 @@ export default function Resume() {
             <span className="text-purple-400 font-semibold"> professional experience</span>, and key milestones in my
             journey.
           </motion.p>
-          <NeonBorder glowColor="cyan" className='w-fit mx-auto' >
+          <NeonBorder glowColor="cyan" className="w-fit mx-auto">
             <motion.button
               className="px-8 py-3 text-lg font-semibold bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white rounded-lg transition-all duration-300 flex items-center gap-2"
               whileHover={{ scale: 1.05, y: -2 }}
@@ -93,9 +88,7 @@ export default function Resume() {
                 >
                   <div className="w-14 h-14 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center shadow-xl border-2 border-black">
                     {item.icon ? (
-                      <div className="w-7 h-7 text-white flex items-center justify-center">
-                        {item.icon}
-                      </div>
+                      <div className="w-7 h-7 text-white flex items-center justify-center">{item.icon}</div>
                     ) : (
                       <>
                         {item.type === 'education' && <GraduationCap className="w-7 h-7 text-white" />}
@@ -107,10 +100,7 @@ export default function Resume() {
                 </motion.div>
 
                 <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}>
-                  <NeonBorder
-                    className="transform hover:scale-[1.02] transition-all duration-300"
-                    glowColor="purple"
-                  >
+                  <NeonBorder className="transform hover:scale-[1.02] transition-all duration-300" glowColor="purple">
                     <div className="p-6">
                       <div className="pb-3">
                         <div className="flex justify-between items-start flex-wrap gap-2">

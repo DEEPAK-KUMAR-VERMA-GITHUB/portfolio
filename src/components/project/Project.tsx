@@ -1,13 +1,11 @@
 'use client';
 
-import { categories, projects } from '@/constants/constants';
-import FloatingParticles from '@/components/hero/FloatingParticles';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
 import NeonBorder from '@/components/hero/NeonBorder';
 import { Badge } from '@/components/ui/badge';
+import { categories, projects } from '@/constants/constants';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ExternalLink, Github, Star } from 'lucide-react';
-import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Project() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -17,10 +15,6 @@ export default function Project() {
 
   return (
     <section id="projects" className="py-20 relative overflow-hidden bg-black/20">
-      <div className="absolute inset-0 z-0 opacity-20">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZG90cyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48Y2lyY2xlIGN4PSIxMCIgY3k9IjEwIiByPSIxIiBmaWxsPSJyZ2JhKDAsIDI1NSwgMjU1LCAwLjEpIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2RvdHMpIi8+PC9zdmc+')] bg-repeat"></div>
-        <FloatingParticles />
-      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
