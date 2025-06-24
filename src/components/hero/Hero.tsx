@@ -10,7 +10,7 @@ import { FiArrowRight } from 'react-icons/fi';
 import { scrollToSection } from '@/components/navbar/Navbar';
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Hero = () => {
   const color = useMotionValue(COLORS_TOP[0]);
@@ -27,19 +27,32 @@ const Hero = () => {
     });
   }, []);
 
+  // Only render WebGL content in the browser
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
   return (
     <>
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Animate gradiant background */}
+        {/* Animate gradient background */}
         <motion.div className="absolute inset-0" style={{ backgroundImage }} />
-        {/* Floating particles */}
-        <FloatingParticles />
 
-        {/* Geometric shapes */}
-        <GeometricShapes />
+        {/* Only render WebGL content in the browser */}
+        {mounted && (
+          <>
+            {/* Floating particles */}
+            <FloatingParticles />
+            {/* Geometric shapes */}
+            <GeometricShapes />
+          </>
+        )}
 
         {/* Grid overlay */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWRHRj0iJWEyNTUiLz4KICA8L2c+Cjwvc3ZnPgo=')] opacity-20" />
 
         {/* Ambient lighting effects */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[128px] animate-pulse" />
@@ -185,7 +198,7 @@ const Hero = () => {
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white font-semibold rounded-lg border border-purple-400/30 transition-all duration-300 flex items-center gap-2"
+                className="w-full px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white font-semibold rounded-lg border border-purple-400/30 transition-all duration-300 flex items-center gap-2"
               >
                 <Download className="h-5 w-5" />
                 Download Resume

@@ -1,14 +1,22 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Atom, Menu, X } from 'lucide-react';
+import { Atom, Menu, UserIcon, X } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const navbarSections = ['Home', 'About', 'Projects', 'Achievements', 'Resume', 'Contact'];
 
-export const scrollToSection = (section: string) => {
-  const element = document.getElementById(section);
+export const scrollToSection = (sectionId: string) => {
+  const element = document.getElementById(sectionId);
   if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
+    const headerOffset = 80; // Height of your fixed header
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
   }
 };
 
@@ -20,6 +28,7 @@ const Navbar = () => {
     scrollToSection(section);
     setMobileMenuOpen(false);
   };
+  const router = useRouter();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-white/10 shadow-2xl">
@@ -69,6 +78,16 @@ const Navbar = () => {
                 )}
               </motion.button>
             ))}
+
+            {/* icon button to go to admin panel */}
+            <motion.button
+              className="bg-black/40 backdrop-blur-xl rounded-full p-2 flex items-center justify-center text-white hover:text-cyan-400 transition-colors relative z-10"
+              onClick={() => router.push('/admin')}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <UserIcon className="h-5 w-5" />
+            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
