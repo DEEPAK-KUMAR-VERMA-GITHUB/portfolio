@@ -1,4 +1,4 @@
-import { Achievement, Project, Skill, TimelineItem } from '@/types/Hero/types';
+import { Achievement, Project, Skill, TimelineItem } from '@/types/types';
 import { COLORS } from './colors';
 
 export const COLORS_TOP = [COLORS.TEAL, COLORS.BLUE, COLORS.PURPLE, COLORS.PINK];

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { Particles } from "@/types/Hero/types";
+import { Particles } from "@/types/types";
 import { motion } from "framer-motion";
 
 const FloatingParticles = () => {

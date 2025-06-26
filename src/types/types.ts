@@ -8,7 +8,7 @@ export interface Particles {
 }
 
 export interface Project {
-  id: number;
+  id: string;
   title: string;
   description: string;
   image: string;
@@ -17,6 +17,8 @@ export interface Project {
   githubUrl: string;
   liveUrl: string;
   featured: boolean;
+  status: 'draft' | 'published';
+  createdAt: string;
 }
 
 export interface Skill {
@@ -40,4 +42,9 @@ export interface TimelineItem {
   description: string;
   type: 'education' | 'experience' | 'project';
   icon?: React.ReactNode; // Optional custom icon component
+}
+
+export interface Tag {
+  id: string;
+  label: string;
 }
