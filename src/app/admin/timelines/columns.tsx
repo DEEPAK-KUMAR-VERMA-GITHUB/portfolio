@@ -1,16 +1,16 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { Project } from '@/types/types';
-import { Badge } from '@/components/ui/badge';
+import { TimelineItem } from '@/types/types';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, Pencil, Trash2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export const columns = ({
   onEdit,
   onDelete,
 }: {
-  onEdit: (project: Project) => void;
-  onDelete: (project: Project) => void;
-}): ColumnDef<Project, React.ReactNode>[] => [
+  onEdit: (timeline: TimelineItem) => void;
+  onDelete: (timeline: TimelineItem) => void;
+}): ColumnDef<TimelineItem>[] => [
   {
     accessorKey: 'title',
     header: ({ column }) => {
@@ -30,7 +30,7 @@ export const columns = ({
     ),
   },
   {
-    accessorKey: 'status',
+    accessorKey: 'organization',
     header: ({ column }) => {
       return (
         <Button
@@ -38,19 +38,15 @@ export const columns = ({
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="px-0 hover:bg-transparent"
         >
-          Status
+          Organization
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <Badge variant={row.original.status === 'published' ? 'default' : 'outline'}>
-        {row.original.status}
-      </Badge>
-    ),
+    cell: ({ row }) => row.original.organization,
   },
   {
-    accessorKey: 'category',
+    accessorKey: 'type',
     header: ({ column }) => {
       return (
         <Button
@@ -58,17 +54,33 @@ export const columns = ({
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="px-0 hover:bg-transparent"
         >
-          Category
+          Type
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <span className="capitalize">{row.original.category}</span>
-    ),
+    cell: ({ row }) => {
+      const type = row.original.type;
+      const typeMap = {
+        education: { label: 'Education', variant: 'default' as const, color: 'bg-blue-100 text-blue-800' },
+        experience: { label: 'Experience', variant: 'secondary' as const, color: 'bg-purple-100 text-purple-800' },
+        project: { label: 'Project', variant: 'outline' as const, color: 'bg-green-100 text-green-800' },
+      };
+      
+      const { label, color } = typeMap[type] || { label: type, color: 'bg-gray-100 text-gray-800' };
+      
+      return (
+        <Badge className={color}>
+          {label}
+        </Badge>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
-    accessorKey: 'featured',
+    accessorKey: 'period',
     header: ({ column }) => {
       return (
         <Button
@@ -76,40 +88,20 @@ export const columns = ({
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="px-0 hover:bg-transparent"
         >
-          Featured
+          Period
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <Badge variant={row.original.featured ? 'default' : 'outline'}>
-        {row.original.featured ? 'Yes' : 'No'}
-      </Badge>
-    ),
-  },
-  {
-    accessorKey: 'createdAt',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="px-0 hover:bg-transparent"
-        >
-          Created
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+    cell: ({ row }) => row.original.period,
   },
   {
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => (
       <div className="flex items-center justify-end space-x-2">
-        <Button
-          variant="ghost"
+        <Button 
+          variant="ghost" 
           size="icon"
           onClick={() => onEdit(row.original)}
           className="h-8 w-8 text-muted-foreground hover:text-primary"
@@ -117,8 +109,8 @@ export const columns = ({
         >
           <Pencil className="h-4 w-4" />
         </Button>
-        <Button
-          variant="ghost"
+        <Button 
+          variant="ghost" 
           size="icon"
           onClick={() => onDelete(row.original)}
           className="h-8 w-8 text-muted-foreground hover:text-destructive"

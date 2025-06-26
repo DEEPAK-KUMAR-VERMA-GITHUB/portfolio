@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { columns } from '@/app/admin/projects/columns';
 import { Project } from '@/types/types';
 import { Button } from '@/components/ui/button';

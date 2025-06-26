@@ -36,6 +36,7 @@ export interface Achievement {
 }
 
 export interface TimelineItem {
+  id?: string;
   title: string;
   organization: string;
   period: string;

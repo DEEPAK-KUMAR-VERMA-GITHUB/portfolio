@@ -20,8 +20,7 @@ const navItems = [
   { label: 'Projects', href: '/admin/projects', icon: FolderOpen },
   { label: 'About', href: '/admin/about', icon: User },
   { label: 'Skills', href: '/admin/skills', icon: Code },
-  { label: 'Education', href: '/admin/education', icon: GraduationCap },
-  { label: 'Experience', href: '/admin/experience', icon: BriefcaseBusiness },
+  { label: 'Timelines', href: '/admin/timelines', icon: BriefcaseBusiness },
   { label: 'Contact', href: '/admin/contact', icon: MessageSquare },
   { label: 'Footer', href: '/admin/footer', icon: LinkIcon },
 ];
