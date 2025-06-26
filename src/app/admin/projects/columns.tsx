@@ -33,6 +33,7 @@ export const columns = ({
   },
   {
     id: 'actions',
+    header: 'Actions',
     cell: ({ row }) => (
       <div className="flex gap-2">
         <Button size="sm" variant="outline" onClick={() => onEdit(row.original)}>

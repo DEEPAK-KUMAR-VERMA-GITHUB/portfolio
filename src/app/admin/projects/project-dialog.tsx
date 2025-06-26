@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ImageUpload } from '@/app/admin/_components/image-upload';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -181,7 +182,11 @@ export default function ProjectDialog({
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Project description" className="min-h-[100px]" {...field} />
+                      <Textarea
+                        placeholder="Project description"
+                        className="min-h-[100px] max-h-[200px] resize-none overflow-y-auto"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -208,36 +213,40 @@ export default function ProjectDialog({
                   </FormItem>
                 )}
               />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
                 <FormField
                   control={form.control}
                   name="image"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image URL</FormLabel>
+                      <FormLabel>Project Image</FormLabel>
                       <FormControl>
-                        <Input placeholder="https://example.com/image.jpg" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="liveUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Live URL</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://example.com" {...field} />
+                        <ImageUpload
+                          value={field.value as string}
+                          onChange={(file, preview) => {
+                            field.onChange(file || '');
+                            form.setValue('image', preview);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-
+              <FormField
+                control={form.control}
+                name="liveUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Live URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="githubUrl"
