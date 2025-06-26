@@ -9,7 +9,7 @@ export const columns = ({
   onDelete,
 }: {
   onEdit: (project: Project) => void;
-  onDelete: (id: string) => void;
+  onDelete: (project: Project) => void;
 }): ColumnDef<Project, React.ReactNode>[] => [
   {
     accessorKey: 'title',
@@ -38,7 +38,7 @@ export const columns = ({
         <Button size="sm" variant="outline" onClick={() => onEdit(row.original)}>
           <Pencil className="w-4 h-4" />
         </Button>
-        <Button size="sm" variant="destructive" onClick={() => onDelete(row.original.id)}>
+        <Button size="sm" variant="destructive" onClick={() => onDelete(row.original)}>
           <Trash2 className="w-4 h-4" />
         </Button>
       </div>

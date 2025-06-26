@@ -8,6 +8,7 @@ import { Plus } from 'lucide-react';
 import { DataTable } from '@/app/admin/projects/data-table';
 import ProjectDialog from '@/app/admin/projects/project-dialog';
 import { Toaster, toast } from 'react-hot-toast';
+import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
 
 const initialProjects: Project[] = [
   {
@@ -26,9 +27,12 @@ const initialProjects: Project[] = [
 ];
 
 export default function ProjectsPage() {
-  const [open, setOpen] = useState<boolean>(false);
   const [editProject, setEditProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState(initialProjects);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const handleAdd = (newProject: Project) => {
     if (editProject) {
@@ -39,17 +43,41 @@ export default function ProjectsPage() {
       toast.success('Project added successfully');
     }
     setEditProject(null);
-    setOpen(false);
+    setIsDialogOpen(false);
   };
 
   const handleEdit = (project: Project) => {
     setEditProject(project);
-    setOpen(true);
+    setIsDialogOpen(true);
   };
 
-  const handleDelete = (projectId: string) => {
-    setProjects(prev => prev.filter(p => p.id !== projectId));
-    toast.success('Project deleted');
+  const handleCancel = () => {
+    setIsDialogOpen(false);
+    setEditProject(null);
+  };
+
+  const handleAddProject = () => {
+    setIsDialogOpen(true);
+    setEditProject(null);
+  };
+
+  const handleDeleteProject = (project: Project) => {
+    setProjectToDelete(project);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!projectToDelete) return;
+
+    setIsDeleting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setProjects(prev => prev.filter(p => p.id !== projectToDelete.id));
+      setIsDeleteDialogOpen(false);
+      setProjectToDelete(null);
+      setIsDeleting(false);
+      toast.success('Project deleted successfully');
+    }, 500);
   };
 
   return (
@@ -57,14 +85,35 @@ export default function ProjectsPage() {
       <Toaster position="top-center" />
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Projects</h2>
-        <Button onClick={() => setOpen(true)}>
+        <Button onClick={handleAddProject}>
           <Plus className="mr-2 h-4 w-4" /> Add Project
         </Button>
       </div>
 
-      <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} data={projects} searchKey="title" />
+      <DataTable
+        columns={columns({ onEdit: handleEdit, onDelete: handleDeleteProject })}
+        data={projects}
+        searchKey="title"
+        itemsPerPage={10}
+        searchable
+      />
 
-      {open && <ProjectDialog onSave={handleAdd} onCancel={() => setOpen(false)} project={editProject} />}
+      <ProjectDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onSave={handleAdd}
+        onCancel={handleCancel}
+        project={editProject}
+      />
+
+      <DeleteConfirmationDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+        title="Delete Project"
+        description={`Are you sure you want to delete "${projectToDelete?.title}"? This action cannot be undone.`}
+      />
     </div>
   );
 }
