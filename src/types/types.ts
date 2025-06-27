@@ -97,3 +97,23 @@ export interface Tag {
   id: string;
   label: string;
 }
+
+export type ContactStatus = 'new' | 'in-progress' | 'resolved' | 'spam';
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  status: ContactStatus;
+  labels?: string[];
+  metadata?: {
+    ip?: string;
+    userAgent?: string;
+    referrer?: string;
+    [key: string]: any;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
