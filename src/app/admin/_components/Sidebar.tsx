@@ -13,6 +13,8 @@ import {
   MessageSquare,
   Link as LinkIcon,
   LogOut,
+  FileText,
+  ListTodo,
 } from 'lucide-react';
 
 const navItems = [
@@ -20,7 +22,10 @@ const navItems = [
   { label: 'Projects', href: '/admin/projects', icon: FolderOpen },
   { label: 'About', href: '/admin/about', icon: User },
   { label: 'Skills', href: '/admin/skills', icon: Code },
+  { label: 'Achievements', href: '/admin/achievements', icon: GraduationCap },
   { label: 'Timelines', href: '/admin/timelines', icon: BriefcaseBusiness },
+  { label: 'Resume', href: '/admin/resume', icon: FileText },
+  { label: 'Categories', href: '/admin/categories', icon: ListTodo },
   { label: 'Contact', href: '/admin/contact', icon: MessageSquare },
   { label: 'Footer', href: '/admin/footer', icon: LinkIcon },
 ];
