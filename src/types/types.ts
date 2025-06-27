@@ -45,6 +45,54 @@ export interface TimelineItem {
   icon?: React.ReactNode; // Optional custom icon component
 }
 
+export interface Resume {
+  id?: string;
+  title: string;
+  fileUrl: string;
+  fileSize: string;
+  fileType: string;
+  isDefault: boolean;
+  lastUpdated: string;
+  description?: string;
+  version?: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  icon?: string;
+  color?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Technology {
+  id: string;
+  name: string;
+  slug: string;
+  categoryId: string;
+  icon?: string;
+  website?: string;
+  description?: string;
+  featured: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Label {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  color: string;
+  textColor: string;
+  icon?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Tag {
   id: string;
   label: string;
