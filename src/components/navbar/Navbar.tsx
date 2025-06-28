@@ -82,7 +82,7 @@ const Navbar = () => {
             {/* icon button to go to admin panel */}
             <motion.button
               className="bg-black/40 backdrop-blur-xl rounded-full p-2 flex items-center justify-center text-white hover:text-cyan-400 transition-colors relative z-10"
-              onClick={() => router.push('/admin')}
+              onClick={() => router.push('/login')}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >

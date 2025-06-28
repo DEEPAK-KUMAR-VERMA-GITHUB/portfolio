@@ -60,12 +60,6 @@ export const Icons = {
   calendarClock: dynamic(() => import('lucide-react').then(mod => mod.CalendarClock), { ssr: false }),
   calendarSearch: dynamic(() => import('lucide-react').then(mod => mod.CalendarSearch), { ssr: false }),
   calendarHeart: dynamic(() => import('lucide-react').then(mod => mod.CalendarHeart), { ssr: false }),
-  calendarPlus2: dynamic(() => import('lucide-react').then(mod => mod.CalendarPlus2), { ssr: false }),
-  calendarMinus2: dynamic(() => import('lucide-react').then(mod => mod.CalendarMinus2), { ssr: false }),
-  calendarRange2: dynamic(() => import('lucide-react').then(mod => mod.CalendarRange2), { ssr: false }),
-  calendarClock2: dynamic(() => import('lucide-react').then(mod => mod.CalendarClock2), { ssr: false }),
-  calendarSearch2: dynamic(() => import('lucide-react').then(mod => mod.CalendarSearch2), { ssr: false }),
-  calendarHeart2: dynamic(() => import('lucide-react').then(mod => mod.CalendarHeart2), { ssr: false }),
 };
 
 export type IconName = keyof typeof Icons;

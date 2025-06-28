@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from './button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { Input } from './input';
 
 const COLORS = [
   '#3b82f6', // blue-500
@@ -37,30 +38,19 @@ export function ColorPicker({ color, onChange, className }: ColorPickerProps) {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className={cn('h-9 w-9 p-0', className)}
-        >
-          <div 
-            className="h-5 w-5 rounded-full border" 
-            style={{ backgroundColor: selectedColor }}
-          />
+        <Button type="button" variant="outline" size="sm" className={cn('h-9 w-9 p-0', className)}>
+          <div className="h-5 w-5 rounded-full border" style={{ backgroundColor: selectedColor }} />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-52 p-2">
         <div className="grid grid-cols-6 gap-2">
-          {COLORS.map((c) => (
+          {COLORS.map(c => (
             <button
               key={c}
               type="button"
-              className={cn(
-                'h-6 w-6 rounded-full border-2 transition-transform hover:scale-110',
-                {
-                  'ring-2 ring-offset-2 ring-primary': selectedColor === c,
-                }
-              )}
+              className={cn('h-6 w-6 rounded-full border-2 transition-transform hover:scale-110', {
+                'ring-2 ring-offset-2 ring-primary': selectedColor === c,
+              })}
               style={{ backgroundColor: c }}
               onClick={() => {
                 setSelectedColor(c);
@@ -74,7 +64,7 @@ export function ColorPicker({ color, onChange, className }: ColorPickerProps) {
           <Input
             type="color"
             value={selectedColor}
-            onChange={(e) => {
+            onChange={e => {
               const newColor = e.target.value;
               setSelectedColor(newColor);
               onChange(newColor);

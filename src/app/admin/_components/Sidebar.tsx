@@ -30,19 +30,37 @@ const navItems = [
   { label: 'Footer', href: '/admin/footer', icon: LinkIcon },
 ];
 
-export default function Sidebar({ isOpen }: { isOpen: boolean }) {
+interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  image?: string | null;
+}
+
+interface SidebarProps {
+  isOpen: boolean;
+  user?: User | null;
+}
+
+export default function Sidebar({ isOpen, user }: SidebarProps) {
   const pathname = usePathname();
 
   return (
     <aside
       className={cn(
-        'fixed top-0 left-0 z-40 h-screen overflow-hidden w-64 bg-card border-r transition-transform duration-300 ease-in-out',
+        'fixed top-0 left-0 z-40 h-screen overflow-hidden w-64 bg-card border-r transition-transform duration-300 ease-in-out flex flex-col',
         isOpen ? 'translate-x-0' : '-translate-x-full',
         'lg:translate-x-0 lg:static'
       )}
     >
       <div className="p-4 border-b border-border">
         <h2 className="text-xl font-semibold">Admin Panel</h2>
+        {user && (
+          <div className="mt-2 text-sm text-muted-foreground">
+            <p className="font-medium">{user.name || user.email}</p>
+            <p className="text-xs">{user.email}</p>
+          </div>
+        )}
       </div>
 
       <nav className="p-4 space-y-2 flex flex-col h-full">

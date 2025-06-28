@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum ProjectStatus {
+  draft
+  published
+}
+
+enum SkillCategory {
+  frontend
+  backend
+  tools
+  other
+}
+
+enum TimeLineType {
+  education
+  experience
+  project
+  certification
+}
+
+enum ContactStatus {
+  new
+  in_progress
+  resolved
+  spam
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// Models
+
+model User {
+  id                 String        @id @default(uuid()) @db.Uuid
+  name               String?
+  email              String        @unique
+  password           String
+  image              String?
+  bio                String?
+  professionalTitles String?
+  githubUrl          String?
+  linkedInUrl        String?
+  mailLink           String?
+  about              String?
+  journey            String?
+  tags               Tag[]
+  role               UserRole      @default(USER)
+  projects           Project[]
+  achievements       Achievement[]
+  skills             Skill[]
+  timelines          TimeLine[]
+  resumes            Resume[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  Category           Category[]
+  Technology         Technology[]
+  AuditLog           AuditLog[]
+}
+
+model Project {
+  id           String        @id @default(uuid()) @db.Uuid
+  title        String
+  description  String        @db.Text
+  image        String
+  technologies String
+  category     String
+  githubUrl    String
+  liveUrl      String
+  featured     Boolean       @default(false)
+  status       ProjectStatus @default(draft)
+  userId       String        @db.Uuid
+  user         User          @relation(fields: [userId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Skill {
+  id        String        @id @default(uuid()) @db.Uuid
+  name      String
+  category  SkillCategory
+  level     Int           @default(1) @db.SmallInt
+  userId    String        @db.Uuid
+  user      User          @relation(fields: [userId], references: [id])
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model Achievement {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  icon        String
+  issuer      String
+  date        DateTime
+  description String
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TimeLine {
+  id           String       @id @default(uuid()) @db.Uuid
+  title        String
+  organization String
+  period       String
+  description  String       @db.Text
+  type         TimeLineType
+  current      Boolean      @default(false)
+  userId       String       @db.Uuid
+  user         User         @relation(fields: [userId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Resume {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  fileUrl     String
+  fileSize    String
+  fileType    String
+  isDefault   Boolean  @default(false)
+  lastUpdated DateTime @default(now())
+  description String?
+  version     String?
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Category {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String       @unique
+  description String?
+  icon        String
+  User        User?        @relation(fields: [userId], references: [id])
+  userId      String?      @db.Uuid
+  Technology  Technology[]
+}
+
+model Technology {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String   @unique
+  icon        String
+  categoryId  String   @db.Uuid
+  category    Category @relation(fields: [categoryId], references: [id])
+  description String?
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.Uuid
+}
+
+model Tag {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.Uuid
+}
+
+model Label {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String   @unique
+  description String?
+  icon        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  action    String
+  entity    String
+  entityId  String
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  oldData   Json?
+  newData   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}

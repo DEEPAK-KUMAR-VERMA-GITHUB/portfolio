@@ -20,7 +20,7 @@ export const skills: Skill[] = [
 
 export const projects: Project[] = [
   {
-    id: 1,
+    id: '1',
     title: 'E-Commerce Platform',
     description:
       'Full-stack e-commerce solution with React, Node.js, and MongoDB. Features include user authentication, payment integration, and admin dashboard.',
@@ -30,9 +30,11 @@ export const projects: Project[] = [
     githubUrl: 'https://github.com',
     liveUrl: 'https://demo.com',
     featured: true,
+    status: 'published',
+    createdAt: new Date().toISOString(),
   },
   {
-    id: 2,
+    id: '2',
     title: 'Task Management App',
     description: 'Collaborative task management application with real-time updates using Socket.io and React.',
     image: '/api/placeholder/400/250',
@@ -41,9 +43,11 @@ export const projects: Project[] = [
     githubUrl: 'https://github.com',
     liveUrl: 'https://demo.com',
     featured: true,
+    status: 'published',
+    createdAt: new Date().toISOString(),
   },
   {
-    id: 3,
+    id: '3',
     title: 'Weather Dashboard',
     description: 'Beautiful weather dashboard with location-based forecasts and interactive charts.',
     image: '/api/placeholder/400/250',
@@ -52,9 +56,11 @@ export const projects: Project[] = [
     githubUrl: 'https://github.com',
     liveUrl: 'https://demo.com',
     featured: false,
+    status: 'published',
+    createdAt: new Date().toISOString(),
   },
   {
-    id: 4,
+    id: '4',
     title: 'REST API Service',
     description: 'Scalable REST API with authentication, rate limiting, and comprehensive documentation.',
     image: '/api/placeholder/400/250',
@@ -63,6 +69,8 @@ export const projects: Project[] = [
     githubUrl: 'https://github.com',
     liveUrl: 'https://demo.com',
     featured: false,
+    status: 'published',
+    createdAt: new Date().toISOString(),
   },
 ];
 
