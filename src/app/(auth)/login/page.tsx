@@ -1,15 +1,12 @@
-import { Metadata } from 'next';
-import LoginForm from '@/components/auth/login-form';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Sign In',
-  description: 'Sign in to your account',
-};
+import LoginForm from '@/components/auth/login-form';
+import AuthGuard from '@/components/auth/auth-guard';
 
 export default function LoginPage() {
   return (
-    <div className="w-full max-w-md">
+    <AuthGuard>
       <LoginForm />
-    </div>
+    </AuthGuard>
   );
 }

@@ -1,8 +1,7 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Navbar from '@/components/navbar/Navbar';
-import { AuthProvider } from '@/contexts/auth-context';
+import { usePathname } from 'next/navigation';
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,9 +12,9 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
     pathname?.startsWith('/unauthorized');
 
   return (
-    <AuthProvider>
+    <>
       {!isAdmin && <Navbar />}
       {children}
-    </AuthProvider>
+    </>
   );
 }

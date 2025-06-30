@@ -1,8 +1,8 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { User } from '@/app/generated/prisma/client';
+import { useRouter } from 'next/navigation';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export type AuthUser = {
   id: string;
@@ -18,10 +18,11 @@ interface AuthContextType {
   user: AuthUser | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, name?: string) => Promise<void>;
+  register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   error: string | null;
+  isInitialized: boolean;
   clearError: () => void;
 }
 
@@ -32,85 +33,113 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const clearError = () => setError(null);
 
   // Fetch user on mount
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/auth/me');
-        if (res.ok) {
-          const userData = await res.json();
-          setUser(userData);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const userData = await res.json();
+        setUser(userData);
+      } else {
         setUser(null);
-      } finally {
-        setIsLoading(false);
       }
-    };
+      return res.ok;
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      setUser(null);
+      return false;
+    } finally {
+      setIsLoading(false);
+      if (!isInitialized) {
+        setIsInitialized(true);
+      }
+    }
+  }, [isInitialized]);
 
+  useEffect(() => {
     fetchUser();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+  const login = useCallback(
+    async (email: string, password: string) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        console.log(email, password);
 
-      const data = await res.json();
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Login failed');
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Login failed');
+        }
+
+        setUser(data.user);
+        router.push('/admin/dashboard');
+        toast.success('Logged in successfully');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'An error occurred during login';
+        setError(message);
+        throw error;
+      } finally {
+        setIsLoading(false);
       }
+    },
+    [clearError, router]
+  );
 
-      setUser(data.user);
-      router.replace('/admin/dashboard');
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'An error occurred during login';
-      setError(message);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const register = useCallback(
+    async (email: string, password: string, name: string) => {
+      setIsLoading(true);
+      clearError();
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, name }),
+        });
 
-  const register = async (email: string, password: string, name?: string) => {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, name }),
-    });
+        const data = await res.json();
 
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error || 'Registration failed');
-    }
+        if (!res.ok) {
+          throw new Error(data.error || 'Registration failed');
+        }
 
-    // Auto-login after registration
-    await login(email, password);
-  };
+        setUser(data.user);
+        router.push('/admin/dashboard');
+        toast.success('Registered successfully');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'An error occurred during registration';
+        setError(message);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [clearError, router]
+  );
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
       const res = await fetch('/api/auth/logout', { method: 'POST' });
-      
+
       if (!res.ok) {
         throw new Error('Failed to logout');
       }
-      
+
       setUser(null);
+      toast.success('Logged out successfully');
       router.push('/login');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'An error occurred during logout';
@@ -119,24 +148,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [clearError, router]);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isLoading,
-        login,
-        register,
-        logout,
-        isAuthenticated: !!user,
-        error,
-        clearError,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const contextValue = useMemo(() => {
+    return {
+      user,
+      isLoading,
+      login,
+      register,
+      logout,
+      isAuthenticated: !!user,
+      error,
+      clearError,
+      isInitialized,
+    };
+  }, [user, isLoading, login, register, logout, error, isInitialized]);
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {

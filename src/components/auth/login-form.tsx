@@ -1,29 +1,26 @@
 'use client';
 
-import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { useAuth } from '@/contexts/auth-context';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useAuth } from '@/contexts/auth-context';
 import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
   const { login, error, clearError } = useAuth();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(email, password);
 
     if (!email || !password) {
-      // Use the auth context's error state for consistency
       clearError();
       return;
     }
@@ -32,9 +29,7 @@ export default function LoginForm() {
       setIsLoading(true);
       clearError();
       await login(email, password);
-      // Redirect is handled by the auth context
     } catch (error) {
-      // Errors are already handled by the auth context
       console.error('Login error:', error);
     } finally {
       setIsLoading(false);

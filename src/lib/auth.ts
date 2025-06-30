@@ -11,7 +11,7 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   return await compare(password, hashedPassword);
 }
 
-export async function createUser(email: string, password: string, name?: string, role: 'ADMIN' | 'USER' = 'USER') {
+export async function createUser(email: string, password: string, name: string, role: 'ADMIN' | 'USER' = 'USER') {
   const hashedPassword = await hashPassword(password);
 
   return prisma.user.create({

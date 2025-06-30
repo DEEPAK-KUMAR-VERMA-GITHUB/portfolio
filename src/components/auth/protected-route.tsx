@@ -1,50 +1,38 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
-import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
-interface ProtectedRouteProps {
+type ProtectedRouteProps = {
   children: React.ReactNode;
-  requiredRole?: 'ADMIN' | 'USER';
+  requiredRole?: 'USER' | 'ADMIN';
   redirectTo?: string;
-}
+};
 
 export default function ProtectedRoute({
   children,
-  requiredRole = 'ADMIN',
+  requiredRole = 'USER',
   redirectTo = '/login',
 }: ProtectedRouteProps) {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, isInitialized } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!isAuthenticated) {
-        // Redirect to login with callback URL
-        router.push(`${redirectTo}?callbackUrl=${encodeURIComponent(pathname)}`);
-      } else if (requiredRole === 'ADMIN' && user?.role !== 'ADMIN') {
-        // Redirect to unauthorized or home if not admin
-        router.push('/unauthorized');
-      } else {
-        setIsAuthorized(true);
-      }
+    if (!isInitialized && !isAuthenticated) {
+      router.push(redirectTo);
     }
-  }, [isAuthenticated, isLoading, requiredRole, router, pathname, redirectTo, user?.role]);
+    if (isAuthenticated && user && requiredRole === 'ADMIN' && user.role !== 'ADMIN') {
+      router.push('/unauthorized');
+    }
+  }, [isAuthenticated, user, isInitialized]);
 
-  if (isLoading || isAuthorized === null) {
+  if (!isInitialized || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
-  }
-
-  if (!isAuthorized) {
-    return null; // Redirecting in useEffect
   }
 
   return <>{children}</>;

@@ -39,7 +39,7 @@ export default function RegisterForm() {
       setError('');
       await register(email, password, name);
       // Redirect to dashboard after successful registration
-      router.push('/dashboard');
+      router.push('/admin/dashboard');
     } catch (error) {
       console.error('Registration error:', error);
       setError(error instanceof Error ? error.message : 'Registration failed');
@@ -72,6 +72,7 @@ export default function RegisterForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={isLoading}
+              required
             />
           </div>
           <div className="space-y-2">

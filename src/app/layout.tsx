@@ -1,9 +1,9 @@
 // app/layout.tsx
+import ClientWrapper from '@/components/ClientWrapper';
 import type { Metadata } from 'next';
 import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/theme/ThemeProvider';
-import ClientWrapper from '@/components/ClientWrapper';
+import { AuthProvider } from '@/contexts/auth-context';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,9 +35,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
-        <ThemeProvider>
+        <AuthProvider>
           <ClientWrapper>{children}</ClientWrapper>
-        </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

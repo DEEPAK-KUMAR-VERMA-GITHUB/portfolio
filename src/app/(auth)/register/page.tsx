@@ -1,5 +1,6 @@
-import { Metadata } from 'next';
+import AuthGuard from '@/components/auth/auth-guard';
 import RegisterForm from '@/components/auth/register-form';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Create an account',
@@ -8,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <div className="w-full max-w-md">
+    <AuthGuard>
       <RegisterForm />
-    </div>
+    </AuthGuard>
   );
 }

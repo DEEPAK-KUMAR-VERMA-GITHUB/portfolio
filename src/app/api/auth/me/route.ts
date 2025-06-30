@@ -33,14 +33,6 @@ export async function GET() {
     // Fetch user from database
     const user = await prisma.user.findUnique({
       where: { id: payload.userId as string },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        image: true,
-        role: true,
-        // Add other fields you want to expose
-      },
     });
 
     if (!user) {
@@ -57,10 +49,10 @@ export async function GET() {
     console.error('Error in /api/auth/me:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return new NextResponse(
-      JSON.stringify({ 
+      JSON.stringify({
         error: 'Internal server error',
         // In development, include more error details
-        ...(process.env.NODE_ENV === 'development' && { details: errorMessage })
+        ...(process.env.NODE_ENV === 'development' && { details: errorMessage }),
       }),
       {
         status: 500,
