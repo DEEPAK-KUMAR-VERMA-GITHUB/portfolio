@@ -24,7 +24,7 @@ export interface Project {
 export interface Skill {
   name: string;
   level: number;
-  category: 'frontend' | 'backend' | 'tools' | 'other';
+  category: 'frontend' | 'backend' | 'tools' | 'language' | 'database' | 'others';
 }
 
 export interface Achievement {
@@ -41,8 +41,8 @@ export interface TimelineItem {
   organization: string;
   period: string;
   description: string;
-  type: 'education' | 'experience' | 'project';
-  icon?: React.ReactNode; // Optional custom icon component
+  type: 'education' | 'experience' | 'project' | 'certification';
+  icon?: React.ReactNode;
 }
 
 export interface Resume {
@@ -116,4 +116,16 @@ export interface ContactMessage {
   };
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Certification {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  icon: string;
+  image: string;
+  verified: boolean;
+  verifyUrl: string;
+  description: string;
 }

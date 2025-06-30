@@ -12,6 +12,8 @@ import toast from 'react-hot-toast';
 import { WithContext as ReactTags, Tag as ReactTag } from 'react-tag-input';
 import z from 'zod';
 import { ImageUpload } from '../_components/image-upload';
+import { useAuth } from '@/contexts/auth-context';
+import { updateAboutInfoAction } from './actions';
 
 interface AboutInfo {
   name: string;
@@ -32,11 +34,11 @@ const formSchema = z.object({
   email: z.string().email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
   website: z.string().url('Invalid URL'),
-  profileImage: z.string().url('Invalid URL'),
-  professionalTitles: z.string().min(1, 'Professional title is required'),
+  image: z.instanceof(File).optional(),
+  professionalTitles: z.array(z.string()).min(1, 'Professional title is required'),
   githubUrl: z.string().url('Github Url is required').startsWith('https://github.com'),
-  linkedInUrl: z.string().url('Linkedin Url is required').startsWith('https://linkedin.com'),
-  mailUrl: z.string().url('Mail Url is required'),
+  linkedInUrl: z.string().url('Linkedin Url is required').startsWith('https://www.linkedin.com'),
+  mailLink: z.string().url('Mail Url is required').startsWith('mailto:'),
   about: z.string().min(10, 'About must be at least 10 characters'),
   journey: z.string().min(10, 'Journey must be at least 10 characters'),
   tags: z.array(z.string()).min(1, 'Select at least one tag'),
@@ -45,6 +47,7 @@ const formSchema = z.object({
 export default function AboutPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const { user } = useAuth();
 
   const {
     register,
@@ -61,11 +64,11 @@ export default function AboutPage() {
       email: '',
       phone: '',
       website: '',
-      profileImage: '',
-      professionalTitles: '',
+      image: undefined,
+      professionalTitles: [],
       githubUrl: '',
       linkedInUrl: '',
-      mailUrl: '',
+      mailLink: '',
       about: '',
       journey: '',
       tags: [],
@@ -76,6 +79,7 @@ export default function AboutPage() {
     setLoading(true);
     try {
       console.log('Form submitted:', data);
+      // await updateAboutInfoAction(user?.id as string, data);
       toast.success('About information updated successfully');
     } catch (error) {
       console.error('Error updating about information:', error);
@@ -101,7 +105,7 @@ export default function AboutPage() {
                 {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Professional Title</label>
+                <label className="text-sm font-medium">Title</label>
                 <Input placeholder="Software Engineer" {...register('title')} />
                 {errors.title && <p className="text-sm text-red-500">{errors.title.message}</p>}
               </div>
@@ -142,7 +146,39 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Professional Title</label>
-                <Input placeholder="Software Engineer" {...register('professionalTitles')} />
+                <Controller
+                  name="professionalTitles"
+                  control={control}
+                  render={({ field }: { field: any }) => (
+                    <ReactTags
+                      tags={
+                        (field.value || []).map((tag: string) => ({
+                          id: tag,
+                          text: tag,
+                        })) || []
+                      }
+                      handleDelete={i => {
+                        const newTags = field.value.filter((_: any, index: number) => index !== i);
+                        field.onChange(newTags);
+                      }}
+                      handleAddition={(tag: ReactTag) => {
+                        const newTags = [...(field.value || []), tag.text || tag.id];
+                        field.onChange(newTags);
+                      }}
+                      inputFieldPosition="top"
+                      placeholder="Add a professional title and press enter"
+                      classNames={{
+                        tags: 'flex flex-wrap gap-2',
+                        tagInput: 'w-full',
+                        tagInputField: 'w-full p-2 border rounded',
+                        selected: 'flex flex-wrap gap-2',
+                        tag: 'bg-gray-200 px-2 py-1 rounded flex items-center',
+                        remove: 'ml-1 cursor-pointer',
+                      }}
+                    />
+                  )}
+                />
+
                 {errors.professionalTitles && (
                   <p className="text-sm text-red-500">{errors.professionalTitles.message}</p>
                 )}
@@ -162,8 +198,8 @@ export default function AboutPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Mail URL</label>
-                <Input placeholder="https://mail.com/username" {...register('mailUrl')} />
-                {errors.mailUrl && <p className="text-sm text-red-500">{errors.mailUrl.message}</p>}
+                <Input placeholder="mailto:your@email.com" {...register('mailLink')} />
+                {errors.mailLink && <p className="text-sm text-red-500">{errors.mailLink.message}</p>}
               </div>
             </div>
 
@@ -189,7 +225,7 @@ export default function AboutPage() {
                     tags={
                       (field.value || []).map((tag: string) => ({
                         id: tag,
-                        text: tag
+                        text: tag,
                       })) || []
                     }
                     handleDelete={i => {
@@ -219,19 +255,19 @@ export default function AboutPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Profile Image</label>
               <Controller
-                name="profileImage"
+                name="image"
                 control={control}
                 render={({ field }: { field: any }) => (
                   <ImageUpload
                     value={previewUrl || (typeof field.value === 'string' ? field.value : '')}
                     onChange={(file: File | null, url: string) => {
-                      field.onChange(file || '');
+                      field.onChange(file || undefined);
                       setPreviewUrl(url || '');
                     }}
                   />
                 )}
               />
-              {errors.profileImage && <p className="text-sm text-red-500">{errors.profileImage.message}</p>}
+              {errors.image && <p className="text-sm text-red-500">{errors.image.message}</p>}
             </div>
 
             <ActionButton type="submit" isPending={loading}>

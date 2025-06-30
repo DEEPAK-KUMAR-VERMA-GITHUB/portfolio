@@ -1,7 +1,8 @@
 'use client';
 
 import NeonBorder from '@/components/hero/NeonBorder';
-import { achievements } from '@/constants/constants';
+import { ProjectShowcase } from '@/components/project-showcase';
+import { achievements, certifications } from '@/constants/constants';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 
@@ -87,6 +88,27 @@ export default function Achievement() {
               </NeonBorder>
             </motion.div>
           ))}
+        </div>
+
+        {/* // certifications */}
+
+        <div>
+          <ProjectShowcase
+            autoplay
+            buttonInscriptions={{
+              previousButton: 'Previous',
+              nextButton: 'Next',
+              openWebAppButton: 'Preview',
+            }}
+            halomotButtonGradient="linear-gradient(to right, #a123f4, #603dec)"
+            testimonials={certifications.map(certification => ({
+              quote: certification.description,
+              name: certification.title,
+              designation: certification.issuer,
+              src: certification.image,
+            }))}
+            onItemClick={link => window.open(link, '_blank')}
+          />
         </div>
       </div>
     </section>

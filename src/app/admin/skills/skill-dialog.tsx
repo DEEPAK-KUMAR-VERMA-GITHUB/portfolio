@@ -15,7 +15,22 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 const formSchema = z.object({
   name: z.string().min(1, 'Skill name is required'),
-  category: z.enum(['frontend', 'backend', 'tools', 'other']),
+  category: z.enum([
+    'frontend',
+    'backend',
+    'tools',
+    'language',
+    'framework',
+    'database',
+    'library',
+    'version_control',
+    'cloud',
+    'testing',
+    'security',
+    'devops',
+    'operating_system',
+    'other',
+  ]),
   level: z.number().min(0).max(100),
 });
 
@@ -25,6 +40,16 @@ const skillCategories = [
   { value: 'frontend', label: 'Frontend' },
   { value: 'backend', label: 'Backend' },
   { value: 'tools', label: 'Tools' },
+  { value: 'language', label: 'Language' },
+  { value: 'framework', label: 'Framework' },
+  { value: 'database', label: 'Database' },
+  { value: 'library', label: 'Library' },
+  { value: 'version_control', label: 'Version Control' },
+  { value: 'cloud', label: 'Cloud' },
+  { value: 'testing', label: 'Testing' },
+  { value: 'security', label: 'Security' },
+  { value: 'devops', label: 'DevOps' },
+  { value: 'operating_system', label: 'Operating System' },
   { value: 'other', label: 'Other' },
 ];
 
@@ -60,6 +85,8 @@ export default function SkillDialog({
       category: data.category,
       level: data.level,
     };
+
+    console.log(newSkill);
 
     setTimeout(() => {
       onSave(newSkill);
@@ -122,7 +149,7 @@ export default function SkillDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {skillCategories.map((category) => (
+                      {skillCategories.map(category => (
                         <SelectItem key={category.value} value={category.value}>
                           {category.label}
                         </SelectItem>
@@ -146,7 +173,7 @@ export default function SkillDialog({
                       max={100}
                       step={5}
                       value={[field.value]}
-                      onValueChange={(value) => field.onChange(value[0])}
+                      onValueChange={value => field.onChange(value[0])}
                       className="py-4"
                     />
                   </FormControl>

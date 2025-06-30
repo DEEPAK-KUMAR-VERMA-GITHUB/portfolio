@@ -18,7 +18,9 @@ enum SkillCategory {
   frontend
   backend
   tools
-  other
+  language
+  database
+  others
 }
 
 enum TimeLineType {
@@ -43,52 +45,54 @@ enum UserRole {
 // Models
 
 model User {
-  id                 String        @id @default(uuid()) @db.Uuid
-  name               String?
-  email              String        @unique
-  password           String
-  image              String?
-  bio                String?
-  professionalTitles String?
-  githubUrl          String?
-  linkedInUrl        String?
-  mailLink           String?
-  about              String?
-  journey            String?
-  tags               Tag[]
-  role               UserRole      @default(USER)
+  id                 String           @id @default(uuid()) @db.Uuid
+  name               String           @db.VarChar(50)
+  email              String           @unique @db.VarChar(100)
+  password           String           @db.VarChar(255)
+  image              String?          @db.VarChar(255)
+  title              String?          @db.VarChar(50)
+  phone              String?          @db.VarChar(20)
+  location           String?          @db.VarChar(100)
+  bio                String?          @db.Text
+  professionalTitles String[]         @db.VarChar(100)
+  githubUrl          String?          @db.VarChar(255)
+  linkedInUrl        String?          @db.VarChar(255)
+  mailLink           String?          @db.VarChar(255)
+  about              String?          @db.Text
+  journey            String?          @db.Text
+  tags               String[]         @db.VarChar(100)
+  role               UserRole         @default(USER)
   projects           Project[]
   achievements       Achievement[]
   skills             Skill[]
   timelines          TimeLine[]
-  resumes            Resume[]
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
-  Category           Category[]
-  Technology         Technology[]
-  AuditLog           AuditLog[]
+  resumes            Media[]
+  Certification      Certification[]
+  ContactMessage     ContactMessage[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
 }
 
 model Project {
-  id           String        @id @default(uuid()) @db.Uuid
-  title        String
-  description  String        @db.Text
-  image        String
-  technologies String
-  category     String
-  githubUrl    String
-  liveUrl      String
-  featured     Boolean       @default(false)
-  status       ProjectStatus @default(draft)
-  userId       String        @db.Uuid
-  user         User          @relation(fields: [userId], references: [id])
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id          String        @id @default(uuid()) @db.Uuid
+  title       String        @db.VarChar(100)
+  description String        @db.Text
+  image       String        @db.VarChar(255)
+  techStack   String[]      @db.VarChar(100)
+  category    String        @db.VarChar(50)
+  githubUrl   String        @db.VarChar(255)
+  liveUrl     String        @db.VarChar(255)
+  featured    Boolean       @default(false)
+  status      ProjectStatus @default(draft)
+  userId      String        @db.Uuid
+  user        User          @relation(fields: [userId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model Skill {
   id        String        @id @default(uuid()) @db.Uuid
-  name      String
+  name      String        @db.VarChar(100)
   category  SkillCategory
   level     Int           @default(1) @db.SmallInt
   userId    String        @db.Uuid
@@ -99,11 +103,11 @@ model Skill {
 
 model Achievement {
   id          String   @id @default(uuid()) @db.Uuid
-  title       String
-  icon        String
-  issuer      String
+  title       String   @db.VarChar(100)
+  icon        String   @db.VarChar(100)
+  issuer      String   @db.VarChar(100)
   date        DateTime
-  description String
+  description String   @db.Text
   userId      String   @db.Uuid
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
@@ -112,9 +116,9 @@ model Achievement {
 
 model TimeLine {
   id           String       @id @default(uuid()) @db.Uuid
-  title        String
-  organization String
-  period       String
+  title        String       @db.VarChar(100)
+  organization String       @db.VarChar(100)
+  period       String       @db.VarChar(100)
   description  String       @db.Text
   type         TimeLineType
   current      Boolean      @default(false)
@@ -124,12 +128,12 @@ model TimeLine {
   updatedAt    DateTime     @updatedAt
 }
 
-model Resume {
+model Media {
   id          String   @id @default(uuid()) @db.Uuid
-  title       String
-  fileUrl     String
-  fileSize    String
-  fileType    String
+  title       String   @db.VarChar(100)
+  fileUrl     String   @db.VarChar(255)
+  fileSize    String   @db.VarChar(100)
+  fileType    String   @db.VarChar(100)
   isDefault   Boolean  @default(false)
   lastUpdated DateTime @default(now())
   description String?
@@ -140,64 +144,35 @@ model Resume {
   updatedAt   DateTime @updatedAt
 }
 
-model Category {
-  id          String       @id @default(uuid()) @db.Uuid
-  name        String
-  slug        String       @unique
-  description String?
-  icon        String
-  User        User?        @relation(fields: [userId], references: [id])
-  userId      String?      @db.Uuid
-  Technology  Technology[]
-}
-
-model Technology {
+model Certification {
   id          String   @id @default(uuid()) @db.Uuid
-  name        String
-  slug        String   @unique
-  icon        String
-  categoryId  String   @db.Uuid
-  category    Category @relation(fields: [categoryId], references: [id])
-  description String?
-  featured    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      String?  @db.Uuid
-}
-
-model Tag {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String   @unique
-  slug        String   @unique
-  description String?
-  icon        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      String?  @db.Uuid
-}
-
-model Label {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String
-  slug        String   @unique
-  description String?
-  icon        String
+  title       String   @db.VarChar(100)
+  issuer      String   @db.VarChar(100)
+  date        DateTime
+  icon        String?   @db.VarChar(100)
+  image       String   @db.VarChar(255)
+  verified    Boolean  @default(false)
+  verifyUrl   String
+  description String   @db.Text
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model AuditLog {
-  id        String   @id @default(uuid()) @db.Uuid
-  action    String
-  entity    String
-  entityId  String
-  userId    String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-  oldData   Json?
-  newData   Json?
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
+model ContactMessage {
+  id        String        @id @default(uuid()) @db.Uuid
+  name      String        @db.VarChar(100)
+  email     String        @db.VarChar(100)
+  subject   String        @db.VarChar(100)
+  message   String        @db.Text
+  status    ContactStatus @default(new)
+  labels    String[]      @default([])
+  metadata  Json?
+  userId    String?       @db.Uuid
+  user      User?         @relation(fields: [userId], references: [id])
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([email])
 }

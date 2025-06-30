@@ -38,6 +38,27 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --halomot-button-background: #fff;
+  --halomot-button-foreground: #0a0a0a;
+  --project-showcase-name-color: #0a0a0a;
+  --project-showcase-position-color: #454545;
+  --project-showcase-testimony-color: #171717;
+  --project-showcase-name-size: 28px;
+  --project-showcase-position-size: 20px;
+  --project-showcase-testimony-size: 20px;
+  --project-showcase-name-top: 0;
+  --project-showcase-name-bottom: 10px;
+  --project-showcase-position-top: 0;
+  --project-showcase-position-bottom: 0.5em;
+  --project-showcase-testimony-top: 1.24em;
+  --project-showcase-testimony-bottom: 1em;
+  --project-showcase-line-height: 1.56;
+  --project-showcase-button-gradient: linear-gradient(to right, #603dec, #a123f4);
+  --project-showcase-button-background: #eee;
+  --project-showcase-button-text-color: #111;
+  --project-showcase-button-outer-radius: 16.2px;
+  --project-showcase-button-inner-radius: 15px;
+  --project-showcase-button-hover-text-color: #fff;
 }
 
 @theme inline {
@@ -78,6 +99,27 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-halomot-button-foreground: var(----halomot-button-foreground);
+  --color-halomot-button-background: var(----halomot-button-background);
+  --color-project-showcase-button-hover-text-color: var(----project-showcase-button-hover-text-color);
+  --project-showcase-button-inner-radius: var(----project-showcase-button-inner-radius);
+  --project-showcase-button-outer-radius: var(----project-showcase-button-outer-radius);
+  --color-project-showcase-button-text-color: var(----project-showcase-button-text-color);
+  --color-project-showcase-button-background: var(----project-showcase-button-background);
+  --project-showcase-button-gradient: var(----project-showcase-button-gradient);
+  --project-showcase-line-height: var(----project-showcase-line-height);
+  --project-showcase-testimony-bottom: var(----project-showcase-testimony-bottom);
+  --project-showcase-testimony-top: var(----project-showcase-testimony-top);
+  --project-showcase-position-bottom: var(----project-showcase-position-bottom);
+  --project-showcase-position-top: var(----project-showcase-position-top);
+  --project-showcase-name-bottom: var(----project-showcase-name-bottom);
+  --project-showcase-name-top: var(----project-showcase-name-top);
+  --project-showcase-testimony-size: var(----project-showcase-testimony-size);
+  --project-showcase-position-size: var(----project-showcase-position-size);
+  --project-showcase-name-size: var(----project-showcase-name-size);
+  --color-project-showcase-testimony-color: var(----project-showcase-testimony-color);
+  --color-project-showcase-position-color: var(----project-showcase-position-color);
+  --color-project-showcase-name-color: var(----project-showcase-name-color);
 }
 
 body {
@@ -116,6 +158,27 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --halomot-button-background: #0a0a0a;
+  --halomot-button-foreground: #fff;
+  --project-showcase-name-color: #fff;
+  --project-showcase-position-color: #aaa;
+  --project-showcase-testimony-color: #eee;
+  --project-showcase-name-size: 28px;
+  --project-showcase-position-size: 20px;
+  --project-showcase-testimony-size: 20px;
+  --project-showcase-name-top: 0;
+  --project-showcase-name-bottom: 10px;
+  --project-showcase-position-top: 0;
+  --project-showcase-position-bottom: 0.5em;
+  --project-showcase-testimony-top: 1.24em;
+  --project-showcase-testimony-bottom: 1em;
+  --project-showcase-line-height: 1.56;
+  --project-showcase-button-gradient: linear-gradient(to right, #603dec, #a123f4);
+  --project-showcase-button-background: #161616;
+  --project-showcase-button-text-color: #fff;
+  --project-showcase-button-outer-radius: 6.34px;
+  --project-showcase-button-inner-radius: 6px;
+  --project-showcase-button-hover-text-color: #fff;
 }
 
 @layer base {

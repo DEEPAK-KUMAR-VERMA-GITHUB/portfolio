@@ -71,6 +71,8 @@ export default function ResumePage() {
     setUploadProgress(0);
     setError(null);
 
+    console.log(file);
+
     try {
       // Simulate upload progress
       const progressInterval = setInterval(() => {
@@ -100,6 +102,8 @@ export default function ResumePage() {
         lastUpdated: new Date().toISOString(),
         version: '1.0', // In a real app, you might want to increment this
       };
+
+      console.log(newResume);
 
       // Add the new resume and set it as default if it's the first one
       setResumes(prevResumes => {
@@ -210,10 +214,6 @@ export default function ResumePage() {
           <TabsTrigger value="manage">
             <FileText className="h-4 w-4 mr-2" />
             Manage Resumes
-          </TabsTrigger>
-          <TabsTrigger value="settings" disabled>
-            <Settings className="h-4 w-4 mr-2" />
-            Settings
           </TabsTrigger>
         </TabsList>
 

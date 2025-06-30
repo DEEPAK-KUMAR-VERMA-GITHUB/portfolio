@@ -70,6 +70,7 @@ export default function TimelinesPage() {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
+      console.log(timelineData);
 
       if (currentTimeline) {
         // Update existing timeline

@@ -163,7 +163,7 @@ export default function About() {
                   Skills & Technologies
                 </h3>
                 <Tabs defaultValue="frontend" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 bg-black/40 rounded-lg p-1 mb-4 border border-white/10">
+                  <TabsList className="grid w-full grid-cols-6 bg-black/40 rounded-lg p-1 mb-4 border border-white/10">
                     <TabsTrigger
                       value="frontend"
                       className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-purple-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-cyan-400/30 rounded-md transition-all duration-300 text-white/70"
@@ -177,6 +177,24 @@ export default function About() {
                       Backend
                     </TabsTrigger>
                     <TabsTrigger
+                      value="language"
+                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
+                    >
+                      Language
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="framework"
+                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
+                    >
+                      Framework
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="database"
+                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
+                    >
+                      Database
+                    </TabsTrigger>
+                    <TabsTrigger
                       value="tools"
                       className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
                     >
@@ -184,7 +202,7 @@ export default function About() {
                     </TabsTrigger>
                   </TabsList>
 
-                  {['frontend', 'backend', 'tools'].map(category => (
+                  {['frontend', 'backend', 'language', 'framework', 'database', 'tools'].map(category => (
                     <TabsContent key={category} value={category} className="space-y-5 pt-2">
                       {skills
                         .filter(skill => skill.category === category)

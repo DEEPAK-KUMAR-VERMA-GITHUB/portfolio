@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Sidebar from '@/app/admin/_components/Sidebar';
 import SidebarToggle from '@/app/admin/_components/SidebarToggle';
 import { useAuth } from '@/contexts/auth-context';
+import { Toaster } from 'react-hot-toast';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -39,14 +40,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <Sidebar isOpen={sidebarOpen} user={user} />
       <main className="flex-1 p-6 ml-0 bg-background w-full transition-all overflow-scroll">
         {children}
+        <Toaster />
       </main>
 
       {/* Optional: Mobile overlay */}
       {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/40 z-30 lg:hidden" 
-          onClick={() => setSidebarOpen(false)} 
-        />
+        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
     </div>
   );
