@@ -1,22 +1,23 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Project, Tag } from '@/types/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Save, X } from 'lucide-react';
 import { ActionButton } from '@/app/admin/_components/action-button';
 import { TagSelector } from '@/app/admin/_components/tag-selector';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ImageUpload } from '@/app/admin/_components/image-upload';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useFileUpload } from '@/hooks/useFileUpload';
+import { Project } from '@/types/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Save, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { z } from 'zod';
+import { FileUpload } from '../_components/file-upload';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -72,6 +73,19 @@ export default function ProjectDialog({
   });
 
   const [loading, setLoading] = useState(false);
+  const { uploadFile, isUploading, reset, cancelUpload } = useFileUpload();
+
+  const handleFileUpload = async (file: File) => {
+    try {
+      const result = await uploadFile(file);
+      form.setValue('image', result.url);
+      toast.success('File uploaded successfully');
+      return result;
+    } catch (err: any) {
+      console.error('File upload failed:', err.message);
+      toast.error('File upload failed');
+    }
+  };
 
   const onSubmit = (data: ProjectFormValues) => {
     setLoading(true);
@@ -124,6 +138,12 @@ export default function ProjectDialog({
       });
     }
   }, [project, form]);
+
+  useEffect(() => {
+    return () => {
+      cancelUpload();
+    };
+  }, [cancelUpload]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -221,12 +241,11 @@ export default function ProjectDialog({
                     <FormItem>
                       <FormLabel>Project Image</FormLabel>
                       <FormControl>
-                        <ImageUpload
-                          value={field.value as string}
-                          onChange={(file, preview) => {
-                            field.onChange(file || '');
-                            form.setValue('image', preview);
-                          }}
+                        <FileUpload
+                          onFileUpload={handleFileUpload}
+                          disabled={isUploading}
+                          onCancel={cancelUpload}
+                          accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] }}
                         />
                       </FormControl>
                       <FormMessage />

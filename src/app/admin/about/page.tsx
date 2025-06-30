@@ -4,15 +4,15 @@ import { ActionButton } from '@/app/admin/_components/action-button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useAuth } from '@/contexts/auth-context';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Save } from 'lucide-react';
-import { useState } from 'react';
+import { Save, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { WithContext as ReactTags, Tag as ReactTag } from 'react-tag-input';
+import { Tag as ReactTag, WithContext as ReactTags } from 'react-tag-input';
 import z from 'zod';
-import { ImageUpload } from '../_components/image-upload';
-import { useAuth } from '@/contexts/auth-context';
+import { FileUpload } from '../_components/file-upload';
 import { updateAboutInfoAction } from './actions';
 
 interface AboutInfo {
@@ -33,7 +33,7 @@ const formSchema = z.object({
   location: z.string().min(1, 'Location is required'),
   email: z.string().email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
-  website: z.string().url('Invalid URL'),
+  // website: z.string().url('Invalid URL'),
   image: z.instanceof(File).optional(),
   professionalTitles: z.array(z.string()).min(1, 'Professional title is required'),
   githubUrl: z.string().url('Github Url is required').startsWith('https://github.com'),
@@ -47,12 +47,15 @@ const formSchema = z.object({
 export default function AboutPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [currentImage, setCurrentImage] = useState<string>('');
   const { user } = useAuth();
 
   const {
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,7 +66,7 @@ export default function AboutPage() {
       location: '',
       email: '',
       phone: '',
-      website: '',
+      // website: '',
       image: undefined,
       professionalTitles: [],
       githubUrl: '',
@@ -79,7 +82,7 @@ export default function AboutPage() {
     setLoading(true);
     try {
       console.log('Form submitted:', data);
-      // await updateAboutInfoAction(user?.id as string, data);
+      await updateAboutInfoAction(user?.id as string, data);
       toast.success('About information updated successfully');
     } catch (error) {
       console.error('Error updating about information:', error);
@@ -88,6 +91,22 @@ export default function AboutPage() {
       setLoading(false);
     }
   };
+
+  // watch for image changes
+  const imageFile = watch('image');
+
+  useEffect(() => {
+    if (!imageFile) {
+      setPreviewUrl('');
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(imageFile);
+    setPreviewUrl(objectUrl);
+
+    //cleanup
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [imageFile]);
 
   return (
     <div className="space-y-6">
@@ -123,11 +142,11 @@ export default function AboutPage() {
                 <Input placeholder="+91 1234567890" {...register('phone')} />
                 {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label className="text-sm font-medium">Website</label>
                 <Input placeholder="https://yourwebsite.com" {...register('website')} />
                 {errors.website && <p className="text-sm text-red-500">{errors.website.message}</p>}
-              </div>
+              </div> */}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -254,16 +273,43 @@ export default function AboutPage() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Profile Image</label>
+              {previewUrl && (
+                <div className="mb-4">
+                  <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-gray-200">
+                    <img src={previewUrl} alt="Profile preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setValue('image', null as any);
+                        setPreviewUrl('');
+                      }}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+              )}
               <Controller
                 name="image"
                 control={control}
-                render={({ field }: { field: any }) => (
-                  <ImageUpload
-                    value={previewUrl || (typeof field.value === 'string' ? field.value : '')}
-                    onChange={(file: File | null, url: string) => {
-                      field.onChange(file || undefined);
-                      setPreviewUrl(url || '');
+                render={({ field: { onChange, value, ...field } }) => (
+                  <FileUpload
+                    accept={{ 'image/*': ['.jpeg', '.jpg', '.png', '.webp', '.gif'] }}
+                    onFileUpload={file => {
+                      onChange(file);
+                      return Promise.resolve(file);
                     }}
+                    onRemove={async () => {
+                      onChange(null);
+                      setPreviewUrl('');
+                      return Promise.resolve();
+                    }}
+                    onCancel={() => {
+                      onChange(null);
+                      setPreviewUrl('');
+                    }}
+                    disabled={loading}
                   />
                 )}
               />
