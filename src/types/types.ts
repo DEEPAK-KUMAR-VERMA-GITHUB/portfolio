@@ -22,15 +22,19 @@ export interface Project {
 }
 
 export interface Skill {
+  id?: string;
   name: string;
   level: number;
   category: 'frontend' | 'backend' | 'tools' | 'language' | 'database' | 'others';
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Achievement {
   title: string;
   issuer: string;
-  date: string;
+  date: Date;
   icon: string;
   description: string;
 }

@@ -3,64 +3,74 @@
 import { Button } from '@/components/ui/button';
 import { Achievement } from '@/types/types';
 import { Plus } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { DataTable } from '@/app/admin/projects/data-table';
 import { columns } from './columns';
 import AchievementDialog from './achievement-dialog';
 import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
+import { addNewAchievement, deleteAchievement, getAllAchievements, updateAchievement } from './actions';
+import { useAuth } from '@/contexts/auth-context';
 
-// Mock data - replace with actual API calls
-const initialAchievements: Achievement[] = [
-  {
-    title: 'Best Project Award',
-    issuer: 'Tech Conference 2024',
-    date: '2024-05-15',
-    icon: '🏆',
-    description: 'Awarded for the most innovative project at the annual tech conference.'
-  },
-  {
-    title: 'React Certification',
-    issuer: 'React Academy',
-    date: '2024-03-10',
-    icon: '🎓',
-    description: 'Completed advanced React.js certification with honors.'
-  },
-  {
-    title: 'Hackathon Winner',
-    issuer: 'CodeFest 2024',
-    date: '2024-02-20',
-    icon: '🚀',
-    description: 'First place in the 48-hour coding competition.'
-  },
-];
+type AchievementResponse = {
+  success: boolean;
+  data: AchievementItem[];
+};
+
+type AchievementItem = {
+  id: string;
+  title: string;
+  issuer: string;
+  date: Date;
+  icon: string;
+  description: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export default function AchievementsPage() {
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [achievements, setAchievements] = useState<AchievementItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [currentAchievement, setCurrentAchievement] = useState<Achievement | null>(null);
+  const [currentAchievement, setCurrentAchievement] = useState<Achievement | AchievementItem | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
-  const [achievementToDelete, setAchievementToDelete] = useState<Achievement | null>(null);
+  const [achievementToDelete, setAchievementToDelete] = useState<AchievementItem | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { user } = useAuth();
 
-  // Load achievements on component mount
+  const fetchAchievements = useCallback(async () => {
+    if (!user) return;
+    try {
+      const result = await getAllAchievements(user.id);
+      if (result.success) {
+        setAchievements(result.data as AchievementItem[]);
+      } else {
+        toast.error(result.error || 'Failed to load achievements');
+        setAchievements([]);
+      }
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+      toast.error('Failed to load achievements');
+      setAchievements([]);
+    }
+  }, [user]);
+
   useEffect(() => {
-    // In a real app, you would fetch this from an API
-    setAchievements(initialAchievements);
-  }, []);
+    fetchAchievements();
+  }, [fetchAchievements]);
 
   const handleAddAchievement = () => {
     setCurrentAchievement(null);
     setIsDialogOpen(true);
   };
 
-  const handleEditAchievement = (achievement: Achievement) => {
+  const handleEditAchievement = (achievement: AchievementItem) => {
     setCurrentAchievement(achievement);
     setIsDialogOpen(true);
   };
 
-  const handleDeleteClick = (achievement: Achievement) => {
+  const handleDeleteClick = (achievement: AchievementItem) => {
     setAchievementToDelete(achievement);
     setIsDeleteDialogOpen(true);
   };
@@ -71,16 +81,9 @@ export default function AchievementsPage() {
     setIsDeleting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setAchievements(prev => 
-        prev.filter(a => 
-          a.title !== achievementToDelete.title || 
-          a.issuer !== achievementToDelete.issuer
-        )
-      );
-      
+      await deleteAchievement(achievementToDelete.id);
+      await fetchAchievements();
+
       setIsDeleteDialogOpen(false);
       setAchievementToDelete(null);
       toast.success('Achievement deleted successfully');
@@ -92,35 +95,29 @@ export default function AchievementsPage() {
     }
   };
 
-  const handleSaveAchievement = async (achievement: Omit<Achievement, 'id'>) => {
+  const handleSaveAchievement = async (achievement: Achievement | AchievementItem) => {
     setIsSaving(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
       if (currentAchievement) {
         // Update existing achievement
-        setAchievements(prev => 
-          prev.map(a => 
-            a.title === currentAchievement.title && a.issuer === currentAchievement.issuer
-              ? { ...achievement }
-              : a
-          )
-        );
+        await updateAchievement({ ...achievement, id: currentAchievement.id } as AchievementInput, user?.id as string);
+
         toast.success('Achievement updated successfully');
+        setCurrentAchievement(null);
+        setIsDialogOpen(false);
       } else {
-        // Add new achievement
-        setAchievements(prev => [...prev, achievement]);
+        await addNewAchievement(achievement as Achievement, user?.id as string);
         toast.success('Achievement added successfully');
       }
-      
+
       setIsDialogOpen(false);
     } catch (error) {
       console.error('Error saving achievement:', error);
       toast.error('Failed to save achievement');
     } finally {
       setIsSaving(false);
+      await fetchAchievements();
     }
   };
 
@@ -129,9 +126,7 @@ export default function AchievementsPage() {
       <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold">Achievements</h1>
-          <p className="text-sm text-muted-foreground">
-            Manage your professional achievements and certifications
-          </p>
+          <p className="text-sm text-muted-foreground">Manage your professional achievements and certifications</p>
         </div>
         <Button onClick={handleAddAchievement} className="w-full md:w-auto">
           <Plus className="mr-2 h-4 w-4" />

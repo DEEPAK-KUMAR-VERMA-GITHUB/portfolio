@@ -1,5 +1,19 @@
 import { useRef, useState } from 'react';
 
+// function to remove the previous uploaded file
+export const removeUplaodedFile = async (filename: string) => {
+  try {
+    const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to remove file');
+    }
+  } catch (err: any) {
+    console.error('Error removing file:', err);
+  }
+};
+
 export const useFileUpload = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -14,23 +28,6 @@ export const useFileUpload = () => {
   // ref to store the abort controller
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // function to remove the previous uploaded file
-  const removeUplaodedFile = async (filename: string) => {
-    if (!uploadedFile) return;
-
-    try {
-      const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to remove file');
-      }
-      setUploadedFile(null);
-    } catch (err: any) {
-      console.error('Error removing file:', err);
-    }
-  };
-
   const uploadFile = async (file: File) => {
     setIsUploading(true);
     setError(null);
@@ -42,6 +39,7 @@ export const useFileUpload = () => {
 
     if (uploadedFile) {
       await removeUplaodedFile(uploadedFile.url.split('/').pop() as string);
+      setUploadedFile(null);
     }
 
     const controller = new AbortController();
@@ -94,6 +92,9 @@ export const useFileUpload = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
+      if (uploadedFile) {
+        removeUplaodedFile(uploadedFile.url.split('/').pop() as string);
+      }
     }
     setError(null);
   };

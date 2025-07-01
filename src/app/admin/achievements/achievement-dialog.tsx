@@ -25,7 +25,7 @@ export default function AchievementDialog({
 }: AchievementDialogProps) {
   const [title, setTitle] = useState(achievement?.title || '');
   const [issuer, setIssuer] = useState(achievement?.issuer || '');
-  const [date, setDate] = useState(achievement?.date || '');
+  const [date, setDate] = useState<Date>(achievement?.date || new Date());
   const [icon, setIcon] = useState(achievement?.icon || '');
   const [description, setDescription] = useState(achievement?.description || '');
 
@@ -41,7 +41,7 @@ export default function AchievementDialog({
       // Reset form when adding a new achievement
       setTitle('');
       setIssuer('');
-      setDate(new Date().toISOString().split('T')[0]);
+      setDate(new Date());
       setIcon('🏆');
       setDescription('');
     }
@@ -118,8 +118,8 @@ export default function AchievementDialog({
             <Input
               type="date"
               id="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={date.toISOString().split('T')[0]}
+              onChange={(e) => setDate(new Date(e.target.value))}
               className="col-span-3"
               required
             />

@@ -14,6 +14,7 @@ import { Tag as ReactTag, WithContext as ReactTags } from 'react-tag-input';
 import z from 'zod';
 import { FileUpload } from '../_components/file-upload';
 import { updateAboutInfoAction } from './actions';
+import { removeUplaodedFile, useFileUpload } from '@/hooks/useFileUpload';
 
 interface AboutInfo {
   name: string;
@@ -33,8 +34,7 @@ const formSchema = z.object({
   location: z.string().min(1, 'Location is required'),
   email: z.string().email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
-  // website: z.string().url('Invalid URL'),
-  image: z.instanceof(File).optional(),
+  image: z.string().url('Please enter a valid URL').or(z.literal('')),
   professionalTitles: z.array(z.string()).min(1, 'Professional title is required'),
   githubUrl: z.string().url('Github Url is required').startsWith('https://github.com'),
   linkedInUrl: z.string().url('Linkedin Url is required').startsWith('https://www.linkedin.com'),
@@ -47,14 +47,14 @@ const formSchema = z.object({
 export default function AboutPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
-  const [currentImage, setCurrentImage] = useState<string>('');
+  const [currentImage, setCurrentImage] = useState<any | null>(null);
   const { user } = useAuth();
+  const { uploadFile } = useFileUpload();
 
   const {
     register,
     handleSubmit,
     control,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
@@ -66,7 +66,6 @@ export default function AboutPage() {
       location: '',
       email: '',
       phone: '',
-      // website: '',
       image: undefined,
       professionalTitles: [],
       githubUrl: '',
@@ -78,9 +77,32 @@ export default function AboutPage() {
     },
   });
 
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      setValue('name', user.name || '');
+      setValue('title', user.title || '');
+      setValue('bio', user.bio || '');
+      setValue('location', user.location || '');
+      setValue('email', user.email || '');
+      setValue('phone', user.phone || '');
+      setValue('image', user.image || '');
+      setValue('professionalTitles', user.professionalTitles || []);
+      setValue('githubUrl', user.githubUrl || '');
+      setValue('linkedInUrl', user.linkedInUrl || '');
+      setValue('mailLink', user.mailLink || '');
+      setValue('about', user.about || '');
+      setValue('journey', user.journey || '');
+      setValue('tags', user.tags || []);
+
+      setPreviewUrl(user.image || '');
+    }
+  }, [user]);
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
+      if (previewUrl) data.image = previewUrl;
       console.log('Form submitted:', data);
       await updateAboutInfoAction(user?.id as string, data);
       toast.success('About information updated successfully');
@@ -92,21 +114,28 @@ export default function AboutPage() {
     }
   };
 
-  // watch for image changes
-  const imageFile = watch('image');
-
-  useEffect(() => {
-    if (!imageFile) {
-      setPreviewUrl('');
-      return;
+  const handleFileUpload = async (file: File) => {
+    try {
+      const result = await uploadFile(file);
+      setCurrentImage(result);
+      setPreviewUrl(result.url);
+      console.log(result);
+    } catch (error: any) {
+      console.error('File upload failed:', error.message);
+      toast.error('Failed to upload file');
     }
+  };
 
-    const objectUrl = URL.createObjectURL(imageFile);
-    setPreviewUrl(objectUrl);
-
-    //cleanup
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [imageFile]);
+  const handleRemoveFile = async () => {
+    try {
+      await removeUplaodedFile(currentImage?.url.split('/').pop() as string);
+      setPreviewUrl('');
+      setCurrentImage(null);
+    } catch (error: any) {
+      console.error('File removal failed:', error.message);
+      toast.error('Failed to remove file');
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -132,7 +161,11 @@ export default function AboutPage() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Bio</label>
-              <Textarea placeholder="Tell us about yourself..." className="min-h-[100px]" {...register('bio')} />
+              <Textarea
+                placeholder="Tell us about yourself..."
+                className="min-h-[100px] resize-none"
+                {...register('bio')}
+              />
               {errors.bio && <p className="text-sm text-red-500">{errors.bio.message}</p>}
             </div>
 
@@ -141,19 +174,6 @@ export default function AboutPage() {
                 <label className="text-sm font-medium">Phone</label>
                 <Input placeholder="+91 1234567890" {...register('phone')} />
                 {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
-              </div>
-              {/* <div className="space-y-2">
-                <label className="text-sm font-medium">Website</label>
-                <Input placeholder="https://yourwebsite.com" {...register('website')} />
-                {errors.website && <p className="text-sm text-red-500">{errors.website.message}</p>}
-              </div> */}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Location</label>
-                <Input placeholder="City, Country" {...register('location')} />
-                {errors.location && <p className="text-sm text-red-500">{errors.location.message}</p>}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Email</label>
@@ -164,56 +184,9 @@ export default function AboutPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Professional Title</label>
-                <Controller
-                  name="professionalTitles"
-                  control={control}
-                  render={({ field }: { field: any }) => (
-                    <ReactTags
-                      tags={
-                        (field.value || []).map((tag: string) => ({
-                          id: tag,
-                          text: tag,
-                        })) || []
-                      }
-                      handleDelete={i => {
-                        const newTags = field.value.filter((_: any, index: number) => index !== i);
-                        field.onChange(newTags);
-                      }}
-                      handleAddition={(tag: ReactTag) => {
-                        const newTags = [...(field.value || []), tag.text || tag.id];
-                        field.onChange(newTags);
-                      }}
-                      inputFieldPosition="top"
-                      placeholder="Add a professional title and press enter"
-                      classNames={{
-                        tags: 'flex flex-wrap gap-2',
-                        tagInput: 'w-full',
-                        tagInputField: 'w-full p-2 border rounded',
-                        selected: 'flex flex-wrap gap-2',
-                        tag: 'bg-gray-200 px-2 py-1 rounded flex items-center',
-                        remove: 'ml-1 cursor-pointer',
-                      }}
-                    />
-                  )}
-                />
-
-                {errors.professionalTitles && (
-                  <p className="text-sm text-red-500">{errors.professionalTitles.message}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Github URL</label>
-                <Input placeholder="https://github.com/username" {...register('githubUrl')} />
-                {errors.githubUrl && <p className="text-sm text-red-500">{errors.githubUrl.message}</p>}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Linkedin URL</label>
-                <Input placeholder="https://linkedin.com/in/username" {...register('linkedInUrl')} />
-                {errors.linkedInUrl && <p className="text-sm text-red-500">{errors.linkedInUrl.message}</p>}
+                <label className="text-sm font-medium">Location</label>
+                <Input placeholder="City, Country" {...register('location')} />
+                {errors.location && <p className="text-sm text-red-500">{errors.location.message}</p>}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Mail URL</label>
@@ -223,14 +196,73 @@ export default function AboutPage() {
             </div>
 
             <div className="space-y-2">
+              <label className="text-sm font-medium">Professional Title</label>
+              <Controller
+                name="professionalTitles"
+                control={control}
+                render={({ field }: { field: any }) => (
+                  <ReactTags
+                    tags={
+                      (field.value || []).map((tag: string) => ({
+                        id: tag,
+                        text: tag,
+                      })) || []
+                    }
+                    handleDelete={i => {
+                      const newTags = field.value.filter((_: any, index: number) => index !== i);
+                      field.onChange(newTags);
+                    }}
+                    handleAddition={(tag: ReactTag) => {
+                      const newTags = [...(field.value || []), tag.text || tag.id];
+                      field.onChange(newTags);
+                    }}
+                    inputFieldPosition="top"
+                    placeholder="Add a professional title and press enter"
+                    classNames={{
+                      tags: 'flex flex-wrap gap-2',
+                      tagInput: 'w-full',
+                      tagInputField: 'w-full p-2 border rounded',
+                      selected: 'flex flex-wrap gap-2',
+                      tag: 'bg-gray-200 px-2 py-1 rounded flex items-center',
+                      remove: 'ml-1 cursor-pointer',
+                    }}
+                  />
+                )}
+              />
+
+              {errors.professionalTitles && <p className="text-sm text-red-500">{errors.professionalTitles.message}</p>}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Linkedin URL</label>
+                <Input placeholder="https://linkedin.com/in/username" {...register('linkedInUrl')} />
+                {errors.linkedInUrl && <p className="text-sm text-red-500">{errors.linkedInUrl.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Github URL</label>
+                <Input placeholder="https://github.com/username" {...register('githubUrl')} />
+                {errors.githubUrl && <p className="text-sm text-red-500">{errors.githubUrl.message}</p>}
+              </div>
+            </div>
+
+            <div className="space-y-2">
               <label className="text-sm font-medium">About</label>
-              <Textarea placeholder="Tell us about yourself..." className="min-h-[100px]" {...register('about')} />
+              <Textarea
+                placeholder="Tell us about yourself..."
+                className="min-h-[100px] resize-none"
+                {...register('about')}
+              />
               {errors.about && <p className="text-sm text-red-500">{errors.about.message}</p>}
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Journey</label>
-              <Textarea placeholder="Tell us about yourself..." className="min-h-[100px]" {...register('journey')} />
+              <Textarea
+                placeholder="Tell us about yourself..."
+                className="min-h-[100px] resize-none"
+                {...register('journey')}
+              />
               {errors.journey && <p className="text-sm text-red-500">{errors.journey.message}</p>}
             </div>
 
@@ -277,16 +309,6 @@ export default function AboutPage() {
                 <div className="mb-4">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-gray-200">
                     <img src={previewUrl} alt="Profile preview" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setValue('image', null as any);
-                        setPreviewUrl('');
-                      }}
-                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
                   </div>
                 </div>
               )}
@@ -296,19 +318,9 @@ export default function AboutPage() {
                 render={({ field: { onChange, value, ...field } }) => (
                   <FileUpload
                     accept={{ 'image/*': ['.jpeg', '.jpg', '.png', '.webp', '.gif'] }}
-                    onFileUpload={file => {
-                      onChange(file);
-                      return Promise.resolve(file);
-                    }}
-                    onRemove={async () => {
-                      onChange(null);
-                      setPreviewUrl('');
-                      return Promise.resolve();
-                    }}
-                    onCancel={() => {
-                      onChange(null);
-                      setPreviewUrl('');
-                    }}
+                    onFileUpload={handleFileUpload}
+                    onRemove={handleRemoveFile}
+                    onCancel={handleRemoveFile}
                     disabled={loading}
                   />
                 )}
