@@ -14,7 +14,7 @@ import { Tag as ReactTag, WithContext as ReactTags } from 'react-tag-input';
 import z from 'zod';
 import { FileUpload } from '../_components/file-upload';
 import { updateAboutInfoAction } from './actions';
-import { removeUplaodedFile, useFileUpload } from '@/hooks/useFileUpload';
+import { useFileUpload } from '@/hooks/useFileUpload';
 
 interface AboutInfo {
   name: string;
@@ -49,7 +49,7 @@ export default function AboutPage() {
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [currentImage, setCurrentImage] = useState<any | null>(null);
   const { user } = useAuth();
-  const { uploadFile } = useFileUpload();
+  const { uploadFile, removeUplaodedFile } = useFileUpload();
 
   const {
     register,

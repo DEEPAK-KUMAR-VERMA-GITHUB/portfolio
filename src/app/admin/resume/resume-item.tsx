@@ -13,12 +13,7 @@ interface ResumeItemProps {
   isProcessing?: boolean;
 }
 
-export default function ResumeItem({
-  resume,
-  onSetDefault,
-  onDelete,
-  isProcessing = false,
-}: ResumeItemProps) {
+export default function ResumeItem({ resume, onSetDefault, onDelete, isProcessing = false }: ResumeItemProps) {
   const formattedDate = formatDistanceToNow(new Date(resume.lastUpdated), { addSuffix: true });
 
   return (
@@ -50,24 +45,18 @@ export default function ResumeItem({
               <Clock className="h-3 w-3 mr-1" />
               Updated {formattedDate}
             </p>
-            {resume.description && (
-              <p className="text-sm text-muted-foreground mt-1">{resume.description}</p>
-            )}
+            {resume.description && <p className="text-sm text-muted-foreground mt-1">{resume.description}</p>}
           </div>
         </div>
 
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            asChild
-            className="h-8"
-          >
+          <Button variant="outline" size="sm" asChild className="h-8">
             <a href={resume.fileUrl} target="_blank" rel="noopener noreferrer" download>
               <Download className="h-4 w-4 mr-2" />
               Download
             </a>
           </Button>
+
           {!resume.isDefault && (
             <>
               <Button
@@ -80,17 +69,17 @@ export default function ResumeItem({
                 <Star className="h-4 w-4 mr-2" />
                 Set Default
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                onClick={() => onDelete(resume.id!)}
-                disabled={isProcessing}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
             </>
           )}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+            onClick={() => onDelete(resume.id!)}
+            disabled={isProcessing}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </div>

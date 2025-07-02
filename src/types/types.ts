@@ -40,13 +40,13 @@ export interface Achievement {
 }
 
 export interface TimelineItem {
-  id?: string;
+  id: string;
   title: string;
   organization: string;
   period: string;
   description: string;
   type: 'education' | 'experience' | 'project' | 'certification';
-  icon?: React.ReactNode;
+  icon: React.ReactNode;
 }
 
 export interface Resume {

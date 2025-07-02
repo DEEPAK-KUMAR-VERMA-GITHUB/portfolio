@@ -15,6 +15,7 @@ import {
   LogOut,
   FileText,
   ListTodo,
+  IdCard,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-context';
 import toast from 'react-hot-toast';
@@ -27,7 +28,7 @@ const navItems = [
   { label: 'Achievements', href: '/admin/achievements', icon: GraduationCap },
   { label: 'Timelines', href: '/admin/timelines', icon: BriefcaseBusiness },
   { label: 'Resume', href: '/admin/resume', icon: FileText },
-  { label: 'Categories', href: '/admin/categories', icon: ListTodo },
+  { label: 'Certifications', href: '/admin/certifications', icon: IdCard },
   { label: 'Contact', href: '/admin/contact', icon: MessageSquare },
   { label: 'Footer', href: '/admin/footer', icon: LinkIcon },
 ];

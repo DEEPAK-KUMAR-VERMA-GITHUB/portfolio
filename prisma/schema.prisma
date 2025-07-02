@@ -149,7 +149,7 @@ model Certification {
   title       String   @db.VarChar(100)
   issuer      String   @db.VarChar(100)
   date        DateTime
-  icon        String?   @db.VarChar(100)
+  icon        String?  @db.VarChar(100)
   image       String   @db.VarChar(255)
   verified    Boolean  @default(false)
   verifyUrl   String

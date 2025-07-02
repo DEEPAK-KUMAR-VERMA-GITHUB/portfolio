@@ -1,15 +1,16 @@
 'use client';
 
+import { DataTable } from '@/app/admin/projects/data-table';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/auth-context';
 import { TimelineItem } from '@/types/types';
 import { Plus } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { DataTable } from '@/app/admin/projects/data-table';
+import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
+import { addNewTimeline, deleteTimeline, getTimelines, updateTimeline } from './actions';
 import { columns } from './columns';
 import TimelineDialog from './timeline-dialog';
-import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
-import { timeline } from '@/constants/constants';
 
 export default function TimelinesPage() {
   const [timelines, setTimelines] = useState<TimelineItem[]>([]);
@@ -19,11 +20,28 @@ export default function TimelinesPage() {
   const [timelineToDelete, setTimelineToDelete] = useState<TimelineItem | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { user } = useAuth();
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+
+  const fetchTimelines = useCallback(async () => {
+    if (!user) return;
+    try {
+      const result = await getTimelines(user?.id as string);
+      if (result.success) {
+        setTimelines(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching timelines:', error);
+    }
+  }, [user]);
+
+  const triggerRefresh = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   useEffect(() => {
-    const storedTimelines = timeline;
-    setTimelines(storedTimelines);
-  }, []);
+    fetchTimelines();
+  }, [fetchTimelines, refreshTrigger]);
 
   const handleAddTimeline = () => {
     setCurrentTimeline(null);
@@ -46,12 +64,8 @@ export default function TimelinesPage() {
     setIsDeleting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      setTimelines(prev =>
-        prev.filter(t => t.title !== timelineToDelete.title || t.organization !== timelineToDelete.organization)
-      );
+      await deleteTimeline(timelineToDelete.id!);
+      triggerRefresh();
 
       toast.success('Timeline item deleted successfully');
     } catch (error) {
@@ -68,27 +82,19 @@ export default function TimelinesPage() {
     setIsSaving(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      console.log(timelineData);
-
-      if (currentTimeline) {
+      if (currentTimeline && 'id' in currentTimeline) {
         // Update existing timeline
-        setTimelines(prev =>
-          prev.map(t =>
-            t.title === currentTimeline.title && t.organization === currentTimeline.organization
-              ? { ...timelineData, id: t.id }
-              : t
-          )
-        );
+        await updateTimeline({
+          ...timelineData,
+          id: currentTimeline.id,
+          userId: user?.id as string,
+          updatedAt: new Date(),
+        } as TimelineItem);
+        triggerRefresh();
         toast.success('Timeline item updated successfully');
       } else {
-        // Add new timeline
-        const newTimeline = {
-          ...timelineData,
-          id: Date.now().toString(),
-        };
-        setTimelines(prev => [...prev, newTimeline]);
+        await addNewTimeline(timelineData as TimelineItem, user?.id as string);
+        triggerRefresh();
         toast.success('Timeline item added successfully');
       }
 
