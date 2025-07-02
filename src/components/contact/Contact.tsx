@@ -5,8 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { motion } from 'framer-motion';
 import { Github, Lightbulb, Linkedin, Mail, MapPin, Phone, Zap } from 'lucide-react';
+import { useLandingPageContext } from '@/contexts/landing-page-context';
 
 export default function Contact() {
+  const { user } = useLandingPageContext();
+
   return (
     <section id="contact" className="py-20 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -61,9 +64,9 @@ export default function Contact() {
                 </h3>
                 <div className="space-y-10 text-lg">
                   {[
-                    { icon: Mail, text: 'boostyourselfup@gmail.com', color: 'text-green-400' },
-                    { icon: Phone, text: '+91 7541802720', color: 'text-blue-400' },
-                    { icon: MapPin, text: 'Ramgarh, Kaimur, Bihar, India, 821110', color: 'text-purple-400' },
+                    { icon: Mail, text: user?.email, color: 'text-green-400' },
+                    { icon: Phone, text: user?.phone, color: 'text-blue-400' },
+                    { icon: MapPin, text: user?.location, color: 'text-purple-400' },
                   ].map((item, index) => (
                     <motion.div
                       key={index}
@@ -88,13 +91,13 @@ export default function Contact() {
                   <h4 className="text-2xl font-bold mb-5 text-white">Follow Me</h4>
                   <div className="flex gap-4">
                     {[
-                      { icon: Github, href: 'https://github.com', color: 'from-gray-400 to-gray-600' },
-                      { icon: Linkedin, href: 'https://linkedin.com', color: 'from-blue-400 to-blue-600' },
-                      { icon: Mail, href: 'mailto:john.doe@email.com', color: 'from-green-400 to-green-600' },
+                      { icon: Github, href: user?.githubUrl, color: 'from-gray-400 to-gray-600' },
+                      { icon: Linkedin, href: user?.linkedInUrl, color: 'from-blue-400 to-blue-600' },
+                      { icon: Mail, href: user?.mailLink, color: 'from-green-400 to-green-600' },
                     ].map((social, index) => (
                       <motion.a
                         key={index}
-                        href={social.href}
+                        href={social.href!}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`w-12 h-12 rounded-full bg-gradient-to-r ${social.color} flex items-center justify-center text-white transition-all duration-300`}

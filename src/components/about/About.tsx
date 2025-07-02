@@ -8,11 +8,15 @@ import { skills } from '@/constants/constants';
 import { Progress } from '@/components/ui/progress';
 import { motion } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
+import { useLandingPageContext } from '@/contexts/landing-page-context';
+import { highlightPresets, highlightText } from '@/lib/text-utils';
 
 export default function About() {
   const [boxHeight, setBoxHeight] = useState<number>(500);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
+
+  const { user, skills } = useLandingPageContext();
 
   const calculateHeight = () => {
     if (leftRef.current && rightRef.current) {
@@ -81,11 +85,20 @@ export default function About() {
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            I'm a dedicated MCA student with a passion for{' '}
-            <span className="text-cyan-400 font-semibold">full-stack development</span>. My journey in computer
-            applications has equipped me with strong{' '}
-            <span className="text-purple-400 font-semibold">problem-solving skills</span> and a deep understanding of
-            modern web technologies.
+            {user?.about ? (
+              highlightText({
+                text: user.about,
+                highlights: highlightPresets.technical,
+              })
+            ) : (
+              <>
+                I'm a dedicated MCA student with a passion for{' '}
+                <span className="text-cyan-400 font-semibold">full-stack development</span>. My journey in computer
+                applications has equipped me with strong{' '}
+                <span className="text-purple-400 font-semibold">problem-solving skills</span> and a deep understanding
+                of modern web technologies.
+              </>
+            )}
           </motion.p>
         </motion.div>
 
@@ -96,7 +109,7 @@ export default function About() {
             transition={{ duration: 0.8 }}
           >
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="cyan">
-              <div className="p-8 flex flex-col justify-evenly " ref={leftRef} style={{ minHeight: boxHeight }}>
+              <div className="p-8 flex flex-col justify-evenly gap-3 " ref={leftRef} style={{ minHeight: boxHeight }}>
                 <h3 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white flex items-center gap-3">
                   <motion.div
                     animate={{ rotate: [0, 360] }}
@@ -106,36 +119,52 @@ export default function About() {
                   </motion.div>
                   My Journey
                 </h3>
-                <p className="text-white/70 mb-6 leading-relaxed">
-                  Starting my journey with a Bachelor's in Computer Applications, I discovered my passion for{' '}
-                  <span className="text-cyan-400 font-semibold">web development</span> during my undergraduate studies.
-                  Now pursuing my Master's degree, I'm focused on becoming a proficient
-                  <span className="text-purple-400 font-semibold"> full-stack developer</span>.
-                </p>
-                <p className="text-white/70 mb-6 leading-relaxed">
-                  I believe in <span className="text-pink-400 font-semibold">continuous learning</span> and staying
-                  updated with the latest technologies. My goal is to create impactful digital solutions that solve
-                  real-world problems.
-                </p>
+
+                {user?.journey ? (
+                  highlightText({
+                    text: user.journey,
+                    highlights: {
+                      'web development': 'text-cyan-400 font-semibold',
+                      "Master's degree": 'text-purple-400 font-semibold',
+                      'full-stack developer': 'text-pink-400 font-semibold',
+                      'continuous learning': 'text-pink-400 font-semibold',
+                      'impactful digital solutions': 'text-cyan-400 font-semibold',
+                      'real-world problems': 'text-purple-400 font-semibold',
+                    },
+                  })
+                ) : (
+                  <>
+                    <p className="text-white/70 mb-6 leading-relaxed">
+                      Starting my journey with a Bachelor's in Computer Applications, I discovered my passion for{' '}
+                      <span className="text-cyan-400 font-semibold">web development</span> during my undergraduate
+                      studies. Now pursuing my Master's degree, I'm focused on becoming a proficient
+                      <span className="text-purple-400 font-semibold"> full-stack developer</span>.
+                    </p>
+                    <p className="text-white/70 mb-6 leading-relaxed">
+                      I believe in <span className="text-pink-400 font-semibold">continuous learning</span> and staying
+                      updated with the latest technologies. My goal is to create impactful digital solutions that solve
+                      real-world problems.
+                    </p>
+                  </>
+                )}
+
                 <div className="flex flex-wrap gap-3">
                   <div className="flex flex-wrap justify-center gap-3">
-                    {['Problem Solving', 'Team Collaboration', 'Quick Learner', 'Detail Oriented', 'Innovative'].map(
-                      (trait, index) => (
-                        <motion.div
-                          key={trait}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: index * 0.1 }}
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          className="flex flex-col items-center"
-                        >
-                          <Badge className="px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/30 text-white hover:border-cyan-400/60 transition-all duration-300">
-                            <HeartHandshake className="w-4 h-4 mr-2" />
-                            {trait}
-                          </Badge>
-                        </motion.div>
-                      )
-                    )}
+                    {user?.tags?.map((trait, index) => (
+                      <motion.div
+                        key={trait}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.1 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        className="flex flex-col items-center"
+                      >
+                        <Badge className="px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/30 text-white hover:border-cyan-400/60 transition-all duration-300">
+                          <HeartHandshake className="w-4 h-4 mr-2" />
+                          {trait}
+                        </Badge>
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -163,43 +192,16 @@ export default function About() {
                   Skills & Technologies
                 </h3>
                 <Tabs defaultValue="frontend" className="w-full">
-                  <TabsList className="grid w-full grid-cols-6 bg-black/40 rounded-lg p-1 mb-4 border border-white/10">
-                    <TabsTrigger
-                      value="frontend"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-purple-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-cyan-400/30 rounded-md transition-all duration-300 text-white/70"
-                    >
-                      Frontend
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="backend"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500/20 data-[state=active]:to-pink-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-purple-400/30 rounded-md transition-all duration-300 text-white/70"
-                    >
-                      Backend
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="language"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
-                    >
-                      Language
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="framework"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
-                    >
-                      Framework
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="database"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
-                    >
-                      Database
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="tools"
-                      className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-pink-400/30 rounded-md transition-all duration-300 text-white/70"
-                    >
-                      Tools
-                    </TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-6 bg-black/40 rounded-lg p-1 mb-4 border border-white/10 gap-1 ">
+                    {['frontend', 'backend', 'language', 'framework', 'database', 'tools'].map((category, index) => (
+                      <TabsTrigger
+                        key={category}
+                        value={category}
+                        className="text-[10px] md:text-[16px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-purple-500/20 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-cyan-400/30 rounded-md transition-all duration-300 text-white/70"
+                      >
+                        {category}
+                      </TabsTrigger>
+                    ))}
                   </TabsList>
 
                   {['frontend', 'backend', 'language', 'framework', 'database', 'tools'].map(category => (

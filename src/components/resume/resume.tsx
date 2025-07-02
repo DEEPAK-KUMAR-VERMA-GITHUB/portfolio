@@ -1,11 +1,23 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import NeonBorder from '@/components/hero/NeonBorder';
+import { useLandingPageContext } from '@/contexts/landing-page-context';
+import { motion } from 'framer-motion';
 import { Briefcase, Code, Download, GraduationCap } from 'lucide-react';
-import { timeline } from '@/constants/constants';
 
 export default function Resume() {
+  const { resume, timeline } = useLandingPageContext();
+  const downloadResume = () => {
+    if (!resume) return;
+    const link = document.createElement('a');
+    link.href = resume?.url as string;
+    link.setAttribute('download', `${resume?.name}.pdf`);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section id="resume" className="py-20 relative overflow-hidden bg-black/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -32,14 +44,15 @@ export default function Resume() {
             transition={{ delay: 0.3 }}
           >
             My <span className="text-cyan-400 font-semibold">educational background</span>,
-            <span className="text-purple-400 font-semibold"> professional experience</span>, and key milestones in my
-            journey.
+            <span className="text-purple-400 font-semibold"> professional experience</span>, and
+            <span className="text-pink-400 font-semibold"> key milestones</span> in my journey.
           </motion.p>
           <NeonBorder glowColor="cyan" className="w-fit mx-auto">
             <motion.button
               className="px-8 py-3 text-lg font-semibold bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white rounded-lg transition-all duration-300 flex items-center gap-2"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
+              onClick={downloadResume}
             >
               <motion.div animate={{ y: [0, -2, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
                 <Download className="h-5 w-5" />
@@ -87,15 +100,11 @@ export default function Resume() {
                   }}
                 >
                   <div className="w-14 h-14 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center shadow-xl border-2 border-black">
-                    {item.icon ? (
-                      <div className="w-7 h-7 text-white flex items-center justify-center">{item.icon}</div>
-                    ) : (
-                      <>
-                        {item.type === 'education' && <GraduationCap className="w-7 h-7 text-white" />}
-                        {item.type === 'experience' && <Briefcase className="w-7 h-7 text-white" />}
-                        {item.type === 'project' && <Code className="w-7 h-7 text-white" />}
-                      </>
-                    )}
+                    <>
+                      {item.type === 'education' && <GraduationCap className="w-7 h-7 text-white" />}
+                      {item.type === 'experience' && <Briefcase className="w-7 h-7 text-white" />}
+                      {item.type === 'project' && <Code className="w-7 h-7 text-white" />}
+                    </>
                   </div>
                 </motion.div>
 

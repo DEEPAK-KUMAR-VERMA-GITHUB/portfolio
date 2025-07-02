@@ -11,12 +11,16 @@ import { scrollToSection } from '@/components/navbar/Navbar';
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import { useEffect, useState } from 'react';
+import { useLandingPageContext } from '@/contexts/landing-page-context';
+import { highlightPresets, highlightText } from '@/lib/text-utils';
 
 const Hero = () => {
   const color = useMotionValue(COLORS_TOP[0]);
   const backgroundImage = useMotionTemplate`radial-gradient(125% 125% at 50% 0%, #020617 50%, ${color})`;
   const border = useMotionTemplate`1px solid ${color}`;
   const boxShadow = useMotionTemplate`0px 4px 24px ${color}`;
+
+  const { user } = useLandingPageContext();
 
   useEffect(() => {
     animate(color, COLORS_TOP, {
@@ -25,6 +29,7 @@ const Hero = () => {
       repeat: Infinity,
       repeatType: 'mirror',
     });
+    console.log(user);
   }, []);
 
   // Only render WebGL content in the browser
@@ -86,9 +91,15 @@ const Hero = () => {
               className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-2 border-cyan-400/50 relative"
             >
               <Avatar className="w-full h-full">
-                <AvatarImage src="/api/placeholder/160/160" alt="Deepak Kumar Verma" />
+                <AvatarImage
+                  src={`${user?.image}` || '/api/placeholder/160/160'}
+                  alt={user?.name || 'Deepak Kumar Verma'}
+                />
                 <AvatarFallback className="text-5xl font-bold bg-gradient-to-br from-cyan-400 to-purple-600 text-white">
-                  DKV
+                  {user?.name
+                    .split(' ')
+                    .map(word => word[0].toUpperCase())
+                    .join('') || 'DKV'}
                 </AvatarFallback>
               </Avatar>
 
@@ -123,18 +134,13 @@ const Hero = () => {
             className="mb-6"
           >
             <span className="max-w-3xl bg-gradient-to-br from-white via-cyan-200 to-purple-200 bg-clip-text text-center text-3xl font-bold leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
-              Deepak Kumar Verma
+              {user?.name || 'Deepak Kumar Verma'}
             </span>
           </motion.div>
 
           {/* Animated subtitle */}
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            {[
-              '🚀 Full Stack Developer',
-              '🎓 MCA Final Year Student',
-              '💻 Competitive Programmer',
-              '🎮 Tech Enthusiast',
-            ].map((subtitle, i) => (
+            {user?.professionalTitles.map((subtitle, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
@@ -163,13 +169,21 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
             className="text-lg text-white/60 mb-12 max-w-3xl mx-auto leading-relaxed text-center"
           >
-            Passionate about crafting <span className="text-cyan-400 font-semibold">innovative web solutions</span> and
-            exploring
-            <span className="text-purple-400 font-semibold"> cutting-edge technologies</span>. Currently pursuing
-            Master's in Computer Applications with a focus on full-stack development.
+            {user?.bio ? (
+              highlightText({
+                text: user.bio,
+                highlights: highlightPresets.technical,
+              })
+            ) : (
+              <>
+                Passionate about crafting <span className="text-cyan-400 font-semibold">innovative web solutions</span>{' '}
+                and exploring
+                <span className="text-purple-400 font-semibold"> cutting-edge technologies</span>. Currently pursuing
+                Master's in Computer Applications with a focus on full-stack development.
+              </>
+            )}
           </motion.p>
 
-          {/* Enhanced CTA buttons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -199,6 +213,7 @@ const Hero = () => {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 className="w-full px-6 py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white font-semibold rounded-lg border border-purple-400/30 transition-all duration-300 flex items-center gap-2"
+                onClick={() => scrollToSection('resume')}
               >
                 <Download className="h-5 w-5" />
                 Download Resume

@@ -52,8 +52,8 @@ export default function ResumeItem({ resume, onSetDefault, onDelete, isProcessin
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" asChild className="h-8">
             <a href={resume.fileUrl} target="_blank" rel="noopener noreferrer" download>
-              <Download className="h-4 w-4 mr-2" />
-              Download
+              <Download className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:block">Download</span>
             </a>
           </Button>
 
@@ -66,8 +66,8 @@ export default function ResumeItem({ resume, onSetDefault, onDelete, isProcessin
                 onClick={() => onSetDefault(resume.id!)}
                 disabled={isProcessing}
               >
-                <Star className="h-4 w-4 mr-2" />
-                Set Default
+                <Star className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:block">Set Default</span>
               </Button>
             </>
           )}

@@ -129,6 +129,17 @@ const Navbar = () => {
                   />
                 </motion.button>
               ))}
+              <motion.button
+                className="block w-full text-left px-4 py-3 text-base font-medium text-white hover:bg-white/10 rounded-lg transition-colors relative group"
+                onClick={() => router.push('/login')}
+                whileHover={{ x: 10 }}
+              >
+                <span className="relative z-10">Admin</span>
+                <motion.div
+                  className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-cyan-400 to-purple-400 opacity-0 group-hover:opacity-100"
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.button>
             </motion.div>
           )}
         </AnimatePresence>

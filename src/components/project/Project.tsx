@@ -3,12 +3,14 @@
 import NeonBorder from '@/components/hero/NeonBorder';
 import { Badge } from '@/components/ui/badge';
 import { categories, projects } from '@/constants/constants';
+import { useLandingPageContext } from '@/contexts/landing-page-context';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ExternalLink, Github, Star } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Project() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const { projects } = useLandingPageContext();
 
   const filteredProjects =
     selectedCategory === 'all' ? projects : projects.filter(project => project.category === selectedCategory);
@@ -40,7 +42,8 @@ export default function Project() {
           >
             Here are some of my recent projects that showcase my skills in{' '}
             <span className="text-cyan-400 font-semibold">full-stack development</span>,
-            <span className="text-purple-400 font-semibold"> problem-solving</span>, and modern web technologies.
+            <span className="text-purple-400 font-semibold"> problem-solving</span>, and{' '}
+            <span className="text-pink-400 font-semibold">modern web technologies</span>.
           </motion.p>
         </motion.div>
 
