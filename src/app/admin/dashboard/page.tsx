@@ -1,9 +1,73 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LayoutDashboard, FolderOpen, User, Code, GraduationCap, BriefcaseBusiness } from 'lucide-react';
+import {
+  BriefcaseBusiness,
+  Code,
+  FolderOpen,
+  GraduationCap,
+  LayoutDashboard,
+  User
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+interface DashboardStats {
+  projects: number;
+  skills: number;
+  education: number;
+  experience: number;
+  about: number;
+  messages: number;
+}
 
 export default function DashboardPage() {
+  const [stats, setStats] = useState<DashboardStats>({
+    projects: 0,
+    skills: 0,
+    education: 0,
+    experience: 0,
+    about: 0,
+    messages: 0,
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/dashboard/stats');
+        if (!response.ok) {
+          throw new Error('Failed to fetch dashboard statistics');
+        }
+        const data = await response.json();
+        setStats(data);
+      } catch (err) {
+        console.error('Error fetching dashboard stats:', err);
+        setError('Failed to load dashboard data. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-destructive/10 text-destructive p-4 rounded-md">
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
@@ -19,7 +83,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">12</p>
+            <p className="text-3xl font-bold">{stats.projects}</p>
             <p className="text-muted-foreground text-sm">Active and archived projects</p>
           </CardContent>
         </Card>
@@ -31,7 +95,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">1</p>
+            <p className="text-3xl font-bold">{stats.about}</p>
             <p className="text-muted-foreground text-sm">Profile summary</p>
           </CardContent>
         </Card>
@@ -43,7 +107,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">25</p>
+            <p className="text-3xl font-bold">{stats.skills}</p>
             <p className="text-muted-foreground text-sm">Total technologies</p>
           </CardContent>
         </Card>
@@ -55,7 +119,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">3</p>
+            <p className="text-3xl font-bold">{stats.education}</p>
             <p className="text-muted-foreground text-sm">Academic entries</p>
           </CardContent>
         </Card>
@@ -67,7 +131,7 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">5</p>
+            <p className="text-3xl font-bold">{stats.experience}</p>
             <p className="text-muted-foreground text-sm">Work history</p>
           </CardContent>
         </Card>

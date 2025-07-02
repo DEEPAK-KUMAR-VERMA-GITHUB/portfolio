@@ -3,6 +3,7 @@ import { Project } from '@/types/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, Pencil, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 
 export const columns = ({
   onEdit,
@@ -11,6 +12,27 @@ export const columns = ({
   onEdit: (project: Project) => void;
   onDelete: (project: Project) => void;
 }): ColumnDef<Project, React.ReactNode>[] => [
+  {
+    accessorKey: 'image',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="px-0 hover:bg-transparent"
+        >
+          Image
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2">
+        <Image src={row.original.image} alt={row.original.title} width={50} height={50} className="rounded-md" />
+        <div className="font-medium">{row.original.title}</div>
+      </div>
+    ),
+  },
   {
     accessorKey: 'title',
     header: ({ column }) => {
@@ -25,9 +47,7 @@ export const columns = ({
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="font-medium">{row.original.title}</div>
-    ),
+    cell: ({ row }) => <div className="font-medium">{row.original.title}</div>,
   },
   {
     accessorKey: 'status',
@@ -44,9 +64,7 @@ export const columns = ({
       );
     },
     cell: ({ row }) => (
-      <Badge variant={row.original.status === 'published' ? 'default' : 'outline'}>
-        {row.original.status}
-      </Badge>
+      <Badge variant={row.original.status === 'published' ? 'default' : 'outline'}>{row.original.status}</Badge>
     ),
   },
   {
@@ -63,9 +81,7 @@ export const columns = ({
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <span className="capitalize">{row.original.category}</span>
-    ),
+    cell: ({ row }) => <span className="capitalize">{row.original.category}</span>,
   },
   {
     accessorKey: 'featured',
@@ -82,9 +98,7 @@ export const columns = ({
       );
     },
     cell: ({ row }) => (
-      <Badge variant={row.original.featured ? 'default' : 'outline'}>
-        {row.original.featured ? 'Yes' : 'No'}
-      </Badge>
+      <Badge variant={row.original.featured ? 'default' : 'outline'}>{row.original.featured ? 'Yes' : 'No'}</Badge>
     ),
   },
   {

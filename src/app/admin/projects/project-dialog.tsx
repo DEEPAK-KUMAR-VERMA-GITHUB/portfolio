@@ -89,25 +89,9 @@ export default function ProjectDialog({
 
   const onSubmit = (data: ProjectFormValues) => {
     setLoading(true);
-
-    const newProject: Project = {
-      id: project?.id || crypto.randomUUID(),
-      createdAt: project?.createdAt || new Date().toISOString().split('T')[0],
-      title: data.title,
-      description: data.description,
-      status: data.status,
-      featured: data.featured,
-      techStack: data.techStack,
-      image: data.image,
-      liveUrl: data.liveUrl,
-      githubUrl: data.githubUrl,
-      category: data.category,
-    };
-
-    setTimeout(() => {
-      onSave(newProject);
-      setLoading(false);
-    }, 700);
+    console.log(data);
+    onSave(data as Project);
+    setLoading(false);
   };
 
   // reset when project changes
@@ -138,12 +122,6 @@ export default function ProjectDialog({
       });
     }
   }, [project, form]);
-
-  useEffect(() => {
-    return () => {
-      cancelUpload();
-    };
-  }, [cancelUpload]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
