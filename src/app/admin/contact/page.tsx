@@ -1,98 +1,57 @@
+// src/app/admin/contact/page.tsx
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ContactMessage, ContactStatus } from '@/types/types';
-import { AlertCircle, CheckCircle, Filter, Inbox, Mail, RefreshCw, Search } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { ContactMessageCard } from './_components/contact-message';
-import { ReplyDialog } from './_components/reply-dialog';
-import { getAllMessages } from './actions';
-import toast from 'react-hot-toast';
+import { ContactMessage } from '@/types/types';
+import { toast } from 'react-hot-toast';
+import { Search, RefreshCw, MessageSquare, AlertCircle, CheckCircle, Inbox } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/auth-context';
-import { sendEmail } from '@/lib/email';
+import { ContactStatus } from '@/types/types';
 
-// Mock data - replace with real API calls
-// const mockMessages: ContactMessage[] = [
-//   {
-//     id: '1',
-//     name: 'John Doe',
-//     email: 'john.doe@example.com',
-//     subject: 'Collaboration Opportunity',
-//     message:
-//       "Hello,\n\nI came across your portfolio and was impressed by your work. I'd like to discuss a potential collaboration on an upcoming project.\n\nBest regards,\nJohn",
-//     status: 'new',
-//     labels: ['collaboration', 'opportunity'],
-//     metadata: {
-//       ip: '192.168.1.1',
-//       userAgent:
-//         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-//       referrer: 'https://www.google.com/',
-//     },
-//     createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-//     updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-//   },
-//   {
-//     id: '2',
-//     name: 'Acme Inc.',
-//     email: 'hr@acme.com',
-//     subject: 'Job Opportunity - Senior Frontend Developer',
-//     message:
-//       'Dear Candidate,\n\nWe were impressed by your portfolio and would like to invite you to interview for our Senior Frontend Developer position.\n\nBest regards,\nHR Team',
-//     status: 'in-progress',
-//     labels: ['job', 'opportunity'],
-//     createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-//     updatedAt: new Date(Date.now() - 86400000).toISOString(),
-//   },
-//   {
-//     id: '3',
-//     name: 'Spam Bot',
-//     email: 'spam@example.com',
-//     subject: 'Make $1000 a day working from home!',
-//     message: "You've won a prize! Click here to claim your $1000!",
-//     status: 'spam',
-//     createdAt: new Date(Date.now() - 172800000).toISOString(),
-//     updatedAt: new Date(Date.now() - 172800000).toISOString(),
-//   },
-// ];
+const statusOptions = [
+  { value: 'all', label: 'All Statuses' },
+  { value: 'new', label: 'New' },
+  { value: 'in-progress', label: 'In Progress' },
+  { value: 'resolved', label: 'Resolved' },
+  { value: 'spam', label: 'Spam' },
+];
 
 export default function ContactPage() {
+  const router = useRouter();
   const [messages, setMessages] = useState<ContactMessage[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<ContactStatus | 'all'>('all');
-  const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
-  const [isReplyDialogOpen, setIsReplyDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ContactStatus | 'all'>('all');
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const { isAuthenticated } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { user } = useAuth();
 
-  // Simulate loading messages
-  const loadMessages = useCallback(async () => {
+  const fetchMessages = useCallback(async () => {
+    if (!user) return;
     try {
-      setIsLoading(true);
-      const result = await getAllMessages();
-      if (result.success) {
-        setMessages(result.data);
-      } else {
-        toast.error(result.error as never);
-      }
+      const res = await fetch('/api/contact');
+      if (!res.ok) throw new Error('Failed to fetch messages');
+      const { data } = await res.json();
+      setMessages(data);
+      // setFilteredMessages(data);
     } catch (error) {
-      console.error('Error loading messages:', error);
+      console.error('Error fetching messages:', error);
       toast.error('Failed to load messages');
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user]);
 
+  // Fetch messages
   useEffect(() => {
-    if (!isAuthenticated) return;
-    loadMessages();
-  }, [isAuthenticated]);
+    fetchMessages();
+  }, []);
 
   // Filter messages based on search query and status
   const filteredMessages = useMemo(() => {
@@ -110,72 +69,40 @@ export default function ContactPage() {
     });
   }, [messages, searchQuery, statusFilter, activeTab]);
 
-  // Handle status change
-  const handleStatusChange = async (id: string, newStatus: ContactStatus) => {
-    setMessages(prev =>
-      prev.map(msg => (msg.id === id ? { ...msg, status: newStatus, updatedAt: new Date().toISOString() } : msg))
-    );
-  };
-
-  // Handle delete message
-  const handleDeleteMessage = async (id: string) => {
-    setMessages(prev => prev.filter(msg => msg.id !== id));
-  };
-
-  // Handle reply to message
-  const handleReply = (message: ContactMessage) => {
-    setSelectedMessage(message);
-    setIsReplyDialogOpen(true);
-  };
-
-  // Handle send reply
-  const handleSendReply = async (messageId: string, reply: { subject: string; content: string }) => {
-    // In a real app, you would send this to your API
-    console.log('Sending reply to message:', messageId, reply);
-
+  const handleStatusChange = async (messageId: string, newStatus: string) => {
     try {
       const response = await fetch(`/api/contact/${messageId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          reply: {
-            subject: reply.subject,
-            content: reply.content,
-          },
-          status: 'in_progress',
-        }),
+        body: JSON.stringify({ status: newStatus }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to send reply');
-      }
+
+      if (!response.ok) throw new Error('Failed to update status');
+
       const updatedMessage = await response.json();
-      setMessages(prevMessages =>
-        prevMessages.map(msg =>
-          msg.id === messageId
-            ? {
-                ...msg,
-                status: 'in_progress',
-                replies: [
-                  ...(msg.replies || []),
-                  ...(updatedMessage.replies || []).filter(
-                    (newReply: any) => !msg.replies?.some(r => r.id === newReply.id)
-                  ),
-                ],
-              }
-            : msg
-        )
-      );
-
-      // Close the reply dialog
-      setIsReplyDialogOpen(false);
-
-      // Show success message
-      toast.success('Reply sent successfully');
+      setMessages(prev => prev.map(msg => (msg.id === updatedMessage.id ? updatedMessage : msg)));
+      toast.success('Status updated successfully');
     } catch (error) {
-      console.error('Error sending reply:', error);
-      toast.error('Failed to send reply. Please try again.');
+      console.error('Error updating status:', error);
+      toast.error('Failed to update status');
+    }
+  };
+
+  const handleDelete = async (messageId: string) => {
+    try {
+      const response = await fetch(`/api/contact/${messageId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete message');
+
+      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+      toast.success('Message deleted successfully');
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      toast.error('Failed to delete message');
     }
   };
 
@@ -191,16 +118,38 @@ export default function ContactPage() {
     );
   }, [messages]);
 
+  const handleReply = (message: ContactMessage) => {
+    router.push(`/admin/contact/${message.id}#reply`);
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      const res = await fetch('/api/contact', { next: { revalidate: 0 } });
+      if (!res.ok) throw new Error('Failed to refresh messages');
+      const data = await res.json();
+      setMessages(data);
+      toast.success('Messages refreshed');
+    } catch (error) {
+      console.error('Error refreshing messages:', error);
+      toast.error('Failed to refresh messages');
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Contact Messages</h1>
-          <p className="text-muted-foreground">Manage and respond to messages from your contact form</p>
+          <h1 className="text-2xl font-bold">Contact Messages</h1>
+          <p className="text-muted-foreground">
+            {filteredMessages.length} message{filteredMessages.length !== 1 ? 's' : ''} found
+          </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={loadMessages} disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
         </div>
@@ -256,89 +205,84 @@ export default function ContactPage() {
             </TabsTrigger>
           </TabsList>
         </div>
-
-        <div className="mt-6 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search messages..."
-                className="pl-9"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div className="w-full sm:w-[200px]">
-              <Select value={statusFilter} onValueChange={value => setStatusFilter(value as ContactStatus | 'all')}>
-                <SelectTrigger>
-                  <Filter className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="in-progress">In Progress</SelectItem>
-                  <SelectItem value="resolved">Resolved</SelectItem>
-                  <SelectItem value="spam">Spam</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {isLoading ? (
-              // Loading skeleton
-              Array.from({ length: 3 }).map((_, i) => (
-                <Card key={i}>
-                  <CardHeader>
-                    <Skeleton className="h-6 w-3/4" />
-                    <Skeleton className="h-4 w-1/2 mt-2" />
-                  </CardHeader>
-                  <CardContent>
-                    <Skeleton className="h-4 w-full mt-2" />
-                    <Skeleton className="h-4 w-5/6 mt-2" />
-                    <Skeleton className="h-4 w-4/6 mt-2" />
-                  </CardContent>
-                </Card>
-              ))
-            ) : filteredMessages.length > 0 ? (
-              // Messages list
-              filteredMessages.map(message => (
-                <ContactMessageCard
-                  key={message.id}
-                  message={message}
-                  onStatusChangeAction={handleStatusChange}
-                  onDeleteAction={handleDeleteMessage}
-                  onReplyAction={handleReply}
-                />
-              ))
-            ) : (
-              // Empty state
-              <Card>
-                <CardContent className="py-12 text-center">
-                  <Mail className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium">No messages found</h3>
-                  <p className="text-muted-foreground mt-2">
-                    {searchQuery || statusFilter !== 'all'
-                      ? 'Try adjusting your search or filter criteria'
-                      : 'No messages have been received yet'}
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        </div>
       </Tabs>
 
-      {/* Reply Dialog */}
-      {selectedMessage && (
-        <ReplyDialog
-          open={isReplyDialogOpen}
-          onOpenChange={setIsReplyDialogOpen}
-          message={selectedMessage}
-          onSend={handleSendReply}
-        />
+      <div className="mt-6 space-y-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search messages..."
+              className="pl-9"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+        <div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger>
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              {statusOptions.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {isLoading ? (
+        <div className="space-y-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="h-32 bg-muted/50 animate-pulse rounded-lg" />
+          ))}
+        </div>
+      ) : filteredMessages.length > 0 ? (
+        <div className="space-y-4">
+          {filteredMessages.map(message => (
+            <ContactMessageCard
+              key={message.id}
+              message={message}
+              onStatusChangeAction={handleStatusChange}
+              onDeleteAction={handleDelete}
+              onReplyAction={handleReply}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="rounded-full bg-muted p-4 mb-4">
+            <MessageSquare className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-medium">No messages found</h3>
+          <p className="text-sm text-muted-foreground mt-2 max-w-md">
+            {searchQuery || statusFilter !== 'all'
+              ? 'Try adjusting your search or filter criteria'
+              : 'No contact messages have been received yet.'}
+          </p>
+          {searchQuery || statusFilter !== 'all' ? (
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => {
+                setSearchQuery('');
+                setStatusFilter('all');
+              }}
+            >
+              Clear filters
+            </Button>
+          ) : (
+            <Button variant="outline" className="mt-4" onClick={handleRefresh}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+          )}
+        </div>
       )}
     </div>
   );

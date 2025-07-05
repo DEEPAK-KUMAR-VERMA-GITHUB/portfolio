@@ -1,3 +1,5 @@
+'use server';
+
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendEmail } from '@/lib/email';
@@ -12,14 +14,20 @@ interface UpdateMessageRequest {
   };
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: { id: string } | Promise<{ id: string }> }) {
   try {
-    const messageId = params.id;
+    const resolvedParams = params instanceof Promise ? await params : params;
+    const messageId = resolvedParams.id;
     const body: UpdateMessageRequest = await request.json();
 
     // Get the original message first
     const originalMessage = await prisma.contactMessage.findUnique({
       where: { id: messageId },
+      include: {
+        replies: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
     });
 
     if (!originalMessage) {
@@ -28,11 +36,12 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const updateData: any = {};
 
+    // Handle status update
     if (body.status) {
       updateData.status = body.status;
     }
 
-    // If this is a reply, add it to the message and send an email
+    // Handle reply
     if (body.reply) {
       updateData.replies = {
         create: {
@@ -93,6 +102,67 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       {
         success: false,
         error: 'Failed to update message',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request, { params }: { params: { id: string } | Promise<{ id: string }> }) {
+  try {
+    const resolvedParams = params instanceof Promise ? await params : params;
+    const messageId = resolvedParams.id;
+
+    const deletedMessage = await prisma.contactMessage.delete({
+      where: { id: messageId },
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: deletedMessage,
+    });
+  } catch (error) {
+    console.error('Error deleting message:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to delete message',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request: Request, { params }: { params: { id: string } | Promise<{ id: string }> }) {
+  try {
+    const resolvedParams = params instanceof Promise ? await params : params;
+    const messageId = resolvedParams.id;
+
+    const message = await prisma.contactMessage.findUnique({
+      where: { id: messageId },
+      include: {
+        replies: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+
+    if (!message) {
+      return NextResponse.json({ success: false, error: 'Message not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: message,
+    });
+  } catch (error) {
+    console.error('Error fetching message:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to fetch message',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }

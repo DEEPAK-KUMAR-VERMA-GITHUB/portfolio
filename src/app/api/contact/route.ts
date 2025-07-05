@@ -65,3 +65,28 @@ interface UpdateMessageRequest {
     content: string;
   };
 }
+
+export const GET = async () => {
+  try {
+    const messages = await prisma.contactMessage.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        subject: true,
+        message: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        replies: true,
+      },
+    });
+    return NextResponse.json({ success: true, data: messages }, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    return NextResponse.json({ success: false, error: 'Failed to fetch messages' }, { status: 500 });
+  }
+};
