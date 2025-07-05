@@ -12,8 +12,8 @@ import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Tag as ReactTag, WithContext as ReactTags } from 'react-tag-input';
 import z from 'zod';
-import { FileUpload } from '../_components/file-upload';
-import { updateAboutInfoAction } from './actions';
+import { FileUpload } from '@/app/admin/_components/file-upload';
+import { updateAboutInfoAction } from '@/app/admin/about/actions';
 import { useFileUpload } from '@/hooks/useFileUpload';
 
 interface AboutInfo {

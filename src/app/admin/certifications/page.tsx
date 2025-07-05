@@ -4,11 +4,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Loader2 } from 'lucide-react';
-import { DataTable } from './data-table';
-import { columns } from './columns';
-import { CertificationForm } from './certification-form';
+import { DataTable } from '@/app/admin/certifications/data-table';
+import { columns } from '@/app/admin/certifications/columns';
+import { CertificationForm } from '@/app/admin/certifications/certification-form';
 import { Toaster, toast } from 'react-hot-toast';
-import { addCertification, deleteCertification, getCertifications, updateCertification } from './actions';
+import { addCertification, deleteCertification, getCertifications, updateCertification } from '@/app/admin/certifications/actions';
 import { useAuth } from '@/contexts/auth-context';
 
 export type Certification = {
@@ -157,7 +157,7 @@ export default function CertificationsPage() {
         open={isFormOpen}
         onOpenChangeAction={setIsFormOpen}
         certification={editingCert}
-        onSaveAction={handleSave}
+        onSaveAction={handleSave as never}
       />
     </div>
   );

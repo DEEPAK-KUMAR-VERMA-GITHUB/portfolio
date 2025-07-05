@@ -20,7 +20,9 @@ export async function addNewSkill(data: Omit<SkillInput, 'userId'>, userId: stri
   }
 }
 
-export async function getAllSkills(userId: string) {
+export async function getAllSkills(
+  userId: string
+): Promise<{ success: boolean; data: Skill[]; error?: string }> {
   try {
     const skills = await prisma.skill.findMany({
       where: { userId },

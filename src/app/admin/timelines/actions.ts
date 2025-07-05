@@ -52,7 +52,9 @@ export const deleteTimeline = async (timelineId: string) => {
   }
 };
 
-export const getTimelines = async (userId: string) => {
+export const getTimelines = async (
+  userId: string
+): Promise<{ success: boolean; data: TimelineItem[]; error?: string }> => {
   try {
     const result = await prisma.timeLine.findMany({
       where: {

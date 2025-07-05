@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import { FileUpload } from '../_components/file-upload';
+import { FileUpload } from '@/app/admin/_components/file-upload';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required'),

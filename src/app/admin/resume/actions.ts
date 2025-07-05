@@ -1,6 +1,7 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
+import { Resume } from '@/types/types';
 
 export const addResumeAction = async (userId: string, data: any) => {
   console.log(data);
@@ -49,7 +50,7 @@ export const setDefaultResumeAction = async (mediaId: string) => {
   }
 };
 
-export const getResumes = async (userId: string) => {
+export const getResumes = async (userId: string): Promise<{ success: boolean; data?: Resume[]; error?: string }> => {
   try {
     const resumes = await prisma.media.findMany({
       where: {

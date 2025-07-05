@@ -1,21 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Skill } from '@/types/types';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Save, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { addNewSkill } from './actions';
+import { Skill } from '@/types/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2, Save, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useAuth } from '@/contexts/auth-context';
-import { Loader2 } from 'lucide-react';
+import { z } from 'zod';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Skill name is required'),

@@ -6,10 +6,15 @@ import { Plus } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { DataTable } from '@/app/admin/projects/data-table';
-import { columns } from './columns';
-import AchievementDialog from './achievement-dialog';
-import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
-import { addNewAchievement, deleteAchievement, getAllAchievements, updateAchievement } from './actions';
+import { columns } from '@/app/admin/achievements/columns';
+import AchievementDialog from '@/app/admin/achievements/achievement-dialog';
+import { DeleteConfirmationDialog } from '@/app/admin/_components/delete-confirmation-dialog';
+import {
+  addNewAchievement,
+  deleteAchievement,
+  getAllAchievements,
+  updateAchievement,
+} from '@/app/admin/achievements/actions';
 import { useAuth } from '@/contexts/auth-context';
 
 type AchievementResponse = {
@@ -32,7 +37,7 @@ type AchievementItem = {
 export default function AchievementsPage() {
   const [achievements, setAchievements] = useState<AchievementItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [currentAchievement, setCurrentAchievement] = useState<Achievement | AchievementItem | null>(null);
+  const [currentAchievement, setCurrentAchievement] = useState<AchievementItem | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [achievementToDelete, setAchievementToDelete] = useState<AchievementItem | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -95,19 +100,19 @@ export default function AchievementsPage() {
     }
   };
 
-  const handleSaveAchievement = async (achievement: Achievement | AchievementItem) => {
+  const handleSaveAchievement = async (achievement: any) => {
     setIsSaving(true);
 
     try {
       if (currentAchievement) {
         // Update existing achievement
-        await updateAchievement({ ...achievement, id: currentAchievement.id } as AchievementInput, user?.id as string);
+        await updateAchievement({ ...achievement, id: currentAchievement.id }, user?.id as string);
 
         toast.success('Achievement updated successfully');
         setCurrentAchievement(null);
         setIsDialogOpen(false);
       } else {
-        await addNewAchievement(achievement as Achievement, user?.id as string);
+        await addNewAchievement(achievement, user?.id as string);
         toast.success('Achievement added successfully');
       }
 
@@ -136,8 +141,8 @@ export default function AchievementsPage() {
 
       <DataTable
         columns={columns({
-          onEdit: handleEditAchievement,
-          onDelete: handleDeleteClick,
+          onEdit: handleEditAchievement as never,
+          onDelete: handleDeleteClick as never,
         })}
         data={achievements}
         searchKey="title"

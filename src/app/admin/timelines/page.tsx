@@ -7,10 +7,10 @@ import { TimelineItem } from '@/types/types';
 import { Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
-import { addNewTimeline, deleteTimeline, getTimelines, updateTimeline } from './actions';
-import { columns } from './columns';
-import TimelineDialog from './timeline-dialog';
+import { DeleteConfirmationDialog } from '@/app/admin/_components/delete-confirmation-dialog';
+import { addNewTimeline, deleteTimeline, getTimelines, updateTimeline } from '@/app/admin/timelines/actions';
+import { columns } from '@/app/admin/timelines/columns';
+import TimelineDialog from '@/app/admin/timelines/timeline-dialog';
 
 export default function TimelinesPage() {
   const [timelines, setTimelines] = useState<TimelineItem[]>([]);
@@ -89,7 +89,7 @@ export default function TimelinesPage() {
           id: currentTimeline.id,
           userId: user?.id as string,
           updatedAt: new Date(),
-        } as TimelineItem);
+        } as never);
         triggerRefresh();
         toast.success('Timeline item updated successfully');
       } else {

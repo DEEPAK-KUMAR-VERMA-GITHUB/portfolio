@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowUpDown, Pencil, Trash2, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
-import { Certification } from './page';
+import { Certification } from '@/app/admin/certifications/page';
 import Image from 'next/image';
 
 export const columns = (

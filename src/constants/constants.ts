@@ -1,5 +1,5 @@
 import { Achievement, Certification, Project, Skill, TimelineItem } from '@/types/types';
-import { COLORS } from './colors';
+import { COLORS } from '@/constants/colors';
 
 export const COLORS_TOP = [COLORS.TEAL, COLORS.BLUE, COLORS.PURPLE, COLORS.PINK];
 
@@ -23,8 +23,6 @@ export const skills: Skill[] = [
   { name: 'JavaScript', level: 90, category: 'language' },
   { name: 'HTML5', level: 95, category: 'language' },
   { name: 'CSS3', level: 90, category: 'language' },
-  { name: 'GraphQL', level: 85, category: 'framework' },
-  { name: 'Apollo Server', level: 80, category: 'framework' },
 ];
 
 export const projects: Project[] = [
@@ -87,28 +85,28 @@ export const achievements: Achievement[] = [
   {
     title: 'Full Stack Web Development',
     issuer: 'Coursera',
-    date: '2024',
+    date: new Date('2024'),
     icon: '🏆',
     description: 'Completed comprehensive full-stack development course',
   },
   {
     title: 'JavaScript Algorithms',
     issuer: 'HackerRank',
-    date: '2024',
+    date: new Date('2024'),
     icon: '⭐',
     description: '5-star rating in JavaScript problem solving',
   },
   {
     title: 'React Developer',
     issuer: 'Meta',
-    date: '2023',
+    date: new Date('2023'),
     icon: '🎯',
     description: 'Professional React development certification',
   },
   {
     title: 'Best Project Award',
     issuer: 'College',
-    date: '2023',
+    date: new Date('2023'),
     icon: '🥇',
     description: 'Best final year project in computer applications',
   },
@@ -122,6 +120,8 @@ export const timeline: TimelineItem[] = [
     period: '2022 - 2024',
     description: 'Specializing in software development and system design. Current CGPA: 8.5/10',
     type: 'education',
+    id: '1',
+    icon: '🎓',
   },
   {
     title: 'Full Stack Developer Intern',
@@ -129,6 +129,8 @@ export const timeline: TimelineItem[] = [
     period: 'Jun 2023 - Aug 2023',
     description: 'Developed web applications using React and Node.js. Contributed to 3 major projects.',
     type: 'experience',
+    id: '2',
+    icon: '💼',
   },
   {
     title: 'Bachelor of Computer Applications',
@@ -136,6 +138,8 @@ export const timeline: TimelineItem[] = [
     period: '2019 - 2022',
     description: 'Graduated with First Class. Strong foundation in programming and database management.',
     type: 'education',
+    id: '3',
+    icon: '🎓',
   },
   {
     title: 'E-Commerce Platform',
@@ -143,6 +147,8 @@ export const timeline: TimelineItem[] = [
     period: 'Jan 2024 - Present',
     description: 'Building a comprehensive e-commerce solution as final year project.',
     type: 'project',
+    id: '4',
+    icon: '🛒',
   },
 ];
 

@@ -27,8 +27,8 @@ export interface Skill {
   level: number;
   category: 'frontend' | 'backend' | 'tools' | 'language' | 'database' | 'others';
   userId?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Achievement {
@@ -47,6 +47,9 @@ export interface TimelineItem {
   description: string;
   type: 'education' | 'experience' | 'project' | 'certification';
   icon: React.ReactNode;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
 }
 
 export interface Resume {
@@ -56,9 +59,12 @@ export interface Resume {
   fileSize: string;
   fileType: string;
   isDefault: boolean;
-  lastUpdated: string;
-  description?: string;
-  version?: string;
+  lastUpdated: Date;
+  description: string | null | undefined;
+  version?: string | null | undefined;
+  userId?: string | null | undefined;
+  createdAt?: Date | null | undefined;
+  updatedAt?: Date | null | undefined;
 }
 
 export interface Category {
@@ -68,8 +74,8 @@ export interface Category {
   description?: string;
   icon?: string;
   color?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Technology {
@@ -81,8 +87,8 @@ export interface Technology {
   website?: string;
   description?: string;
   featured: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Label {

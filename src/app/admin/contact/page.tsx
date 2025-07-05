@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ContactMessageCard } from './_components/contact-message';
+import { ContactMessageCard } from '@/app/admin/contact/_components/contact-message';
 import { ContactMessage } from '@/types/types';
 import { toast } from 'react-hot-toast';
 import { Search, RefreshCw, MessageSquare, AlertCircle, CheckCircle, Inbox } from 'lucide-react';

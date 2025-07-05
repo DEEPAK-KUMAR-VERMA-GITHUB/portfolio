@@ -1,15 +1,18 @@
 'use client';
 
 import NeonBorder from '@/components/hero/NeonBorder';
-import { ProjectShowcase } from '@/components/project-showcase';
-import { achievements, certifications } from '@/constants/constants';
+import { CertificateShowcase } from '@/components/certificate-showcase';
 import { useLandingPageContext } from '@/contexts/landing-page-context';
 import { formatDate } from 'date-fns';
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { Loader2, Star } from 'lucide-react';
 
 export default function Achievement() {
   const { achievements, certifications } = useLandingPageContext();
+
+  if (!achievements || !certifications) {
+    return <Loader2 className="w-12 h-12 animate-spin" />;
+  }
 
   return (
     <section id="achievements" className="py-20 relative overflow-hidden">
@@ -97,22 +100,29 @@ export default function Achievement() {
         {/* // certifications */}
 
         <div>
-          <ProjectShowcase
-            autoplay
-            buttonInscriptions={{
-              previousButton: 'Previous',
-              nextButton: 'Next',
-              openWebAppButton: 'Preview',
-            }}
-            halomotButtonGradient="linear-gradient(to right, #a123f4, #603dec)"
-            testimonials={certifications.map(certification => ({
-              quote: certification.description,
-              name: certification.title,
-              designation: certification.issuer,
-              src: certification.image,
-            }))}
-            onItemClick={link => window.open(link, '_blank')}
-          />
+          {certifications && (
+            <CertificateShowcase
+              autoplay
+              buttonInscriptions={{
+                previousButton: 'Previous',
+                nextButton: 'Next',
+                openWebAppButton: 'Preview',
+              }}
+              halomotButtonGradient="linear-gradient(to right, #a123f4, #603dec)"
+              certifications={certifications.map(certification => ({
+                id: certification.id,
+                title: certification.title,
+                issuer: certification.issuer,
+                date: certification.date,
+                icon: certification.icon,
+                image: certification.image,
+                verified: certification.verified,
+                verifyUrl: certification.verifyUrl,
+                description: certification.description,
+              }))}
+              onItemClick={link => window.open(link, '_blank')}
+            />
+          )}
         </div>
       </div>
     </section>

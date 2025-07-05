@@ -74,6 +74,8 @@ type Certification = {
   icon: string;
   issuer: string;
   image: string;
+  verified: boolean;
+  verifyUrl: string;
 };
 
 type LandingPageData = {

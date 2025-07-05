@@ -1,19 +1,12 @@
-"use client";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { useEffect, useState, useCallback, useRef } from "react";
-import { HalomotButton } from "./halomot-button";
+'use client';
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { HalomotButton } from '@/components/halomot-button';
+import { Certification } from '@/types/types';
 
-type Testimonial = {
-  quote: string;
-  name: string;
-  designation: string;
-  src: string;
-  link?: string;
-};
-
-type ProjectShowcaseProps = {
-  testimonials: Testimonial[];
+type CertificateShowcaseProps = {
+  certifications: Certification[];
   autoplay?: boolean;
   colors?: { name?: string; position?: string; testimony?: string };
   fontSizes?: { name?: string; position?: string; testimony?: string };
@@ -65,62 +58,61 @@ type ProjectShowcaseProps = {
   halomotButtonHoverTextColor?: string;
 };
 
-export const ProjectShowcase = ({
-  testimonials,
+export const CertificateShowcase = ({
+  certifications,
   autoplay = false,
-  colors = { name: "#fff", position: "gray-500", testimony: "gray-500" },
-  fontSizes = { name: "2xl", position: "sm", testimony: "lg" },
+  colors = { name: '#fff', position: 'gray-500', testimony: 'gray-500' },
+  fontSizes = { name: '2xl', position: 'sm', testimony: 'lg' },
   spacing = {
-    top: "20",
-    bottom: "20",
-    lineHeight: "1.5",
-    nameTop: "0",
-    nameBottom: "0.5em",
-    positionTop: "0",
-    positionBottom: "0.25em",
-    testimonyTop: "1em",
-    testimonyBottom: "1em"
+    top: '20',
+    bottom: '20',
+    lineHeight: '1.5',
+    nameTop: '0',
+    nameBottom: '0.5em',
+    positionTop: '0',
+    positionBottom: '0.25em',
+    testimonyTop: '1em',
+    testimonyBottom: '1em',
   },
   desktopVersionBottomThreshold = 1024,
   mobile = {},
   imageAspectRatio = 1.37,
   isRTL = false,
   onItemClick,
-  outerRounding = "18.2px",
-  innerRounding = "18px",
-  outlineColor = "#33313d",
-  hoverOutlineColor = "#403d4d",
+  outerRounding = '18.2px',
+  innerRounding = '18px',
+  outlineColor = '#33313d',
+  hoverOutlineColor = '#403d4d',
   buttonInscriptions = {
-    previousButton: "Previous",
-    nextButton: "Next",
-    openWebAppButton: "Preview"
+    previousButton: 'Previous',
+    nextButton: 'Next',
+    openWebAppButton: 'Preview',
   },
-  halomotButtonGradient = "linear-gradient(to right, #a123f4, #603dec)",
-  halomotButtonBackground = "#111014",
-  halomotButtonTextColor = "#fff",
-  halomotButtonOuterBorderRadius = "6.34px",
-  halomotButtonInnerBorderRadius = "6px",
-  halomotButtonHoverTextColor
-}: ProjectShowcaseProps) => {
+  halomotButtonGradient = 'linear-gradient(to right, #a123f4, #603dec)',
+  halomotButtonBackground = '#111014',
+  halomotButtonTextColor = '#fff',
+  halomotButtonOuterBorderRadius = '6.34px',
+  halomotButtonInnerBorderRadius = '6px',
+  halomotButtonHoverTextColor,
+}: CertificateShowcaseProps) => {
   const [active, setActive] = useState(0);
   const [isMobileView, setIsMobileView] = useState(false);
   const [componentWidth, setComponentWidth] = useState(0);
   const componentRef = useRef<HTMLDivElement>(null);
 
   // Use Mobile Config (with defaults)
-  const currentFontSizes =
-    isMobileView && mobile.fontSizes ? mobile.fontSizes : fontSizes;
+  const currentFontSizes = isMobileView && mobile.fontSizes ? mobile.fontSizes : fontSizes;
   const currentSpacing = {
     ...spacing,
-    ...(isMobileView && mobile.spacing ? mobile.spacing : {})
+    ...(isMobileView && mobile.spacing ? mobile.spacing : {}),
   };
 
   const handleNext = () => {
-    setActive((prev) => (prev + 1) % testimonials.length);
+    setActive(prev => (prev + 1) % certifications.length);
   };
 
   const handlePrev = () => {
-    setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setActive(prev => (prev - 1 + certifications.length) % certifications.length);
   };
 
   const isActive = (index: number) => {
@@ -137,9 +129,7 @@ export const ProjectShowcase = ({
   const handleResize = useCallback(() => {
     if (componentRef.current) {
       setComponentWidth(componentRef.current.offsetWidth);
-      setIsMobileView(
-        componentRef.current.offsetWidth < desktopVersionBottomThreshold
-      );
+      setIsMobileView(componentRef.current.offsetWidth < desktopVersionBottomThreshold);
     }
   }, [desktopVersionBottomThreshold]);
 
@@ -166,11 +156,8 @@ export const ProjectShowcase = ({
     const minGap = 60;
     const maxGap = 86;
     if (width <= minWidth) return minGap;
-    if (width >= maxWidth)
-      return Math.max(minGap, maxGap + 0.06018 * (width - maxWidth));
-    return (
-      minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth))
-    );
+    if (width >= maxWidth) return Math.max(minGap, maxGap + 0.06018 * (width - maxWidth));
+    return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
   };
 
   return (
@@ -179,61 +166,52 @@ export const ProjectShowcase = ({
       className={`w-full mx-auto antialiased font-sans py-${currentSpacing.top} pb-${currentSpacing.bottom}`}
       style={{
         lineHeight: currentSpacing.lineHeight,
-        backgroundColor: "transparent",
-        direction: isRTL ? "rtl" : "ltr"
+        backgroundColor: 'transparent',
+        direction: isRTL ? 'rtl' : 'ltr',
       }}
     >
       <div
         className="relative"
         style={{
-          display: "grid",
-          gridTemplateColumns: isMobileView
-            ? "1fr"
-            : isRTL
-            ? "1fr 1fr"
-            : "1fr 1fr",
-          gap: `${calculateGap(componentWidth)}px`
+          display: 'grid',
+          gridTemplateColumns: isMobileView ? '1fr' : isRTL ? '1fr 1fr' : '1fr 1fr',
+          gap: `${calculateGap(componentWidth)}px`,
         }}
       >
         {isRTL && !isMobileView ? (
           <>
             <div className="w-full">
-              <div
-                className="relative"
-                style={{ paddingTop: `${(1 / imageAspectRatio) * 100}%` }}
-              >
+              <div className="relative" style={{ paddingTop: `${(1 / imageAspectRatio) * 100}%` }}>
                 <AnimatePresence>
-                  {testimonials.map((testimonial, index) => (
+                  {certifications.map((certification, index) => (
                     <motion.div
-                      key={testimonial.src}
+                      key={certification.image}
                       initial={{
                         opacity: 0,
                         scale: 0.9,
                         z: -100,
-                        rotate: randomRotateY()
+                        rotate: randomRotateY(),
                       }}
                       animate={{
                         opacity: isActive(index) ? 1 : 0.7,
                         scale: isActive(index) ? 1 : 0.95,
                         z: isActive(index) ? 0 : -100,
                         rotate: isActive(index) ? 0 : randomRotateY(),
-                        zIndex: isActive(index)
-                          ? 999
-                          : testimonials.length + 2 - index,
-                        y: isActive(index) ? [0, -80, 0] : 0
+                        zIndex: isActive(index) ? 999 : certifications.length + 2 - index,
+                        y: isActive(index) ? [0, -80, 0] : 0,
                       }}
                       exit={{
                         opacity: 0,
                         scale: 0.9,
                         z: 100,
-                        rotate: randomRotateY()
+                        rotate: randomRotateY(),
                       }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      transition={{ duration: 0.4, ease: 'easeInOut' }}
                       className="absolute inset-0 origin-bottom"
                     >
                       <ImageContainer
-                        src={testimonial.src}
-                        alt={testimonial.name}
+                        src={certification.image}
+                        alt={certification.title}
                         outerRounding={outerRounding}
                         innerRounding={innerRounding}
                         outlineColor={outlineColor}
@@ -250,7 +228,7 @@ export const ProjectShowcase = ({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
               >
                 <h3
                   className={`font-bold`}
@@ -259,10 +237,10 @@ export const ProjectShowcase = ({
                     color: colors.name,
                     marginTop: currentSpacing.nameTop,
                     marginBottom: currentSpacing.nameBottom,
-                    textAlign: "right"
+                    textAlign: 'right',
                   }}
                 >
-                  {testimonials[active].name}
+                  {certifications[active].title}
                 </h3>
                 <p
                   style={{
@@ -270,10 +248,10 @@ export const ProjectShowcase = ({
                     color: colors.position,
                     marginTop: currentSpacing.positionTop,
                     marginBottom: currentSpacing.positionBottom,
-                    textAlign: "right"
+                    textAlign: 'right',
                   }}
                 >
-                  {testimonials[active].designation}
+                  {certifications[active].issuer}
                 </p>
                 <motion.p
                   style={{
@@ -281,22 +259,22 @@ export const ProjectShowcase = ({
                     color: colors.testimony,
                     marginTop: currentSpacing.testimonyTop,
                     marginBottom: currentSpacing.testimonyBottom,
-                    textAlign: "right"
+                    textAlign: 'right',
                   }}
                 >
-                  {testimonials[active].quote.split(" ").map((word, index) => (
+                  {certifications[active].description.split(' ').map((word, index) => (
                     <motion.span
                       key={index}
-                      initial={{ filter: "blur(10px)", opacity: 0, y: 5 }}
+                      initial={{ filter: 'blur(10px)', opacity: 0, y: 5 }}
                       animate={{
-                        filter: "blur(0px)",
+                        filter: 'blur(0px)',
                         opacity: 1,
-                        y: 0
+                        y: 0,
                       }}
                       transition={{
                         duration: 0.2,
-                        ease: "easeInOut",
-                        delay: 0.02 * index
+                        ease: 'easeInOut',
+                        delay: 0.02 * index,
                       }}
                       className="inline-block"
                     >
@@ -306,10 +284,8 @@ export const ProjectShowcase = ({
                 </motion.p>
               </motion.div>
               <div
-                className={`flex gap-4 ${
-                  isMobileView ? "pt-12" : "md:pt-0"
-                } w-full`}
-                style={{ justifyContent: "flex-start" }}
+                className={`flex gap-4 ${isMobileView ? 'pt-12' : 'md:pt-0'} w-full`}
+                style={{ justifyContent: 'flex-start' }}
               >
                 <HalomotButton
                   inscription={buttonInscriptions.previousButton}
@@ -320,9 +296,7 @@ export const ProjectShowcase = ({
                   textColor={halomotButtonTextColor}
                   innerBorderRadius={halomotButtonInnerBorderRadius}
                   outerBorderRadius={halomotButtonOuterBorderRadius}
-                  {...(halomotButtonHoverTextColor
-                    ? { hoverTextColor: halomotButtonHoverTextColor }
-                    : {})}
+                  {...(halomotButtonHoverTextColor ? { hoverTextColor: halomotButtonHoverTextColor } : {})}
                 />
                 <HalomotButton
                   inscription={buttonInscriptions.nextButton}
@@ -333,25 +307,19 @@ export const ProjectShowcase = ({
                   textColor={halomotButtonTextColor}
                   innerBorderRadius={halomotButtonInnerBorderRadius}
                   outerBorderRadius={halomotButtonOuterBorderRadius}
-                  {...(halomotButtonHoverTextColor
-                    ? { hoverTextColor: halomotButtonHoverTextColor }
-                    : {})}
+                  {...(halomotButtonHoverTextColor ? { hoverTextColor: halomotButtonHoverTextColor } : {})}
                 />
                 <HalomotButton
                   inscription={buttonInscriptions.openWebAppButton}
-                  onClick={() =>
-                    onItemClick && onItemClick(testimonials[active].link || "")
-                  }
+                  onClick={() => onItemClick && onItemClick(certifications[active].verifyUrl || '')}
                   fillWidth
                   gradient={halomotButtonGradient}
                   backgroundColor={halomotButtonBackground}
                   textColor={halomotButtonTextColor}
                   innerBorderRadius={halomotButtonInnerBorderRadius}
                   outerBorderRadius={halomotButtonOuterBorderRadius}
-                  {...(halomotButtonHoverTextColor
-                    ? { hoverTextColor: halomotButtonHoverTextColor }
-                    : {})}
-                  href={testimonials[active].link}
+                  {...(halomotButtonHoverTextColor ? { hoverTextColor: halomotButtonHoverTextColor } : {})}
+                  href={certifications[active].verifyUrl}
                 />
               </div>
             </div>
@@ -359,42 +327,37 @@ export const ProjectShowcase = ({
         ) : (
           <>
             <div className="w-full">
-              <div
-                className="relative"
-                style={{ paddingTop: `${(1 / imageAspectRatio) * 100}%` }}
-              >
+              <div className="relative" style={{ paddingTop: `${(1 / imageAspectRatio) * 100}%` }}>
                 <AnimatePresence>
-                  {testimonials.map((testimonial, index) => (
+                  {certifications.map((certification, index) => (
                     <motion.div
-                      key={testimonial.src}
+                      key={certification.image}
                       initial={{
                         opacity: 0,
                         scale: 0.9,
                         z: -100,
-                        rotate: randomRotateY()
+                        rotate: randomRotateY(),
                       }}
                       animate={{
                         opacity: isActive(index) ? 1 : 0.7,
                         scale: isActive(index) ? 1 : 0.95,
                         z: isActive(index) ? 0 : -100,
                         rotate: isActive(index) ? 0 : randomRotateY(),
-                        zIndex: isActive(index)
-                          ? 999
-                          : testimonials.length + 2 - index,
-                        y: isActive(index) ? [0, -80, 0] : 0
+                        zIndex: isActive(index) ? 999 : certifications.length + 2 - index,
+                        y: isActive(index) ? [0, -80, 0] : 0,
                       }}
                       exit={{
                         opacity: 0,
                         scale: 0.9,
                         z: 100,
-                        rotate: randomRotateY()
+                        rotate: randomRotateY(),
                       }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      transition={{ duration: 0.4, ease: 'easeInOut' }}
                       className="absolute inset-0 origin-bottom"
                     >
                       <ImageContainer
-                        src={testimonial.src}
-                        alt={testimonial.name}
+                        src={certification.image}
+                        alt={certification.title}
                         outerRounding={outerRounding}
                         innerRounding={innerRounding}
                         outlineColor={outlineColor}
@@ -411,7 +374,7 @@ export const ProjectShowcase = ({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
               >
                 <h3
                   className={`font-bold`}
@@ -419,42 +382,42 @@ export const ProjectShowcase = ({
                     fontSize: currentFontSizes.name,
                     color: colors.name,
                     marginTop: currentSpacing.nameTop,
-                    marginBottom: currentSpacing.nameBottom
+                    marginBottom: currentSpacing.nameBottom,
                   }}
                 >
-                  {testimonials[active].name}
+                  {certifications[active]?.title }
                 </h3>
                 <p
                   style={{
                     fontSize: currentFontSizes.position,
                     color: colors.position,
                     marginTop: currentSpacing.positionTop,
-                    marginBottom: currentSpacing.positionBottom
+                    marginBottom: currentSpacing.positionBottom,
                   }}
                 >
-                  {testimonials[active].designation}
+                  {certifications[active]?.issuer}
                 </p>
                 <motion.p
                   style={{
                     fontSize: currentFontSizes.testimony,
                     color: colors.testimony,
                     marginTop: currentSpacing.testimonyTop,
-                    marginBottom: currentSpacing.testimonyBottom
+                    marginBottom: currentSpacing.testimonyBottom,
                   }}
                 >
-                  {testimonials[active].quote.split(" ").map((word, index) => (
+                  {certifications[active]?.description.split(' ').map((word, index) => (
                     <motion.span
                       key={index}
-                      initial={{ filter: "blur(10px)", opacity: 0, y: 5 }}
+                      initial={{ filter: 'blur(10px)', opacity: 0, y: 5 }}
                       animate={{
-                        filter: "blur(0px)",
+                        filter: 'blur(0px)',
                         opacity: 1,
-                        y: 0
+                        y: 0,
                       }}
                       transition={{
                         duration: 0.2,
-                        ease: "easeInOut",
-                        delay: 0.02 * index
+                        ease: 'easeInOut',
+                        delay: 0.02 * index,
                       }}
                       className="inline-block"
                     >
@@ -463,11 +426,7 @@ export const ProjectShowcase = ({
                   ))}
                 </motion.p>
               </motion.div>
-              <div
-                className={`flex gap-4 ${
-                  isMobileView ? "pt-12" : "md:pt-0"
-                } w-full`}
-              >
+              <div className={`flex gap-4 ${isMobileView ? 'pt-12' : 'md:pt-0'} w-full`}>
                 <HalomotButton
                   inscription={buttonInscriptions.previousButton}
                   onClick={handlePrev}
@@ -477,9 +436,7 @@ export const ProjectShowcase = ({
                   textColor={halomotButtonTextColor}
                   innerBorderRadius={halomotButtonInnerBorderRadius}
                   outerBorderRadius={halomotButtonOuterBorderRadius}
-                  {...(halomotButtonHoverTextColor
-                    ? { hoverTextColor: halomotButtonHoverTextColor }
-                    : {})}
+                  {...(halomotButtonHoverTextColor ? { hoverTextColor: halomotButtonHoverTextColor } : {})}
                 />
                 <HalomotButton
                   inscription={buttonInscriptions.nextButton}
@@ -490,25 +447,19 @@ export const ProjectShowcase = ({
                   textColor={halomotButtonTextColor}
                   innerBorderRadius={halomotButtonInnerBorderRadius}
                   outerBorderRadius={halomotButtonOuterBorderRadius}
-                  {...(halomotButtonHoverTextColor
-                    ? { hoverTextColor: halomotButtonHoverTextColor }
-                    : {})}
+                  {...(halomotButtonHoverTextColor ? { hoverTextColor: halomotButtonHoverTextColor } : {})}
                 />
                 <HalomotButton
                   inscription={buttonInscriptions.openWebAppButton}
-                  onClick={() =>
-                    onItemClick && onItemClick(testimonials[active].link || "")
-                  }
+                  onClick={() => onItemClick && onItemClick(certifications[active]?.verifyUrl || '')}
                   fillWidth
                   gradient={halomotButtonGradient}
                   backgroundColor={halomotButtonBackground}
                   textColor={halomotButtonTextColor}
                   innerBorderRadius={halomotButtonInnerBorderRadius}
                   outerBorderRadius={halomotButtonOuterBorderRadius}
-                  {...(halomotButtonHoverTextColor
-                    ? { hoverTextColor: halomotButtonHoverTextColor }
-                    : {})}
-                  href={testimonials[active].link}
+                  {...(halomotButtonHoverTextColor ? { hoverTextColor: halomotButtonHoverTextColor } : {})}
+                  href={certifications[active]?.verifyUrl}
                 />
               </div>
             </div>
@@ -534,21 +485,21 @@ const ImageContainer = ({
   outerRounding,
   innerRounding,
   outlineColor,
-  hoverOutlineColor
+  hoverOutlineColor,
 }: ImageContainerProps) => (
   <div
     className="relative h-full w-full project-showcase-image-container"
     style={{
       borderRadius: outerRounding,
-      padding: "1px",
+      padding: '1px',
       backgroundColor: outlineColor,
-      transition: "background-color 0.3s ease-in-out"
+      transition: 'background-color 0.3s ease-in-out',
     }}
   >
     <div
       className="relative h-full w-full overflow-hidden"
       style={{
-        borderRadius: innerRounding
+        borderRadius: innerRounding,
       }}
     >
       <Image

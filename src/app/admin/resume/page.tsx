@@ -6,38 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Toaster, toast } from 'react-hot-toast';
 import { Plus, Upload as UploadIcon, FileText, Download, Settings } from 'lucide-react';
-import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
-import ResumeUpload from './resume-upload';
-import ResumeItem from './resume-item';
+import { DeleteConfirmationDialog } from '@/app/admin/_components/delete-confirmation-dialog';
+import ResumeUpload from '@/app/admin/resume/resume-upload';
+import ResumeItem from '@/app/admin/resume/resume-item';
 import { Resume } from '@/types/types';
 import { useAuth } from '@/contexts/auth-context';
-import { addResumeAction, deleteResumeAction, getResumes, setDefaultResumeAction } from './actions';
+import { addResumeAction, deleteResumeAction, getResumes, setDefaultResumeAction } from '@/app/admin/resume/actions';
 import { useFileUpload } from '@/hooks/useFileUpload';
-
-// // Mock data - replace with API calls
-// const mockResumes: Resume[] = [
-//   {
-//     id: '1',
-//     title: 'Software Engineer Resume',
-//     fileUrl: '/resumes/resume-2024.pdf',
-//     fileSize: '1.2 MB',
-//     fileType: 'application/pdf',
-//     isDefault: true,
-//     lastUpdated: '2024-06-20T10:30:00Z',
-//     version: '2.0',
-//     description: 'Latest version with updated experience and skills',
-//   },
-//   {
-//     id: '2',
-//     title: 'Software Engineer Resume',
-//     fileUrl: '/resumes/resume-2023.pdf',
-//     fileSize: '1.1 MB',
-//     fileType: 'application/pdf',
-//     isDefault: false,
-//     lastUpdated: '2023-06-15T14:20:00Z',
-//     version: '1.5',
-//   },
-// ];
 
 export default function ResumePage() {
   const [resumes, setResumes] = useState<Resume[]>([]);
@@ -60,11 +35,11 @@ export default function ResumePage() {
     try {
       const result = await getResumes(user?.id as string);
       if (result.success) {
-        setResumes(result.data);
-        const defaultResume = result.data.find(r => r.isDefault);
-        const otherResumes = result.data.filter(r => !r.isDefault);
-        setDefaultResume(defaultResume);
-        setOtherResumes(otherResumes);
+        setResumes(result.data || []);
+        const defaultResume = result.data?.find(r => r.isDefault);
+        const otherResumes = result.data?.filter(r => !r.isDefault);
+        setDefaultResume(defaultResume || null);
+        setOtherResumes(otherResumes || []);
       }
     } catch (error) {
       console.error('Error fetching resumes:', error);
@@ -109,8 +84,12 @@ export default function ResumePage() {
         fileSize: formatFileSize(result.size),
         fileType: result.type,
         isDefault: false,
-        lastUpdated: new Date().toISOString(),
+        lastUpdated: new Date(),
         version: '1.0',
+        description: '',
+        userId: user?.id as string,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       console.log(newResume);

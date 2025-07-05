@@ -19,7 +19,7 @@ import { useFileUpload } from '@/hooks/useFileUpload';
 import { cn } from '@/lib/utils';
 import { Certification } from '@/types/types';
 import { toast } from 'react-hot-toast';
-import { FileUpload } from '../_components/file-upload';
+import { FileUpload } from '@/app/admin/_components/file-upload';
 
 const formSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters'),
@@ -118,7 +118,7 @@ export function CertificationForm({ open, onOpenChangeAction, certification, onS
               onSaveAction({
                 ...data,
                 image: certificationImageUrl,
-              });
+              } as never);
             })}
             className="space-y-6"
           >

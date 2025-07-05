@@ -8,8 +8,8 @@ import { Plus } from 'lucide-react';
 import { DataTable } from '@/app/admin/projects/data-table';
 import ProjectDialog from '@/app/admin/projects/project-dialog';
 import { Toaster, toast } from 'react-hot-toast';
-import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
-import { addProject, deleteProject, getAllProjects, updateProject } from './actions';
+import { DeleteConfirmationDialog } from '@/app/admin/_components/delete-confirmation-dialog';
+import { addProject, deleteProject, getAllProjects, updateProject } from '@/app/admin/projects/actions';
 import { useAuth } from '@/contexts/auth-context';
 
 // const initialProjects: Project[] = [

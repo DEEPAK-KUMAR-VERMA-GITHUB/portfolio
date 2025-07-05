@@ -6,11 +6,11 @@ import { Plus } from 'lucide-react';
 import { useEffect, useState, useCallback } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { DataTable } from '@/app/admin/projects/data-table';
-import { columns } from './columns';
-import SkillDialog from './skill-dialog';
-import { DeleteConfirmationDialog } from '../_components/delete-confirmation-dialog';
+import { columns } from '@/app/admin/skills/columns';
+import SkillDialog from '@/app/admin/skills/skill-dialog';
+import { DeleteConfirmationDialog } from '@/app/admin/_components/delete-confirmation-dialog';
 import { useAuth } from '@/contexts/auth-context';
-import { addNewSkill, deleteSkill, getAllSkills, updateSkill } from './actions';
+import { addNewSkill, deleteSkill, getAllSkills, updateSkill } from '@/app/admin/skills/actions';
 
 type SkillWithId = Skill & {
   id: string;
@@ -49,7 +49,7 @@ export default function SkillsPage() {
     try {
       const result = await getAllSkills(user.id);
       if (result.success) {
-        setSkills(result.data || []);
+        setSkills(result.data as SkillWithId[]);
       } else {
         toast.error(result.error || 'Failed to load skills');
         setSkills([]);
@@ -111,21 +111,21 @@ export default function SkillsPage() {
       let result;
       if (editSkill) {
         // Update existing skill
-        const updateData: SkillUpdateInput = {
+        const updateData: Skill = {
           id: editSkill.id,
           name: skillData.name,
           category: skillData.category as Skill['category'],
           level: skillData.level,
-          userId: user.id
+          userId: user.id,
         };
-        result = await updateSkill(updateData);
+        result = await updateSkill(updateData as never);
       } else {
         // Add new skill
         const newSkill: SkillInput = {
           name: skillData.name,
           category: skillData.category as Skill['category'],
           level: skillData.level,
-          userId: user.id
+          userId: user.id,
         };
         result = await addNewSkill(newSkill, user.id);
       }
@@ -162,8 +162,8 @@ export default function SkillsPage() {
         ) : (
           <DataTable
             columns={columns({
-              onEdit: handleEditSkill,
-              onDelete: handleDeleteClick,
+              onEdit: handleEditSkill as never,
+              onDelete: handleDeleteClick as never,
             })}
             data={skills}
             searchKey="name"
@@ -177,7 +177,7 @@ export default function SkillsPage() {
         skill={editSkill}
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        onSave={handleSaveSkill}
+        onSave={handleSaveSkill as never}
         onCancel={() => setIsDialogOpen(false)}
       />
 
