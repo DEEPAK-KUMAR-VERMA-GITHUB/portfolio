@@ -63,7 +63,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         reply: body.reply.content,
         replySubject: body.reply.subject,
         websiteUrl: new URL(config.app.url).origin,
-        logoUrl: `${config.app.url}/file.svg`,
+        logoUrl: `${config.app.url}/logo_512x512.png`,
       });
 
       // Send email with the reply

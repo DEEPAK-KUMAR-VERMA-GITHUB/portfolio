@@ -10,8 +10,8 @@ export default function Resume() {
   const downloadResume = () => {
     if (!resume) return;
     const link = document.createElement('a');
-    link.href = resume?.url as string;
-    link.setAttribute('download', `${resume?.name}.pdf`);
+    link.href = resume.fileUrl as string;
+    link.setAttribute('download', `${resume.title}.pdf`);
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
@@ -125,7 +125,7 @@ export default function Resume() {
                           </motion.div>
                         </div>
                       </div>
-                      <p className="text-white/70 text-sm leading-relaxed">{item.description}</p>
+                      <p className="text-white/70 text-sm leading-relaxed text-justify">{item.description}</p>
                     </div>
                   </NeonBorder>
                 </div>

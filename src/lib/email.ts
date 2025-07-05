@@ -4,6 +4,7 @@ import { config } from './config';
 // Create a test account for development
 const createTestAccount = async () => {
   if (process.env.NODE_ENV === 'development') {
+    console.log('Creating test account...');
     const testAccount = await nodemailer.createTestAccount();
     return {
       host: 'smtp.ethereal.email',

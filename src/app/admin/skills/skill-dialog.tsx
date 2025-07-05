@@ -156,7 +156,7 @@ export default function SkillDialog({
                     <Slider
                       min={0}
                       max={100}
-                      step={5}
+                      step={1}
                       value={[field.value]}
                       onValueChange={value => field.onChange(value[0])}
                       className="py-4"
