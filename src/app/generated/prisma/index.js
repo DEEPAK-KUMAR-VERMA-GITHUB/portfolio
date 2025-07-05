@@ -35,12 +35,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.10.1
- * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
+ * Prisma Client JS version: 6.11.1
+ * Query Engine version: f40f79ec31188888a2e33acda0ecc8fd10a853a9
  */
 Prisma.prismaVersion = {
-  client: "6.10.1",
-  engine: "9b628578b3b7cae625e8c927178f15a170e74a9c"
+  client: "6.11.1",
+  engine: "f40f79ec31188888a2e33acda0ecc8fd10a853a9"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -322,12 +322,13 @@ const config = {
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../../../prisma",
-  "clientVersion": "6.10.1",
-  "engineVersion": "9b628578b3b7cae625e8c927178f15a170e74a9c",
+  "clientVersion": "6.11.1",
+  "engineVersion": "f40f79ec31188888a2e33acda0ecc8fd10a853a9",
   "datasourceNames": [
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -338,7 +339,7 @@ const config = {
   },
   "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Enums\nenum ProjectStatus {\n  draft\n  published\n}\n\nenum SkillCategory {\n  frontend\n  backend\n  tools\n  language\n  database\n  others\n}\n\nenum TimeLineType {\n  education\n  experience\n  project\n  certification\n}\n\nenum ContactStatus {\n  new\n  in_progress\n  resolved\n  spam\n}\n\nenum UserRole {\n  USER\n  ADMIN\n}\n\n// Models\n\nmodel User {\n  id                 String           @id @default(uuid()) @db.Uuid\n  name               String           @db.VarChar(50)\n  email              String           @unique @db.VarChar(100)\n  password           String           @db.VarChar(255)\n  image              String?          @db.VarChar(255)\n  title              String?          @db.VarChar(50)\n  phone              String?          @db.VarChar(20)\n  location           String?          @db.VarChar(100)\n  bio                String?          @db.Text\n  professionalTitles String[]         @db.VarChar(100)\n  githubUrl          String?          @db.VarChar(255)\n  linkedInUrl        String?          @db.VarChar(255)\n  mailLink           String?          @db.VarChar(255)\n  about              String?          @db.Text\n  journey            String?          @db.Text\n  tags               String[]         @db.VarChar(100)\n  role               UserRole         @default(USER)\n  projects           Project[]\n  achievements       Achievement[]\n  skills             Skill[]\n  timelines          TimeLine[]\n  resumes            Media[]\n  Certification      Certification[]\n  ContactMessage     ContactMessage[]\n  MessageReply       MessageReply[]\n  createdAt          DateTime         @default(now())\n  updatedAt          DateTime         @updatedAt\n}\n\nmodel Project {\n  id          String        @id @default(uuid()) @db.Uuid\n  title       String        @db.VarChar(100)\n  description String        @db.Text\n  image       String        @db.VarChar(255)\n  techStack   String[]      @db.VarChar(100)\n  category    String        @db.VarChar(50)\n  githubUrl   String        @db.VarChar(255)\n  liveUrl     String        @db.VarChar(255)\n  featured    Boolean       @default(false)\n  status      ProjectStatus @default(draft)\n  userId      String        @db.Uuid\n  user        User          @relation(fields: [userId], references: [id])\n  createdAt   DateTime      @default(now())\n  updatedAt   DateTime      @updatedAt\n}\n\nmodel Skill {\n  id        String        @id @default(uuid()) @db.Uuid\n  name      String        @db.VarChar(100)\n  category  SkillCategory\n  level     Int           @default(1) @db.SmallInt\n  userId    String        @db.Uuid\n  user      User          @relation(fields: [userId], references: [id])\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n}\n\nmodel Achievement {\n  id          String   @id @default(uuid()) @db.Uuid\n  title       String   @db.VarChar(100)\n  icon        String   @db.VarChar(100)\n  issuer      String   @db.VarChar(100)\n  date        DateTime\n  description String   @db.Text\n  userId      String   @db.Uuid\n  user        User     @relation(fields: [userId], references: [id])\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}\n\nmodel TimeLine {\n  id           String       @id @default(uuid()) @db.Uuid\n  title        String       @db.VarChar(100)\n  organization String       @db.VarChar(100)\n  period       String       @db.VarChar(100)\n  description  String       @db.Text\n  type         TimeLineType\n  current      Boolean      @default(false)\n  userId       String       @db.Uuid\n  user         User         @relation(fields: [userId], references: [id])\n  createdAt    DateTime     @default(now())\n  updatedAt    DateTime     @updatedAt\n}\n\nmodel Media {\n  id          String   @id @default(uuid()) @db.Uuid\n  title       String   @db.VarChar(100)\n  fileUrl     String   @db.VarChar(255)\n  fileSize    String   @db.VarChar(100)\n  fileType    String   @db.VarChar(100)\n  isDefault   Boolean  @default(false)\n  lastUpdated DateTime @default(now())\n  description String?\n  version     String?\n  userId      String   @db.Uuid\n  user        User     @relation(fields: [userId], references: [id])\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}\n\nmodel Certification {\n  id          String   @id @default(uuid()) @db.Uuid\n  title       String   @db.VarChar(100)\n  issuer      String   @db.VarChar(100)\n  date        DateTime\n  icon        String?  @db.VarChar(100)\n  image       String   @db.VarChar(255)\n  verified    Boolean  @default(false)\n  verifyUrl   String\n  description String   @db.Text\n  userId      String   @db.Uuid\n  user        User     @relation(fields: [userId], references: [id])\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n}\n\nmodel ContactMessage {\n  id        String         @id @default(uuid()) @db.Uuid\n  name      String         @db.VarChar(100)\n  email     String         @db.VarChar(100)\n  subject   String         @db.VarChar(100)\n  message   String         @db.Text\n  status    ContactStatus  @default(new)\n  labels    String[]       @default([])\n  metadata  Json?\n  replies   MessageReply[]\n  userId    String?        @db.Uuid\n  user      User?          @relation(fields: [userId], references: [id])\n  createdAt DateTime       @default(now())\n  updatedAt DateTime       @updatedAt\n\n  @@index([email])\n}\n\nmodel MessageReply {\n  id        String         @id @default(uuid()) @db.Uuid\n  subject   String         @db.VarChar(200)\n  content   String         @db.Text\n  messageId String         @db.Uuid\n  message   ContactMessage @relation(fields: [messageId], references: [id])\n  userId    String?        @db.Uuid\n  user      User?          @relation(fields: [userId], references: [id])\n  createdAt DateTime       @default(now())\n  updatedAt DateTime       @updatedAt\n\n  @@index([messageId])\n}\n",
   "inlineSchemaHash": "111e1c86d96446b0f67e1991f2aadae8a55f70a1c0d1d4180cdf01abb69442f5",
-  "copyEngine": false
+  "copyEngine": true
 }
 
 const fs = require('fs')
@@ -375,3 +376,9 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
+// file annotations for bundling tools to include these files
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "src/app/generated/prisma/query_engine-windows.dll.node")
+// file annotations for bundling tools to include these files
+path.join(__dirname, "schema.prisma");
+path.join(process.cwd(), "src/app/generated/prisma/schema.prisma")

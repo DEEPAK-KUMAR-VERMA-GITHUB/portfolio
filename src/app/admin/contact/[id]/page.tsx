@@ -1,27 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
-import Link from 'next/link';
-import { ArrowLeft, Loader2, Send } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from 'react-hot-toast';
-import { cn } from '@/lib/utils';
-import { ContactMessage } from '@/types/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
+import { ContactMessage } from '@/types/types';
+import { format } from 'date-fns';
+import { ArrowLeft, Loader2, Send } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
-export default function ContactMessagePage({ params }: { params: { id: string } }) {
-  const router = useRouter();
+
+export default function ContactMessagePage() {
+  const params = useParams()
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [replyContent, setReplyContent] = useState('');
   const [message, setMessage] = useState<ContactMessage | null>(null);

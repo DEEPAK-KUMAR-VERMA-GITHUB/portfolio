@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --dir .",
+    "lint:fix": "next lint --dir . --fix",
+    "type-check": "tsc --noEmit",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -39,12 +41,11 @@
     "jose": "^6.0.11",
     "lucide-react": "^0.522.0",
     "mime-types": "^3.0.1",
-    "multer": "^2.0.1",
-    "next": "15.3.4",
+    "next": "^15.3.5",
     "nodemailer": "^7.0.4",
-    "react": "^19.0.0",
+    "react": "^19.1.0",
     "react-day-picker": "^9.7.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.1.0",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.58.1",
     "react-hot-toast": "^2.5.2",
@@ -57,7 +58,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/multer": "^1.4.13",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

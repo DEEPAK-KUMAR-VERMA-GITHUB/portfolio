@@ -14,10 +14,15 @@ interface UpdateMessageRequest {
   };
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } | Promise<{ id: string }> }) {
+// Helper function to handle errors
+function handleError(error: unknown, message: string) {
+  console.error(message, error);
+  return NextResponse.json({ success: false, error: message }, { status: 500 });
+}
+
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {
-    const resolvedParams = params instanceof Promise ? await params : params;
-    const messageId = resolvedParams.id;
+    const messageId = params.id;
     const body: UpdateMessageRequest = await request.json();
 
     // Get the original message first
@@ -98,21 +103,13 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     });
   } catch (error) {
     console.error('Error updating message:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to update message',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    return handleError(error, 'Failed to update message');
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } | Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: any) {
   try {
-    const resolvedParams = params instanceof Promise ? await params : params;
-    const messageId = resolvedParams.id;
+    const messageId = params.id;
 
     const deletedMessage = await prisma.contactMessage.delete({
       where: { id: messageId },
@@ -124,21 +121,13 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     });
   } catch (error) {
     console.error('Error deleting message:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to delete message',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    return handleError(error, 'Failed to delete message');
   }
 }
 
-export async function GET(request: Request, { params }: { params: { id: string } | Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: any) {
   try {
-    const resolvedParams = params instanceof Promise ? await params : params;
-    const messageId = resolvedParams.id;
+    const messageId = params.id;
 
     const message = await prisma.contactMessage.findUnique({
       where: { id: messageId },
@@ -159,13 +148,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
     });
   } catch (error) {
     console.error('Error fetching message:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to fetch message',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    return handleError(error, 'Failed to fetch message');
   }
 }
