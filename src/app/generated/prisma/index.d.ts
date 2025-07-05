@@ -53,6 +53,11 @@ export type Certification = $Result.DefaultSelection<Prisma.$CertificationPayloa
  * 
  */
 export type ContactMessage = $Result.DefaultSelection<Prisma.$ContactMessagePayload>
+/**
+ * Model MessageReply
+ * 
+ */
+export type MessageReply = $Result.DefaultSelection<Prisma.$MessageReplyPayload>
 
 /**
  * Enums
@@ -331,6 +336,16 @@ export class PrismaClient<
     * ```
     */
   get contactMessage(): Prisma.ContactMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.messageReply`: Exposes CRUD operations for the **MessageReply** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MessageReplies
+    * const messageReplies = await prisma.messageReply.findMany()
+    * ```
+    */
+  get messageReply(): Prisma.MessageReplyDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -778,7 +793,8 @@ export namespace Prisma {
     TimeLine: 'TimeLine',
     Media: 'Media',
     Certification: 'Certification',
-    ContactMessage: 'ContactMessage'
+    ContactMessage: 'ContactMessage',
+    MessageReply: 'MessageReply'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -797,7 +813,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "project" | "skill" | "achievement" | "timeLine" | "media" | "certification" | "contactMessage"
+      modelProps: "user" | "project" | "skill" | "achievement" | "timeLine" | "media" | "certification" | "contactMessage" | "messageReply"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1393,6 +1409,80 @@ export namespace Prisma {
           }
         }
       }
+      MessageReply: {
+        payload: Prisma.$MessageReplyPayload<ExtArgs>
+        fields: Prisma.MessageReplyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MessageReplyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MessageReplyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>
+          }
+          findFirst: {
+            args: Prisma.MessageReplyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MessageReplyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>
+          }
+          findMany: {
+            args: Prisma.MessageReplyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>[]
+          }
+          create: {
+            args: Prisma.MessageReplyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>
+          }
+          createMany: {
+            args: Prisma.MessageReplyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MessageReplyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>[]
+          }
+          delete: {
+            args: Prisma.MessageReplyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>
+          }
+          update: {
+            args: Prisma.MessageReplyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>
+          }
+          deleteMany: {
+            args: Prisma.MessageReplyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MessageReplyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MessageReplyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>[]
+          }
+          upsert: {
+            args: Prisma.MessageReplyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessageReplyPayload>
+          }
+          aggregate: {
+            args: Prisma.MessageReplyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMessageReply>
+          }
+          groupBy: {
+            args: Prisma.MessageReplyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MessageReplyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MessageReplyCountArgs<ExtArgs>
+            result: $Utils.Optional<MessageReplyCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1485,6 +1575,7 @@ export namespace Prisma {
     media?: MediaOmit
     certification?: CertificationOmit
     contactMessage?: ContactMessageOmit
+    messageReply?: MessageReplyOmit
   }
 
   /* Types for Logging */
@@ -1586,6 +1677,7 @@ export namespace Prisma {
     resumes: number
     Certification: number
     ContactMessage: number
+    MessageReply: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1596,6 +1688,7 @@ export namespace Prisma {
     resumes?: boolean | UserCountOutputTypeCountResumesArgs
     Certification?: boolean | UserCountOutputTypeCountCertificationArgs
     ContactMessage?: boolean | UserCountOutputTypeCountContactMessageArgs
+    MessageReply?: boolean | UserCountOutputTypeCountMessageReplyArgs
   }
 
   // Custom InputTypes
@@ -1656,6 +1749,44 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountContactMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ContactMessageWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMessageReplyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageReplyWhereInput
+  }
+
+
+  /**
+   * Count Type ContactMessageCountOutputType
+   */
+
+  export type ContactMessageCountOutputType = {
+    replies: number
+  }
+
+  export type ContactMessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replies?: boolean | ContactMessageCountOutputTypeCountRepliesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ContactMessageCountOutputType without action
+   */
+  export type ContactMessageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactMessageCountOutputType
+     */
+    select?: ContactMessageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ContactMessageCountOutputType without action
+   */
+  export type ContactMessageCountOutputTypeCountRepliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageReplyWhereInput
   }
 
 
@@ -1938,6 +2069,7 @@ export namespace Prisma {
     resumes?: boolean | User$resumesArgs<ExtArgs>
     Certification?: boolean | User$CertificationArgs<ExtArgs>
     ContactMessage?: boolean | User$ContactMessageArgs<ExtArgs>
+    MessageReply?: boolean | User$MessageReplyArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2016,6 +2148,7 @@ export namespace Prisma {
     resumes?: boolean | User$resumesArgs<ExtArgs>
     Certification?: boolean | User$CertificationArgs<ExtArgs>
     ContactMessage?: boolean | User$ContactMessageArgs<ExtArgs>
+    MessageReply?: boolean | User$MessageReplyArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2031,6 +2164,7 @@ export namespace Prisma {
       resumes: Prisma.$MediaPayload<ExtArgs>[]
       Certification: Prisma.$CertificationPayload<ExtArgs>[]
       ContactMessage: Prisma.$ContactMessagePayload<ExtArgs>[]
+      MessageReply: Prisma.$MessageReplyPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2453,6 +2587,7 @@ export namespace Prisma {
     resumes<T extends User$resumesArgs<ExtArgs> = {}>(args?: Subset<T, User$resumesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Certification<T extends User$CertificationArgs<ExtArgs> = {}>(args?: Subset<T, User$CertificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ContactMessage<T extends User$ContactMessageArgs<ExtArgs> = {}>(args?: Subset<T, User$ContactMessageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    MessageReply<T extends User$MessageReplyArgs<ExtArgs> = {}>(args?: Subset<T, User$MessageReplyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3054,6 +3189,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContactMessageScalarFieldEnum | ContactMessageScalarFieldEnum[]
+  }
+
+  /**
+   * User.MessageReply
+   */
+  export type User$MessageReplyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    where?: MessageReplyWhereInput
+    orderBy?: MessageReplyOrderByWithRelationInput | MessageReplyOrderByWithRelationInput[]
+    cursor?: MessageReplyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageReplyScalarFieldEnum | MessageReplyScalarFieldEnum[]
   }
 
   /**
@@ -10086,7 +10245,9 @@ export namespace Prisma {
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    replies?: boolean | ContactMessage$repliesArgs<ExtArgs>
     user?: boolean | ContactMessage$userArgs<ExtArgs>
+    _count?: boolean | ContactMessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactMessage"]>
 
   export type ContactMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10135,7 +10296,9 @@ export namespace Prisma {
 
   export type ContactMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "subject" | "message" | "status" | "labels" | "metadata" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["contactMessage"]>
   export type ContactMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replies?: boolean | ContactMessage$repliesArgs<ExtArgs>
     user?: boolean | ContactMessage$userArgs<ExtArgs>
+    _count?: boolean | ContactMessageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContactMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | ContactMessage$userArgs<ExtArgs>
@@ -10147,6 +10310,7 @@ export namespace Prisma {
   export type $ContactMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ContactMessage"
     objects: {
+      replies: Prisma.$MessageReplyPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -10555,6 +10719,7 @@ export namespace Prisma {
    */
   export interface Prisma__ContactMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    replies<T extends ContactMessage$repliesArgs<ExtArgs> = {}>(args?: Subset<T, ContactMessage$repliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends ContactMessage$userArgs<ExtArgs> = {}>(args?: Subset<T, ContactMessage$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10992,6 +11157,30 @@ export namespace Prisma {
   }
 
   /**
+   * ContactMessage.replies
+   */
+  export type ContactMessage$repliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    where?: MessageReplyWhereInput
+    orderBy?: MessageReplyOrderByWithRelationInput | MessageReplyOrderByWithRelationInput[]
+    cursor?: MessageReplyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageReplyScalarFieldEnum | MessageReplyScalarFieldEnum[]
+  }
+
+  /**
    * ContactMessage.user
    */
   export type ContactMessage$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11026,6 +11215,1117 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ContactMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MessageReply
+   */
+
+  export type AggregateMessageReply = {
+    _count: MessageReplyCountAggregateOutputType | null
+    _min: MessageReplyMinAggregateOutputType | null
+    _max: MessageReplyMaxAggregateOutputType | null
+  }
+
+  export type MessageReplyMinAggregateOutputType = {
+    id: string | null
+    subject: string | null
+    content: string | null
+    messageId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MessageReplyMaxAggregateOutputType = {
+    id: string | null
+    subject: string | null
+    content: string | null
+    messageId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MessageReplyCountAggregateOutputType = {
+    id: number
+    subject: number
+    content: number
+    messageId: number
+    userId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MessageReplyMinAggregateInputType = {
+    id?: true
+    subject?: true
+    content?: true
+    messageId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MessageReplyMaxAggregateInputType = {
+    id?: true
+    subject?: true
+    content?: true
+    messageId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MessageReplyCountAggregateInputType = {
+    id?: true
+    subject?: true
+    content?: true
+    messageId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MessageReplyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessageReply to aggregate.
+     */
+    where?: MessageReplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageReplies to fetch.
+     */
+    orderBy?: MessageReplyOrderByWithRelationInput | MessageReplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MessageReplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageReplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageReplies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MessageReplies
+    **/
+    _count?: true | MessageReplyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MessageReplyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MessageReplyMaxAggregateInputType
+  }
+
+  export type GetMessageReplyAggregateType<T extends MessageReplyAggregateArgs> = {
+        [P in keyof T & keyof AggregateMessageReply]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMessageReply[P]>
+      : GetScalarType<T[P], AggregateMessageReply[P]>
+  }
+
+
+
+
+  export type MessageReplyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageReplyWhereInput
+    orderBy?: MessageReplyOrderByWithAggregationInput | MessageReplyOrderByWithAggregationInput[]
+    by: MessageReplyScalarFieldEnum[] | MessageReplyScalarFieldEnum
+    having?: MessageReplyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MessageReplyCountAggregateInputType | true
+    _min?: MessageReplyMinAggregateInputType
+    _max?: MessageReplyMaxAggregateInputType
+  }
+
+  export type MessageReplyGroupByOutputType = {
+    id: string
+    subject: string
+    content: string
+    messageId: string
+    userId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MessageReplyCountAggregateOutputType | null
+    _min: MessageReplyMinAggregateOutputType | null
+    _max: MessageReplyMaxAggregateOutputType | null
+  }
+
+  type GetMessageReplyGroupByPayload<T extends MessageReplyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MessageReplyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MessageReplyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MessageReplyGroupByOutputType[P]>
+            : GetScalarType<T[P], MessageReplyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MessageReplySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subject?: boolean
+    content?: boolean
+    messageId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    message?: boolean | ContactMessageDefaultArgs<ExtArgs>
+    user?: boolean | MessageReply$userArgs<ExtArgs>
+  }, ExtArgs["result"]["messageReply"]>
+
+  export type MessageReplySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subject?: boolean
+    content?: boolean
+    messageId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    message?: boolean | ContactMessageDefaultArgs<ExtArgs>
+    user?: boolean | MessageReply$userArgs<ExtArgs>
+  }, ExtArgs["result"]["messageReply"]>
+
+  export type MessageReplySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subject?: boolean
+    content?: boolean
+    messageId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    message?: boolean | ContactMessageDefaultArgs<ExtArgs>
+    user?: boolean | MessageReply$userArgs<ExtArgs>
+  }, ExtArgs["result"]["messageReply"]>
+
+  export type MessageReplySelectScalar = {
+    id?: boolean
+    subject?: boolean
+    content?: boolean
+    messageId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MessageReplyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "subject" | "content" | "messageId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["messageReply"]>
+  export type MessageReplyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | ContactMessageDefaultArgs<ExtArgs>
+    user?: boolean | MessageReply$userArgs<ExtArgs>
+  }
+  export type MessageReplyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | ContactMessageDefaultArgs<ExtArgs>
+    user?: boolean | MessageReply$userArgs<ExtArgs>
+  }
+  export type MessageReplyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | ContactMessageDefaultArgs<ExtArgs>
+    user?: boolean | MessageReply$userArgs<ExtArgs>
+  }
+
+  export type $MessageReplyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MessageReply"
+    objects: {
+      message: Prisma.$ContactMessagePayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      subject: string
+      content: string
+      messageId: string
+      userId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["messageReply"]>
+    composites: {}
+  }
+
+  type MessageReplyGetPayload<S extends boolean | null | undefined | MessageReplyDefaultArgs> = $Result.GetResult<Prisma.$MessageReplyPayload, S>
+
+  type MessageReplyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MessageReplyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MessageReplyCountAggregateInputType | true
+    }
+
+  export interface MessageReplyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MessageReply'], meta: { name: 'MessageReply' } }
+    /**
+     * Find zero or one MessageReply that matches the filter.
+     * @param {MessageReplyFindUniqueArgs} args - Arguments to find a MessageReply
+     * @example
+     * // Get one MessageReply
+     * const messageReply = await prisma.messageReply.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MessageReplyFindUniqueArgs>(args: SelectSubset<T, MessageReplyFindUniqueArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MessageReply that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MessageReplyFindUniqueOrThrowArgs} args - Arguments to find a MessageReply
+     * @example
+     * // Get one MessageReply
+     * const messageReply = await prisma.messageReply.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MessageReplyFindUniqueOrThrowArgs>(args: SelectSubset<T, MessageReplyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MessageReply that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageReplyFindFirstArgs} args - Arguments to find a MessageReply
+     * @example
+     * // Get one MessageReply
+     * const messageReply = await prisma.messageReply.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MessageReplyFindFirstArgs>(args?: SelectSubset<T, MessageReplyFindFirstArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MessageReply that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageReplyFindFirstOrThrowArgs} args - Arguments to find a MessageReply
+     * @example
+     * // Get one MessageReply
+     * const messageReply = await prisma.messageReply.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MessageReplyFindFirstOrThrowArgs>(args?: SelectSubset<T, MessageReplyFindFirstOrThrowArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MessageReplies that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageReplyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MessageReplies
+     * const messageReplies = await prisma.messageReply.findMany()
+     * 
+     * // Get first 10 MessageReplies
+     * const messageReplies = await prisma.messageReply.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const messageReplyWithIdOnly = await prisma.messageReply.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MessageReplyFindManyArgs>(args?: SelectSubset<T, MessageReplyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MessageReply.
+     * @param {MessageReplyCreateArgs} args - Arguments to create a MessageReply.
+     * @example
+     * // Create one MessageReply
+     * const MessageReply = await prisma.messageReply.create({
+     *   data: {
+     *     // ... data to create a MessageReply
+     *   }
+     * })
+     * 
+     */
+    create<T extends MessageReplyCreateArgs>(args: SelectSubset<T, MessageReplyCreateArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MessageReplies.
+     * @param {MessageReplyCreateManyArgs} args - Arguments to create many MessageReplies.
+     * @example
+     * // Create many MessageReplies
+     * const messageReply = await prisma.messageReply.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MessageReplyCreateManyArgs>(args?: SelectSubset<T, MessageReplyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MessageReplies and returns the data saved in the database.
+     * @param {MessageReplyCreateManyAndReturnArgs} args - Arguments to create many MessageReplies.
+     * @example
+     * // Create many MessageReplies
+     * const messageReply = await prisma.messageReply.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MessageReplies and only return the `id`
+     * const messageReplyWithIdOnly = await prisma.messageReply.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MessageReplyCreateManyAndReturnArgs>(args?: SelectSubset<T, MessageReplyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MessageReply.
+     * @param {MessageReplyDeleteArgs} args - Arguments to delete one MessageReply.
+     * @example
+     * // Delete one MessageReply
+     * const MessageReply = await prisma.messageReply.delete({
+     *   where: {
+     *     // ... filter to delete one MessageReply
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MessageReplyDeleteArgs>(args: SelectSubset<T, MessageReplyDeleteArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MessageReply.
+     * @param {MessageReplyUpdateArgs} args - Arguments to update one MessageReply.
+     * @example
+     * // Update one MessageReply
+     * const messageReply = await prisma.messageReply.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MessageReplyUpdateArgs>(args: SelectSubset<T, MessageReplyUpdateArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MessageReplies.
+     * @param {MessageReplyDeleteManyArgs} args - Arguments to filter MessageReplies to delete.
+     * @example
+     * // Delete a few MessageReplies
+     * const { count } = await prisma.messageReply.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MessageReplyDeleteManyArgs>(args?: SelectSubset<T, MessageReplyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MessageReplies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageReplyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MessageReplies
+     * const messageReply = await prisma.messageReply.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MessageReplyUpdateManyArgs>(args: SelectSubset<T, MessageReplyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MessageReplies and returns the data updated in the database.
+     * @param {MessageReplyUpdateManyAndReturnArgs} args - Arguments to update many MessageReplies.
+     * @example
+     * // Update many MessageReplies
+     * const messageReply = await prisma.messageReply.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MessageReplies and only return the `id`
+     * const messageReplyWithIdOnly = await prisma.messageReply.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MessageReplyUpdateManyAndReturnArgs>(args: SelectSubset<T, MessageReplyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MessageReply.
+     * @param {MessageReplyUpsertArgs} args - Arguments to update or create a MessageReply.
+     * @example
+     * // Update or create a MessageReply
+     * const messageReply = await prisma.messageReply.upsert({
+     *   create: {
+     *     // ... data to create a MessageReply
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MessageReply we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MessageReplyUpsertArgs>(args: SelectSubset<T, MessageReplyUpsertArgs<ExtArgs>>): Prisma__MessageReplyClient<$Result.GetResult<Prisma.$MessageReplyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MessageReplies.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageReplyCountArgs} args - Arguments to filter MessageReplies to count.
+     * @example
+     * // Count the number of MessageReplies
+     * const count = await prisma.messageReply.count({
+     *   where: {
+     *     // ... the filter for the MessageReplies we want to count
+     *   }
+     * })
+    **/
+    count<T extends MessageReplyCountArgs>(
+      args?: Subset<T, MessageReplyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MessageReplyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MessageReply.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageReplyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MessageReplyAggregateArgs>(args: Subset<T, MessageReplyAggregateArgs>): Prisma.PrismaPromise<GetMessageReplyAggregateType<T>>
+
+    /**
+     * Group by MessageReply.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageReplyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MessageReplyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MessageReplyGroupByArgs['orderBy'] }
+        : { orderBy?: MessageReplyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MessageReplyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMessageReplyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MessageReply model
+   */
+  readonly fields: MessageReplyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MessageReply.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MessageReplyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    message<T extends ContactMessageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactMessageDefaultArgs<ExtArgs>>): Prisma__ContactMessageClient<$Result.GetResult<Prisma.$ContactMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends MessageReply$userArgs<ExtArgs> = {}>(args?: Subset<T, MessageReply$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MessageReply model
+   */
+  interface MessageReplyFieldRefs {
+    readonly id: FieldRef<"MessageReply", 'String'>
+    readonly subject: FieldRef<"MessageReply", 'String'>
+    readonly content: FieldRef<"MessageReply", 'String'>
+    readonly messageId: FieldRef<"MessageReply", 'String'>
+    readonly userId: FieldRef<"MessageReply", 'String'>
+    readonly createdAt: FieldRef<"MessageReply", 'DateTime'>
+    readonly updatedAt: FieldRef<"MessageReply", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MessageReply findUnique
+   */
+  export type MessageReplyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageReply to fetch.
+     */
+    where: MessageReplyWhereUniqueInput
+  }
+
+  /**
+   * MessageReply findUniqueOrThrow
+   */
+  export type MessageReplyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageReply to fetch.
+     */
+    where: MessageReplyWhereUniqueInput
+  }
+
+  /**
+   * MessageReply findFirst
+   */
+  export type MessageReplyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageReply to fetch.
+     */
+    where?: MessageReplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageReplies to fetch.
+     */
+    orderBy?: MessageReplyOrderByWithRelationInput | MessageReplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessageReplies.
+     */
+    cursor?: MessageReplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageReplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageReplies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessageReplies.
+     */
+    distinct?: MessageReplyScalarFieldEnum | MessageReplyScalarFieldEnum[]
+  }
+
+  /**
+   * MessageReply findFirstOrThrow
+   */
+  export type MessageReplyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageReply to fetch.
+     */
+    where?: MessageReplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageReplies to fetch.
+     */
+    orderBy?: MessageReplyOrderByWithRelationInput | MessageReplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessageReplies.
+     */
+    cursor?: MessageReplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageReplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageReplies.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessageReplies.
+     */
+    distinct?: MessageReplyScalarFieldEnum | MessageReplyScalarFieldEnum[]
+  }
+
+  /**
+   * MessageReply findMany
+   */
+  export type MessageReplyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * Filter, which MessageReplies to fetch.
+     */
+    where?: MessageReplyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessageReplies to fetch.
+     */
+    orderBy?: MessageReplyOrderByWithRelationInput | MessageReplyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MessageReplies.
+     */
+    cursor?: MessageReplyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessageReplies from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessageReplies.
+     */
+    skip?: number
+    distinct?: MessageReplyScalarFieldEnum | MessageReplyScalarFieldEnum[]
+  }
+
+  /**
+   * MessageReply create
+   */
+  export type MessageReplyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MessageReply.
+     */
+    data: XOR<MessageReplyCreateInput, MessageReplyUncheckedCreateInput>
+  }
+
+  /**
+   * MessageReply createMany
+   */
+  export type MessageReplyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MessageReplies.
+     */
+    data: MessageReplyCreateManyInput | MessageReplyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MessageReply createManyAndReturn
+   */
+  export type MessageReplyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * The data used to create many MessageReplies.
+     */
+    data: MessageReplyCreateManyInput | MessageReplyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MessageReply update
+   */
+  export type MessageReplyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MessageReply.
+     */
+    data: XOR<MessageReplyUpdateInput, MessageReplyUncheckedUpdateInput>
+    /**
+     * Choose, which MessageReply to update.
+     */
+    where: MessageReplyWhereUniqueInput
+  }
+
+  /**
+   * MessageReply updateMany
+   */
+  export type MessageReplyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MessageReplies.
+     */
+    data: XOR<MessageReplyUpdateManyMutationInput, MessageReplyUncheckedUpdateManyInput>
+    /**
+     * Filter which MessageReplies to update
+     */
+    where?: MessageReplyWhereInput
+    /**
+     * Limit how many MessageReplies to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MessageReply updateManyAndReturn
+   */
+  export type MessageReplyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * The data used to update MessageReplies.
+     */
+    data: XOR<MessageReplyUpdateManyMutationInput, MessageReplyUncheckedUpdateManyInput>
+    /**
+     * Filter which MessageReplies to update
+     */
+    where?: MessageReplyWhereInput
+    /**
+     * Limit how many MessageReplies to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MessageReply upsert
+   */
+  export type MessageReplyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MessageReply to update in case it exists.
+     */
+    where: MessageReplyWhereUniqueInput
+    /**
+     * In case the MessageReply found by the `where` argument doesn't exist, create a new MessageReply with this data.
+     */
+    create: XOR<MessageReplyCreateInput, MessageReplyUncheckedCreateInput>
+    /**
+     * In case the MessageReply was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MessageReplyUpdateInput, MessageReplyUncheckedUpdateInput>
+  }
+
+  /**
+   * MessageReply delete
+   */
+  export type MessageReplyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
+    /**
+     * Filter which MessageReply to delete.
+     */
+    where: MessageReplyWhereUniqueInput
+  }
+
+  /**
+   * MessageReply deleteMany
+   */
+  export type MessageReplyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessageReplies to delete
+     */
+    where?: MessageReplyWhereInput
+    /**
+     * Limit how many MessageReplies to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MessageReply.user
+   */
+  export type MessageReply$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * MessageReply without action
+   */
+  export type MessageReplyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessageReply
+     */
+    select?: MessageReplySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MessageReply
+     */
+    omit?: MessageReplyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageReplyInclude<ExtArgs> | null
   }
 
 
@@ -11182,6 +12482,19 @@ export namespace Prisma {
   };
 
   export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
+
+
+  export const MessageReplyScalarFieldEnum: {
+    id: 'id',
+    subject: 'subject',
+    content: 'content',
+    messageId: 'messageId',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MessageReplyScalarFieldEnum = (typeof MessageReplyScalarFieldEnum)[keyof typeof MessageReplyScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -11410,6 +12723,7 @@ export namespace Prisma {
     resumes?: MediaListRelationFilter
     Certification?: CertificationListRelationFilter
     ContactMessage?: ContactMessageListRelationFilter
+    MessageReply?: MessageReplyListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11439,6 +12753,7 @@ export namespace Prisma {
     resumes?: MediaOrderByRelationAggregateInput
     Certification?: CertificationOrderByRelationAggregateInput
     ContactMessage?: ContactMessageOrderByRelationAggregateInput
+    MessageReply?: MessageReplyOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11471,6 +12786,7 @@ export namespace Prisma {
     resumes?: MediaListRelationFilter
     Certification?: CertificationListRelationFilter
     ContactMessage?: ContactMessageListRelationFilter
+    MessageReply?: MessageReplyListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -12035,6 +13351,7 @@ export namespace Prisma {
     userId?: UuidNullableFilter<"ContactMessage"> | string | null
     createdAt?: DateTimeFilter<"ContactMessage"> | Date | string
     updatedAt?: DateTimeFilter<"ContactMessage"> | Date | string
+    replies?: MessageReplyListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
@@ -12050,6 +13367,7 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    replies?: MessageReplyOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -12068,6 +13386,7 @@ export namespace Prisma {
     userId?: UuidNullableFilter<"ContactMessage"> | string | null
     createdAt?: DateTimeFilter<"ContactMessage"> | Date | string
     updatedAt?: DateTimeFilter<"ContactMessage"> | Date | string
+    replies?: MessageReplyListRelationFilter
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
@@ -12105,6 +13424,74 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ContactMessage"> | Date | string
   }
 
+  export type MessageReplyWhereInput = {
+    AND?: MessageReplyWhereInput | MessageReplyWhereInput[]
+    OR?: MessageReplyWhereInput[]
+    NOT?: MessageReplyWhereInput | MessageReplyWhereInput[]
+    id?: UuidFilter<"MessageReply"> | string
+    subject?: StringFilter<"MessageReply"> | string
+    content?: StringFilter<"MessageReply"> | string
+    messageId?: UuidFilter<"MessageReply"> | string
+    userId?: UuidNullableFilter<"MessageReply"> | string | null
+    createdAt?: DateTimeFilter<"MessageReply"> | Date | string
+    updatedAt?: DateTimeFilter<"MessageReply"> | Date | string
+    message?: XOR<ContactMessageScalarRelationFilter, ContactMessageWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type MessageReplyOrderByWithRelationInput = {
+    id?: SortOrder
+    subject?: SortOrder
+    content?: SortOrder
+    messageId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    message?: ContactMessageOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type MessageReplyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MessageReplyWhereInput | MessageReplyWhereInput[]
+    OR?: MessageReplyWhereInput[]
+    NOT?: MessageReplyWhereInput | MessageReplyWhereInput[]
+    subject?: StringFilter<"MessageReply"> | string
+    content?: StringFilter<"MessageReply"> | string
+    messageId?: UuidFilter<"MessageReply"> | string
+    userId?: UuidNullableFilter<"MessageReply"> | string | null
+    createdAt?: DateTimeFilter<"MessageReply"> | Date | string
+    updatedAt?: DateTimeFilter<"MessageReply"> | Date | string
+    message?: XOR<ContactMessageScalarRelationFilter, ContactMessageWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type MessageReplyOrderByWithAggregationInput = {
+    id?: SortOrder
+    subject?: SortOrder
+    content?: SortOrder
+    messageId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MessageReplyCountOrderByAggregateInput
+    _max?: MessageReplyMaxOrderByAggregateInput
+    _min?: MessageReplyMinOrderByAggregateInput
+  }
+
+  export type MessageReplyScalarWhereWithAggregatesInput = {
+    AND?: MessageReplyScalarWhereWithAggregatesInput | MessageReplyScalarWhereWithAggregatesInput[]
+    OR?: MessageReplyScalarWhereWithAggregatesInput[]
+    NOT?: MessageReplyScalarWhereWithAggregatesInput | MessageReplyScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"MessageReply"> | string
+    subject?: StringWithAggregatesFilter<"MessageReply"> | string
+    content?: StringWithAggregatesFilter<"MessageReply"> | string
+    messageId?: UuidWithAggregatesFilter<"MessageReply"> | string
+    userId?: UuidNullableWithAggregatesFilter<"MessageReply"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MessageReply"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MessageReply"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -12132,6 +13519,7 @@ export namespace Prisma {
     resumes?: MediaCreateNestedManyWithoutUserInput
     Certification?: CertificationCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12161,6 +13549,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
     Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -12190,6 +13579,7 @@ export namespace Prisma {
     resumes?: MediaUpdateManyWithoutUserNestedInput
     Certification?: CertificationUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12219,6 +13609,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
     Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12859,6 +14250,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    replies?: MessageReplyCreateNestedManyWithoutMessageInput
     user?: UserCreateNestedOneWithoutContactMessageInput
   }
 
@@ -12874,6 +14266,7 @@ export namespace Prisma {
     userId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    replies?: MessageReplyUncheckedCreateNestedManyWithoutMessageInput
   }
 
   export type ContactMessageUpdateInput = {
@@ -12887,6 +14280,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageReplyUpdateManyWithoutMessageNestedInput
     user?: UserUpdateOneWithoutContactMessageNestedInput
   }
 
@@ -12902,6 +14296,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageReplyUncheckedUpdateManyWithoutMessageNestedInput
   }
 
   export type ContactMessageCreateManyInput = {
@@ -12940,6 +14335,74 @@ export namespace Prisma {
     status?: EnumContactStatusFieldUpdateOperationsInput | $Enums.ContactStatus
     labels?: ContactMessageUpdatelabelsInput | string[]
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageReplyCreateInput = {
+    id?: string
+    subject: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    message: ContactMessageCreateNestedOneWithoutRepliesInput
+    user?: UserCreateNestedOneWithoutMessageReplyInput
+  }
+
+  export type MessageReplyUncheckedCreateInput = {
+    id?: string
+    subject: string
+    content: string
+    messageId: string
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MessageReplyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    message?: ContactMessageUpdateOneRequiredWithoutRepliesNestedInput
+    user?: UserUpdateOneWithoutMessageReplyNestedInput
+  }
+
+  export type MessageReplyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageReplyCreateManyInput = {
+    id?: string
+    subject: string
+    content: string
+    messageId: string
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MessageReplyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageReplyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13055,6 +14518,12 @@ export namespace Prisma {
     none?: ContactMessageWhereInput
   }
 
+  export type MessageReplyListRelationFilter = {
+    every?: MessageReplyWhereInput
+    some?: MessageReplyWhereInput
+    none?: MessageReplyWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -13085,6 +14554,10 @@ export namespace Prisma {
   }
 
   export type ContactMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MessageReplyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13706,6 +15179,41 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type ContactMessageScalarRelationFilter = {
+    is?: ContactMessageWhereInput
+    isNot?: ContactMessageWhereInput
+  }
+
+  export type MessageReplyCountOrderByAggregateInput = {
+    id?: SortOrder
+    subject?: SortOrder
+    content?: SortOrder
+    messageId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MessageReplyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    subject?: SortOrder
+    content?: SortOrder
+    messageId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MessageReplyMinOrderByAggregateInput = {
+    id?: SortOrder
+    subject?: SortOrder
+    content?: SortOrder
+    messageId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type UserCreateprofessionalTitlesInput = {
     set: string[]
   }
@@ -13763,6 +15271,13 @@ export namespace Prisma {
     connect?: ContactMessageWhereUniqueInput | ContactMessageWhereUniqueInput[]
   }
 
+  export type MessageReplyCreateNestedManyWithoutUserInput = {
+    create?: XOR<MessageReplyCreateWithoutUserInput, MessageReplyUncheckedCreateWithoutUserInput> | MessageReplyCreateWithoutUserInput[] | MessageReplyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutUserInput | MessageReplyCreateOrConnectWithoutUserInput[]
+    createMany?: MessageReplyCreateManyUserInputEnvelope
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput> | ProjectCreateWithoutUserInput[] | ProjectUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutUserInput | ProjectCreateOrConnectWithoutUserInput[]
@@ -13810,6 +15325,13 @@ export namespace Prisma {
     connectOrCreate?: ContactMessageCreateOrConnectWithoutUserInput | ContactMessageCreateOrConnectWithoutUserInput[]
     createMany?: ContactMessageCreateManyUserInputEnvelope
     connect?: ContactMessageWhereUniqueInput | ContactMessageWhereUniqueInput[]
+  }
+
+  export type MessageReplyUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<MessageReplyCreateWithoutUserInput, MessageReplyUncheckedCreateWithoutUserInput> | MessageReplyCreateWithoutUserInput[] | MessageReplyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutUserInput | MessageReplyCreateOrConnectWithoutUserInput[]
+    createMany?: MessageReplyCreateManyUserInputEnvelope
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13936,6 +15458,20 @@ export namespace Prisma {
     deleteMany?: ContactMessageScalarWhereInput | ContactMessageScalarWhereInput[]
   }
 
+  export type MessageReplyUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MessageReplyCreateWithoutUserInput, MessageReplyUncheckedCreateWithoutUserInput> | MessageReplyCreateWithoutUserInput[] | MessageReplyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutUserInput | MessageReplyCreateOrConnectWithoutUserInput[]
+    upsert?: MessageReplyUpsertWithWhereUniqueWithoutUserInput | MessageReplyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MessageReplyCreateManyUserInputEnvelope
+    set?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    disconnect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    delete?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    update?: MessageReplyUpdateWithWhereUniqueWithoutUserInput | MessageReplyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MessageReplyUpdateManyWithWhereWithoutUserInput | MessageReplyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MessageReplyScalarWhereInput | MessageReplyScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput> | ProjectCreateWithoutUserInput[] | ProjectUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutUserInput | ProjectCreateOrConnectWithoutUserInput[]
@@ -14032,6 +15568,20 @@ export namespace Prisma {
     update?: ContactMessageUpdateWithWhereUniqueWithoutUserInput | ContactMessageUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ContactMessageUpdateManyWithWhereWithoutUserInput | ContactMessageUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ContactMessageScalarWhereInput | ContactMessageScalarWhereInput[]
+  }
+
+  export type MessageReplyUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MessageReplyCreateWithoutUserInput, MessageReplyUncheckedCreateWithoutUserInput> | MessageReplyCreateWithoutUserInput[] | MessageReplyUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutUserInput | MessageReplyCreateOrConnectWithoutUserInput[]
+    upsert?: MessageReplyUpsertWithWhereUniqueWithoutUserInput | MessageReplyUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MessageReplyCreateManyUserInputEnvelope
+    set?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    disconnect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    delete?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    update?: MessageReplyUpdateWithWhereUniqueWithoutUserInput | MessageReplyUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MessageReplyUpdateManyWithWhereWithoutUserInput | MessageReplyUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MessageReplyScalarWhereInput | MessageReplyScalarWhereInput[]
   }
 
   export type ProjectCreatetechStackInput = {
@@ -14155,10 +15705,24 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type MessageReplyCreateNestedManyWithoutMessageInput = {
+    create?: XOR<MessageReplyCreateWithoutMessageInput, MessageReplyUncheckedCreateWithoutMessageInput> | MessageReplyCreateWithoutMessageInput[] | MessageReplyUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutMessageInput | MessageReplyCreateOrConnectWithoutMessageInput[]
+    createMany?: MessageReplyCreateManyMessageInputEnvelope
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutContactMessageInput = {
     create?: XOR<UserCreateWithoutContactMessageInput, UserUncheckedCreateWithoutContactMessageInput>
     connectOrCreate?: UserCreateOrConnectWithoutContactMessageInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type MessageReplyUncheckedCreateNestedManyWithoutMessageInput = {
+    create?: XOR<MessageReplyCreateWithoutMessageInput, MessageReplyUncheckedCreateWithoutMessageInput> | MessageReplyCreateWithoutMessageInput[] | MessageReplyUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutMessageInput | MessageReplyCreateOrConnectWithoutMessageInput[]
+    createMany?: MessageReplyCreateManyMessageInputEnvelope
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
   }
 
   export type EnumContactStatusFieldUpdateOperationsInput = {
@@ -14170,6 +15734,20 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type MessageReplyUpdateManyWithoutMessageNestedInput = {
+    create?: XOR<MessageReplyCreateWithoutMessageInput, MessageReplyUncheckedCreateWithoutMessageInput> | MessageReplyCreateWithoutMessageInput[] | MessageReplyUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutMessageInput | MessageReplyCreateOrConnectWithoutMessageInput[]
+    upsert?: MessageReplyUpsertWithWhereUniqueWithoutMessageInput | MessageReplyUpsertWithWhereUniqueWithoutMessageInput[]
+    createMany?: MessageReplyCreateManyMessageInputEnvelope
+    set?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    disconnect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    delete?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    update?: MessageReplyUpdateWithWhereUniqueWithoutMessageInput | MessageReplyUpdateWithWhereUniqueWithoutMessageInput[]
+    updateMany?: MessageReplyUpdateManyWithWhereWithoutMessageInput | MessageReplyUpdateManyWithWhereWithoutMessageInput[]
+    deleteMany?: MessageReplyScalarWhereInput | MessageReplyScalarWhereInput[]
+  }
+
   export type UserUpdateOneWithoutContactMessageNestedInput = {
     create?: XOR<UserCreateWithoutContactMessageInput, UserUncheckedCreateWithoutContactMessageInput>
     connectOrCreate?: UserCreateOrConnectWithoutContactMessageInput
@@ -14178,6 +15756,50 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutContactMessageInput, UserUpdateWithoutContactMessageInput>, UserUncheckedUpdateWithoutContactMessageInput>
+  }
+
+  export type MessageReplyUncheckedUpdateManyWithoutMessageNestedInput = {
+    create?: XOR<MessageReplyCreateWithoutMessageInput, MessageReplyUncheckedCreateWithoutMessageInput> | MessageReplyCreateWithoutMessageInput[] | MessageReplyUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: MessageReplyCreateOrConnectWithoutMessageInput | MessageReplyCreateOrConnectWithoutMessageInput[]
+    upsert?: MessageReplyUpsertWithWhereUniqueWithoutMessageInput | MessageReplyUpsertWithWhereUniqueWithoutMessageInput[]
+    createMany?: MessageReplyCreateManyMessageInputEnvelope
+    set?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    disconnect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    delete?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    connect?: MessageReplyWhereUniqueInput | MessageReplyWhereUniqueInput[]
+    update?: MessageReplyUpdateWithWhereUniqueWithoutMessageInput | MessageReplyUpdateWithWhereUniqueWithoutMessageInput[]
+    updateMany?: MessageReplyUpdateManyWithWhereWithoutMessageInput | MessageReplyUpdateManyWithWhereWithoutMessageInput[]
+    deleteMany?: MessageReplyScalarWhereInput | MessageReplyScalarWhereInput[]
+  }
+
+  export type ContactMessageCreateNestedOneWithoutRepliesInput = {
+    create?: XOR<ContactMessageCreateWithoutRepliesInput, ContactMessageUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: ContactMessageCreateOrConnectWithoutRepliesInput
+    connect?: ContactMessageWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutMessageReplyInput = {
+    create?: XOR<UserCreateWithoutMessageReplyInput, UserUncheckedCreateWithoutMessageReplyInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessageReplyInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ContactMessageUpdateOneRequiredWithoutRepliesNestedInput = {
+    create?: XOR<ContactMessageCreateWithoutRepliesInput, ContactMessageUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: ContactMessageCreateOrConnectWithoutRepliesInput
+    upsert?: ContactMessageUpsertWithoutRepliesInput
+    connect?: ContactMessageWhereUniqueInput
+    update?: XOR<XOR<ContactMessageUpdateToOneWithWhereWithoutRepliesInput, ContactMessageUpdateWithoutRepliesInput>, ContactMessageUncheckedUpdateWithoutRepliesInput>
+  }
+
+  export type UserUpdateOneWithoutMessageReplyNestedInput = {
+    create?: XOR<UserCreateWithoutMessageReplyInput, UserUncheckedCreateWithoutMessageReplyInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessageReplyInput
+    upsert?: UserUpsertWithoutMessageReplyInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMessageReplyInput, UserUpdateWithoutMessageReplyInput>, UserUncheckedUpdateWithoutMessageReplyInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -14708,6 +16330,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    replies?: MessageReplyCreateNestedManyWithoutMessageInput
   }
 
   export type ContactMessageUncheckedCreateWithoutUserInput = {
@@ -14721,6 +16344,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    replies?: MessageReplyUncheckedCreateNestedManyWithoutMessageInput
   }
 
   export type ContactMessageCreateOrConnectWithoutUserInput = {
@@ -14730,6 +16354,34 @@ export namespace Prisma {
 
   export type ContactMessageCreateManyUserInputEnvelope = {
     data: ContactMessageCreateManyUserInput | ContactMessageCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MessageReplyCreateWithoutUserInput = {
+    id?: string
+    subject: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    message: ContactMessageCreateNestedOneWithoutRepliesInput
+  }
+
+  export type MessageReplyUncheckedCreateWithoutUserInput = {
+    id?: string
+    subject: string
+    content: string
+    messageId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MessageReplyCreateOrConnectWithoutUserInput = {
+    where: MessageReplyWhereUniqueInput
+    create: XOR<MessageReplyCreateWithoutUserInput, MessageReplyUncheckedCreateWithoutUserInput>
+  }
+
+  export type MessageReplyCreateManyUserInputEnvelope = {
+    data: MessageReplyCreateManyUserInput | MessageReplyCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -14961,6 +16613,35 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ContactMessage"> | Date | string
   }
 
+  export type MessageReplyUpsertWithWhereUniqueWithoutUserInput = {
+    where: MessageReplyWhereUniqueInput
+    update: XOR<MessageReplyUpdateWithoutUserInput, MessageReplyUncheckedUpdateWithoutUserInput>
+    create: XOR<MessageReplyCreateWithoutUserInput, MessageReplyUncheckedCreateWithoutUserInput>
+  }
+
+  export type MessageReplyUpdateWithWhereUniqueWithoutUserInput = {
+    where: MessageReplyWhereUniqueInput
+    data: XOR<MessageReplyUpdateWithoutUserInput, MessageReplyUncheckedUpdateWithoutUserInput>
+  }
+
+  export type MessageReplyUpdateManyWithWhereWithoutUserInput = {
+    where: MessageReplyScalarWhereInput
+    data: XOR<MessageReplyUpdateManyMutationInput, MessageReplyUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type MessageReplyScalarWhereInput = {
+    AND?: MessageReplyScalarWhereInput | MessageReplyScalarWhereInput[]
+    OR?: MessageReplyScalarWhereInput[]
+    NOT?: MessageReplyScalarWhereInput | MessageReplyScalarWhereInput[]
+    id?: UuidFilter<"MessageReply"> | string
+    subject?: StringFilter<"MessageReply"> | string
+    content?: StringFilter<"MessageReply"> | string
+    messageId?: UuidFilter<"MessageReply"> | string
+    userId?: UuidNullableFilter<"MessageReply"> | string | null
+    createdAt?: DateTimeFilter<"MessageReply"> | Date | string
+    updatedAt?: DateTimeFilter<"MessageReply"> | Date | string
+  }
+
   export type UserCreateWithoutProjectsInput = {
     id?: string
     name: string
@@ -14987,6 +16668,7 @@ export namespace Prisma {
     resumes?: MediaCreateNestedManyWithoutUserInput
     Certification?: CertificationCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProjectsInput = {
@@ -15015,6 +16697,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
     Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProjectsInput = {
@@ -15059,6 +16742,7 @@ export namespace Prisma {
     resumes?: MediaUpdateManyWithoutUserNestedInput
     Certification?: CertificationUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -15087,6 +16771,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
     Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSkillsInput = {
@@ -15115,6 +16800,7 @@ export namespace Prisma {
     resumes?: MediaCreateNestedManyWithoutUserInput
     Certification?: CertificationCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSkillsInput = {
@@ -15143,6 +16829,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
     Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSkillsInput = {
@@ -15187,6 +16874,7 @@ export namespace Prisma {
     resumes?: MediaUpdateManyWithoutUserNestedInput
     Certification?: CertificationUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkillsInput = {
@@ -15215,6 +16903,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
     Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAchievementsInput = {
@@ -15243,6 +16932,7 @@ export namespace Prisma {
     resumes?: MediaCreateNestedManyWithoutUserInput
     Certification?: CertificationCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAchievementsInput = {
@@ -15271,6 +16961,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
     Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAchievementsInput = {
@@ -15315,6 +17006,7 @@ export namespace Prisma {
     resumes?: MediaUpdateManyWithoutUserNestedInput
     Certification?: CertificationUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAchievementsInput = {
@@ -15343,6 +17035,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
     Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutTimelinesInput = {
@@ -15371,6 +17064,7 @@ export namespace Prisma {
     resumes?: MediaCreateNestedManyWithoutUserInput
     Certification?: CertificationCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTimelinesInput = {
@@ -15399,6 +17093,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
     Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTimelinesInput = {
@@ -15443,6 +17138,7 @@ export namespace Prisma {
     resumes?: MediaUpdateManyWithoutUserNestedInput
     Certification?: CertificationUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTimelinesInput = {
@@ -15471,6 +17167,7 @@ export namespace Prisma {
     resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
     Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutResumesInput = {
@@ -15499,6 +17196,7 @@ export namespace Prisma {
     timelines?: TimeLineCreateNestedManyWithoutUserInput
     Certification?: CertificationCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutResumesInput = {
@@ -15527,6 +17225,7 @@ export namespace Prisma {
     timelines?: TimeLineUncheckedCreateNestedManyWithoutUserInput
     Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutResumesInput = {
@@ -15571,6 +17270,7 @@ export namespace Prisma {
     timelines?: TimeLineUpdateManyWithoutUserNestedInput
     Certification?: CertificationUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResumesInput = {
@@ -15599,6 +17299,7 @@ export namespace Prisma {
     timelines?: TimeLineUncheckedUpdateManyWithoutUserNestedInput
     Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCertificationInput = {
@@ -15627,6 +17328,7 @@ export namespace Prisma {
     timelines?: TimeLineCreateNestedManyWithoutUserInput
     resumes?: MediaCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificationInput = {
@@ -15655,6 +17357,7 @@ export namespace Prisma {
     timelines?: TimeLineUncheckedCreateNestedManyWithoutUserInput
     resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
     ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificationInput = {
@@ -15699,6 +17402,7 @@ export namespace Prisma {
     timelines?: TimeLineUpdateManyWithoutUserNestedInput
     resumes?: MediaUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificationInput = {
@@ -15727,6 +17431,35 @@ export namespace Prisma {
     timelines?: TimeLineUncheckedUpdateManyWithoutUserNestedInput
     resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
     ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type MessageReplyCreateWithoutMessageInput = {
+    id?: string
+    subject: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutMessageReplyInput
+  }
+
+  export type MessageReplyUncheckedCreateWithoutMessageInput = {
+    id?: string
+    subject: string
+    content: string
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MessageReplyCreateOrConnectWithoutMessageInput = {
+    where: MessageReplyWhereUniqueInput
+    create: XOR<MessageReplyCreateWithoutMessageInput, MessageReplyUncheckedCreateWithoutMessageInput>
+  }
+
+  export type MessageReplyCreateManyMessageInputEnvelope = {
+    data: MessageReplyCreateManyMessageInput | MessageReplyCreateManyMessageInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserCreateWithoutContactMessageInput = {
@@ -15755,6 +17488,7 @@ export namespace Prisma {
     timelines?: TimeLineCreateNestedManyWithoutUserInput
     resumes?: MediaCreateNestedManyWithoutUserInput
     Certification?: CertificationCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutContactMessageInput = {
@@ -15783,11 +17517,28 @@ export namespace Prisma {
     timelines?: TimeLineUncheckedCreateNestedManyWithoutUserInput
     resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
     Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
+    MessageReply?: MessageReplyUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutContactMessageInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutContactMessageInput, UserUncheckedCreateWithoutContactMessageInput>
+  }
+
+  export type MessageReplyUpsertWithWhereUniqueWithoutMessageInput = {
+    where: MessageReplyWhereUniqueInput
+    update: XOR<MessageReplyUpdateWithoutMessageInput, MessageReplyUncheckedUpdateWithoutMessageInput>
+    create: XOR<MessageReplyCreateWithoutMessageInput, MessageReplyUncheckedCreateWithoutMessageInput>
+  }
+
+  export type MessageReplyUpdateWithWhereUniqueWithoutMessageInput = {
+    where: MessageReplyWhereUniqueInput
+    data: XOR<MessageReplyUpdateWithoutMessageInput, MessageReplyUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type MessageReplyUpdateManyWithWhereWithoutMessageInput = {
+    where: MessageReplyScalarWhereInput
+    data: XOR<MessageReplyUpdateManyMutationInput, MessageReplyUncheckedUpdateManyWithoutMessageInput>
   }
 
   export type UserUpsertWithoutContactMessageInput = {
@@ -15827,6 +17578,7 @@ export namespace Prisma {
     timelines?: TimeLineUpdateManyWithoutUserNestedInput
     resumes?: MediaUpdateManyWithoutUserNestedInput
     Certification?: CertificationUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutContactMessageInput = {
@@ -15855,6 +17607,211 @@ export namespace Prisma {
     timelines?: TimeLineUncheckedUpdateManyWithoutUserNestedInput
     resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
     Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
+    MessageReply?: MessageReplyUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ContactMessageCreateWithoutRepliesInput = {
+    id?: string
+    name: string
+    email: string
+    subject: string
+    message: string
+    status?: $Enums.ContactStatus
+    labels?: ContactMessageCreatelabelsInput | string[]
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutContactMessageInput
+  }
+
+  export type ContactMessageUncheckedCreateWithoutRepliesInput = {
+    id?: string
+    name: string
+    email: string
+    subject: string
+    message: string
+    status?: $Enums.ContactStatus
+    labels?: ContactMessageCreatelabelsInput | string[]
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ContactMessageCreateOrConnectWithoutRepliesInput = {
+    where: ContactMessageWhereUniqueInput
+    create: XOR<ContactMessageCreateWithoutRepliesInput, ContactMessageUncheckedCreateWithoutRepliesInput>
+  }
+
+  export type UserCreateWithoutMessageReplyInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    image?: string | null
+    title?: string | null
+    phone?: string | null
+    location?: string | null
+    bio?: string | null
+    professionalTitles?: UserCreateprofessionalTitlesInput | string[]
+    githubUrl?: string | null
+    linkedInUrl?: string | null
+    mailLink?: string | null
+    about?: string | null
+    journey?: string | null
+    tags?: UserCreatetagsInput | string[]
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutUserInput
+    achievements?: AchievementCreateNestedManyWithoutUserInput
+    skills?: SkillCreateNestedManyWithoutUserInput
+    timelines?: TimeLineCreateNestedManyWithoutUserInput
+    resumes?: MediaCreateNestedManyWithoutUserInput
+    Certification?: CertificationCreateNestedManyWithoutUserInput
+    ContactMessage?: ContactMessageCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMessageReplyInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    image?: string | null
+    title?: string | null
+    phone?: string | null
+    location?: string | null
+    bio?: string | null
+    professionalTitles?: UserCreateprofessionalTitlesInput | string[]
+    githubUrl?: string | null
+    linkedInUrl?: string | null
+    mailLink?: string | null
+    about?: string | null
+    journey?: string | null
+    tags?: UserCreatetagsInput | string[]
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutUserInput
+    achievements?: AchievementUncheckedCreateNestedManyWithoutUserInput
+    skills?: SkillUncheckedCreateNestedManyWithoutUserInput
+    timelines?: TimeLineUncheckedCreateNestedManyWithoutUserInput
+    resumes?: MediaUncheckedCreateNestedManyWithoutUserInput
+    Certification?: CertificationUncheckedCreateNestedManyWithoutUserInput
+    ContactMessage?: ContactMessageUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMessageReplyInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMessageReplyInput, UserUncheckedCreateWithoutMessageReplyInput>
+  }
+
+  export type ContactMessageUpsertWithoutRepliesInput = {
+    update: XOR<ContactMessageUpdateWithoutRepliesInput, ContactMessageUncheckedUpdateWithoutRepliesInput>
+    create: XOR<ContactMessageCreateWithoutRepliesInput, ContactMessageUncheckedCreateWithoutRepliesInput>
+    where?: ContactMessageWhereInput
+  }
+
+  export type ContactMessageUpdateToOneWithWhereWithoutRepliesInput = {
+    where?: ContactMessageWhereInput
+    data: XOR<ContactMessageUpdateWithoutRepliesInput, ContactMessageUncheckedUpdateWithoutRepliesInput>
+  }
+
+  export type ContactMessageUpdateWithoutRepliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: EnumContactStatusFieldUpdateOperationsInput | $Enums.ContactStatus
+    labels?: ContactMessageUpdatelabelsInput | string[]
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutContactMessageNestedInput
+  }
+
+  export type ContactMessageUncheckedUpdateWithoutRepliesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: EnumContactStatusFieldUpdateOperationsInput | $Enums.ContactStatus
+    labels?: ContactMessageUpdatelabelsInput | string[]
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutMessageReplyInput = {
+    update: XOR<UserUpdateWithoutMessageReplyInput, UserUncheckedUpdateWithoutMessageReplyInput>
+    create: XOR<UserCreateWithoutMessageReplyInput, UserUncheckedCreateWithoutMessageReplyInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMessageReplyInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMessageReplyInput, UserUncheckedUpdateWithoutMessageReplyInput>
+  }
+
+  export type UserUpdateWithoutMessageReplyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalTitles?: UserUpdateprofessionalTitlesInput | string[]
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    mailLink?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    journey?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: UserUpdatetagsInput | string[]
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutUserNestedInput
+    achievements?: AchievementUpdateManyWithoutUserNestedInput
+    skills?: SkillUpdateManyWithoutUserNestedInput
+    timelines?: TimeLineUpdateManyWithoutUserNestedInput
+    resumes?: MediaUpdateManyWithoutUserNestedInput
+    Certification?: CertificationUpdateManyWithoutUserNestedInput
+    ContactMessage?: ContactMessageUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMessageReplyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalTitles?: UserUpdateprofessionalTitlesInput | string[]
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    mailLink?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    journey?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: UserUpdatetagsInput | string[]
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutUserNestedInput
+    achievements?: AchievementUncheckedUpdateManyWithoutUserNestedInput
+    skills?: SkillUncheckedUpdateManyWithoutUserNestedInput
+    timelines?: TimeLineUncheckedUpdateManyWithoutUserNestedInput
+    resumes?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    Certification?: CertificationUncheckedUpdateManyWithoutUserNestedInput
+    ContactMessage?: ContactMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectCreateManyUserInput = {
@@ -15941,6 +17898,15 @@ export namespace Prisma {
     status?: $Enums.ContactStatus
     labels?: ContactMessageCreatelabelsInput | string[]
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MessageReplyCreateManyUserInput = {
+    id?: string
+    subject: string
+    content: string
+    messageId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16181,6 +18147,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageReplyUpdateManyWithoutMessageNestedInput
   }
 
   export type ContactMessageUncheckedUpdateWithoutUserInput = {
@@ -16194,6 +18161,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replies?: MessageReplyUncheckedUpdateManyWithoutMessageNestedInput
   }
 
   export type ContactMessageUncheckedUpdateManyWithoutUserInput = {
@@ -16205,6 +18173,69 @@ export namespace Prisma {
     status?: EnumContactStatusFieldUpdateOperationsInput | $Enums.ContactStatus
     labels?: ContactMessageUpdatelabelsInput | string[]
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageReplyUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    message?: ContactMessageUpdateOneRequiredWithoutRepliesNestedInput
+  }
+
+  export type MessageReplyUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageReplyUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageReplyCreateManyMessageInput = {
+    id?: string
+    subject: string
+    content: string
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MessageReplyUpdateWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutMessageReplyNestedInput
+  }
+
+  export type MessageReplyUncheckedUpdateWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageReplyUncheckedUpdateManyWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

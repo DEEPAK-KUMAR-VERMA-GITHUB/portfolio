@@ -3,12 +3,60 @@
 import NeonBorder from '@/components/hero/NeonBorder';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { motion } from 'framer-motion';
-import { Github, Lightbulb, Linkedin, Mail, MapPin, Phone, Zap } from 'lucide-react';
 import { useLandingPageContext } from '@/contexts/landing-page-context';
+import { motion } from 'framer-motion';
+import { Github, Lightbulb, Linkedin, Loader2, Mail, MapPin, Phone, Send, Zap } from 'lucide-react';
+import z from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Button } from '../ui/button';
+import { sendMessage } from './actions';
+import { toast } from 'react-hot-toast';
 
 export default function Contact() {
   const { user } = useLandingPageContext();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const formSchema = z.object({
+    name: z.string().min(3, 'Name is required'),
+    email: z.string().email('Invalid email'),
+    subject: z.string().min(3, 'Subject is required'),
+    message: z.string().min(10, 'Message must be at least 10 characters'),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  });
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      setIsSubmitting(true);
+
+      const result = await sendMessage(data);
+
+      if (result.success) {
+        toast.success('Your message has been sent successfully! I will get back to you as soon as possible.');
+        form.reset();
+      } else {
+        toast.error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('An unexpected error occurred. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="py-20 relative overflow-hidden">
@@ -35,13 +83,12 @@ export default function Contact() {
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            I'm always open to discussing <span className="text-green-400 font-semibold">new opportunities</span>,
-            <span className="text-blue-400 font-semibold"> collaborations</span>, or just having a chat about
-            technology.
+            I'm always open to discussing <span className="text-green-400 font-semibold">new opportunities</span>,{' '}
+            <span className="text-blue-400 font-semibold">collaborations</span>, or just having a chat about technology.
           </motion.p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center ">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -123,6 +170,7 @@ export default function Contact() {
             </NeonBorder>
           </motion.div>
 
+          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -137,85 +185,109 @@ export default function Contact() {
                     Fill out the form below and I'll get back to you as soon as possible.
                   </p>
                 </div>
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      <label htmlFor="name" className="text-sm font-medium mb-2 block text-white">
-                        Name
-                      </label>
-                      <Input
-                        id="name"
-                        placeholder="Your name"
-                        className="h-12 text-base bg-black/40 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400/50 focus:ring-cyan-400/20"
+
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white">Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Your name"
+                                className="bg-black/40 border-white/20 text-white placeholder:text-white/40"
+                                {...field}
+                                disabled={isSubmitting}
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
                       />
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      <label htmlFor="email" className="text-sm font-medium mb-2 block text-white">
-                        Email
-                      </label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="your.email@example.com"
-                        className="h-12 text-base bg-black/40 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400/50 focus:ring-cyan-400/20"
+
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white">Email</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="email"
+                                placeholder="your.email@example.com"
+                                className="bg-black/40 border-white/20 text-white placeholder:text-white/40"
+                                {...field}
+                                disabled={isSubmitting}
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
                       />
-                    </motion.div>
-                  </div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <label htmlFor="subject" className="text-sm font-medium mb-2 block text-white">
-                      Subject
-                    </label>
-                    <Input
-                      id="subject"
-                      placeholder="What's this about?"
-                      className="h-12 text-base bg-black/40 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400/50 focus:ring-cyan-400/20"
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="subject"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white">Subject</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="What's this about?"
+                              className="bg-black/40 border-white/20 text-white placeholder:text-white/40"
+                              {...field}
+                              disabled={isSubmitting}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-400" />
+                        </FormItem>
+                      )}
                     />
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <label htmlFor="message" className="text-sm font-medium mb-2 block text-white">
-                      Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      placeholder="Tell me more about your project or inquiry..."
-                      rows={6}
-                      className="resize-none text-base bg-black/40 border-white/20 text-white placeholder:text-white/40 focus:border-cyan-400/50 focus:ring-cyan-400/20"
+
+                    <FormField
+                      control={form.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white">Message</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Your message here..."
+                              className="min-h-[120px] bg-black/40 border-white/20 text-white placeholder:text-white/40 resize-none"
+                              {...field}
+                              disabled={isSubmitting}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-400" />
+                        </FormItem>
+                      )}
                     />
-                  </motion.div>
-                  <motion.button
-                    type="submit"
-                    className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/50 text-white rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <motion.div
-                      animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                    >
-                      <Zap className="h-5 w-5" />
-                    </motion.div>
-                    Send Message
-                  </motion.button>
-                </form>
+
+                    <div className="flex justify-end">
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="mr-2 h-4 w-4" />
+                            Send Message
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
               </div>
             </NeonBorder>
           </motion.div>

@@ -8,70 +8,91 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ContactMessage, ContactStatus } from '@/types/types';
 import { AlertCircle, CheckCircle, Filter, Inbox, Mail, RefreshCw, Search } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ContactMessageCard } from './_components/contact-message';
 import { ReplyDialog } from './_components/reply-dialog';
+import { getAllMessages } from './actions';
+import toast from 'react-hot-toast';
+import { useAuth } from '@/contexts/auth-context';
+import { sendEmail } from '@/lib/email';
 
 // Mock data - replace with real API calls
-const mockMessages: ContactMessage[] = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    subject: 'Collaboration Opportunity',
-    message:
-      "Hello,\n\nI came across your portfolio and was impressed by your work. I'd like to discuss a potential collaboration on an upcoming project.\n\nBest regards,\nJohn",
-    status: 'new',
-    labels: ['collaboration', 'opportunity'],
-    metadata: {
-      ip: '192.168.1.1',
-      userAgent:
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-      referrer: 'https://www.google.com/',
-    },
-    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-  },
-  {
-    id: '2',
-    name: 'Acme Inc.',
-    email: 'hr@acme.com',
-    subject: 'Job Opportunity - Senior Frontend Developer',
-    message:
-      'Dear Candidate,\n\nWe were impressed by your portfolio and would like to invite you to interview for our Senior Frontend Developer position.\n\nBest regards,\nHR Team',
-    status: 'in-progress',
-    labels: ['job', 'opportunity'],
-    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    updatedAt: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: '3',
-    name: 'Spam Bot',
-    email: 'spam@example.com',
-    subject: 'Make $1000 a day working from home!',
-    message: "You've won a prize! Click here to claim your $1000!",
-    status: 'spam',
-    createdAt: new Date(Date.now() - 172800000).toISOString(),
-    updatedAt: new Date(Date.now() - 172800000).toISOString(),
-  },
-];
+// const mockMessages: ContactMessage[] = [
+//   {
+//     id: '1',
+//     name: 'John Doe',
+//     email: 'john.doe@example.com',
+//     subject: 'Collaboration Opportunity',
+//     message:
+//       "Hello,\n\nI came across your portfolio and was impressed by your work. I'd like to discuss a potential collaboration on an upcoming project.\n\nBest regards,\nJohn",
+//     status: 'new',
+//     labels: ['collaboration', 'opportunity'],
+//     metadata: {
+//       ip: '192.168.1.1',
+//       userAgent:
+//         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+//       referrer: 'https://www.google.com/',
+//     },
+//     createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+//     updatedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+//   },
+//   {
+//     id: '2',
+//     name: 'Acme Inc.',
+//     email: 'hr@acme.com',
+//     subject: 'Job Opportunity - Senior Frontend Developer',
+//     message:
+//       'Dear Candidate,\n\nWe were impressed by your portfolio and would like to invite you to interview for our Senior Frontend Developer position.\n\nBest regards,\nHR Team',
+//     status: 'in-progress',
+//     labels: ['job', 'opportunity'],
+//     createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+//     updatedAt: new Date(Date.now() - 86400000).toISOString(),
+//   },
+//   {
+//     id: '3',
+//     name: 'Spam Bot',
+//     email: 'spam@example.com',
+//     subject: 'Make $1000 a day working from home!',
+//     message: "You've won a prize! Click here to claim your $1000!",
+//     status: 'spam',
+//     createdAt: new Date(Date.now() - 172800000).toISOString(),
+//     updatedAt: new Date(Date.now() - 172800000).toISOString(),
+//   },
+// ];
 
 export default function ContactPage() {
-  const [messages, setMessages] = useState<ContactMessage[]>(mockMessages);
+  const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<ContactStatus | 'all'>('all');
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [isReplyDialogOpen, setIsReplyDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ContactStatus | 'all'>('all');
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const { isAuthenticated } = useAuth();
 
   // Simulate loading messages
   const loadMessages = useCallback(async () => {
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const result = await getAllMessages();
+      if (result.success) {
+        setMessages(result.data);
+      } else {
+        toast.error(result.error as never);
+      }
+    } catch (error) {
+      console.error('Error loading messages:', error);
+      toast.error('Failed to load messages');
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    loadMessages();
+  }, [isAuthenticated]);
 
   // Filter messages based on search query and status
   const filteredMessages = useMemo(() => {
@@ -111,8 +132,51 @@ export default function ContactPage() {
   const handleSendReply = async (messageId: string, reply: { subject: string; content: string }) => {
     // In a real app, you would send this to your API
     console.log('Sending reply to message:', messageId, reply);
-    // Update the message status to in-progress or resolved based on your workflow
-    await handleStatusChange(messageId, 'in-progress');
+
+    try {
+      const response = await fetch(`/api/contact/${messageId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reply: {
+            subject: reply.subject,
+            content: reply.content,
+          },
+          status: 'in_progress',
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to send reply');
+      }
+      const updatedMessage = await response.json();
+      setMessages(prevMessages =>
+        prevMessages.map(msg =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                status: 'in_progress',
+                replies: [
+                  ...(msg.replies || []),
+                  ...(updatedMessage.replies || []).filter(
+                    (newReply: any) => !msg.replies?.some(r => r.id === newReply.id)
+                  ),
+                ],
+              }
+            : msg
+        )
+      );
+
+      // Close the reply dialog
+      setIsReplyDialogOpen(false);
+
+      // Show success message
+      toast.success('Reply sent successfully');
+    } catch (error) {
+      console.error('Error sending reply:', error);
+      toast.error('Failed to send reply. Please try again.');
+    }
   };
 
   // Get counts for each status
@@ -123,7 +187,7 @@ export default function ContactPage() {
         acc.all++;
         return acc;
       },
-      { all: 0, new: 0, 'in-progress': 0, resolved: 0, spam: 0 } as Record<ContactStatus | 'all', number>
+      { all: 0, new: 0, in_progress: 0, resolved: 0, spam: 0 } as Record<ContactStatus | 'all', number>
     );
   }, [messages]);
 
@@ -163,12 +227,12 @@ export default function ContactPage() {
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="in-progress" className="flex items-center gap-2">
+            <TabsTrigger value="in_progress" className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-yellow-500" />
               <span>In Progress</span>
-              {statusCounts['in-progress'] > 0 && (
+              {statusCounts['in_progress'] > 0 && (
                 <span className="ml-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs text-yellow-800">
-                  {statusCounts['in-progress']}
+                  {statusCounts['in_progress']}
                 </span>
               )}
             </TabsTrigger>

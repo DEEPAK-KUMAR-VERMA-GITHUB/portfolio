@@ -34,7 +34,7 @@ const formSchema = z.object({
   location: z.string().min(1, 'Location is required'),
   email: z.string().email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
-  image: z.string().url('Please enter a valid URL').or(z.literal('')),
+  image: z.string().optional(),
   professionalTitles: z.array(z.string()).min(1, 'Professional title is required'),
   githubUrl: z.string().url('Github Url is required').startsWith('https://github.com'),
   linkedInUrl: z.string().url('Linkedin Url is required').startsWith('https://www.linkedin.com'),

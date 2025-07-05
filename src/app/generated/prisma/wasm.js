@@ -237,6 +237,16 @@ exports.Prisma.ContactMessageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.MessageReplyScalarFieldEnum = {
+  id: 'id',
+  subject: 'subject',
+  content: 'content',
+  messageId: 'messageId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -303,7 +313,8 @@ exports.Prisma.ModelName = {
   TimeLine: 'TimeLine',
   Media: 'Media',
   Certification: 'Certification',
-  ContactMessage: 'ContactMessage'
+  ContactMessage: 'ContactMessage',
+  MessageReply: 'MessageReply'
 };
 
 /**

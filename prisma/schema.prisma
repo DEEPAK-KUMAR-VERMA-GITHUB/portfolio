@@ -69,6 +69,7 @@ model User {
   resumes            Media[]
   Certification      Certification[]
   ContactMessage     ContactMessage[]
+  MessageReply       MessageReply[]
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
 }
@@ -169,10 +170,25 @@ model ContactMessage {
   status    ContactStatus @default(new)
   labels    String[]      @default([])
   metadata  Json?
+  replies   MessageReply[]
   userId    String?       @db.Uuid
   user      User?         @relation(fields: [userId], references: [id])
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
   @@index([email])
+}
+
+model MessageReply {
+  id        String        @id @default(uuid()) @db.Uuid
+  subject   String        @db.VarChar(200)
+  content   String        @db.Text
+  messageId String        @db.Uuid
+  message   ContactMessage @relation(fields: [messageId], references: [id])
+  userId    String?        @db.Uuid
+  user      User?          @relation(fields: [userId], references:  [id])
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([messageId])
 }

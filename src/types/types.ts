@@ -102,7 +102,17 @@ export interface Tag {
   label: string;
 }
 
-export type ContactStatus = 'new' | 'in-progress' | 'resolved' | 'spam';
+export type ContactStatus = 'new' | 'in_progress' | 'resolved' | 'spam';
+
+export interface MessageReply {
+  id: string;
+  subject: string;
+  content: string;
+  messageId: string;
+  userId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface ContactMessage {
   id: string;
@@ -118,6 +128,8 @@ export interface ContactMessage {
     referrer?: string;
     [key: string]: any;
   };
+  replies?: MessageReply[];
+  userId?: string;
   createdAt: string;
   updatedAt: string;
 }

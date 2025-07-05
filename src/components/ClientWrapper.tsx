@@ -2,6 +2,7 @@
 import Navbar from '@/components/navbar/Navbar';
 import { usePathname } from 'next/navigation';
 import { useLandingPageContext } from '@/contexts/landing-page-context';
+import { Toaster } from 'react-hot-toast';
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
     <>
       {!isAdmin && <Navbar />}
       {children}
+      <Toaster />
     </>
   );
 }
