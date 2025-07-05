@@ -75,7 +75,7 @@ export default function ContactMessagePage({ params }: { params: { id: string } 
 
       // Refresh the message to show the new reply
       const updatedMessage = await response.json();
-      setMessage(updatedMessage as ContactMessage);
+      setMessage(updatedMessage.data as ContactMessage);
       setReplyContent('');
       toast.success('Reply sent successfully');
     } catch (error) {
@@ -99,7 +99,7 @@ export default function ContactMessagePage({ params }: { params: { id: string } 
       if (!response.ok) throw new Error('Failed to update status');
 
       const updatedMessage = await response.json();
-      setMessage(updatedMessage as ContactMessage);
+      setMessage(updatedMessage.data as ContactMessage);
       toast.success('Status updated successfully');
     } catch (error) {
       console.error('Error updating status:', error);
@@ -146,7 +146,7 @@ export default function ContactMessagePage({ params }: { params: { id: string } 
                         size="sm"
                         className={cn('h-8 gap-1.5 text-xs', statusColors[message.status as keyof typeof statusColors])}
                       >
-                        {message.status.replace('-', ' ')}
+                        {message.status}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -168,7 +168,7 @@ export default function ContactMessagePage({ params }: { params: { id: string } 
                                     : 'bg-gray-500'
                             )}
                           />
-                          <span className="capitalize">{statusKey.replace('-', ' ')}</span>
+                          <span className="capitalize">{statusKey}</span>
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuContent>

@@ -103,7 +103,7 @@ export function ContactMessageCard({
                   className={cn('text-xs font-normal', statusColors[message.status], isUpdating && 'opacity-70')}
                 >
                   {isUpdating ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : statusIcons[message.status]}
-                  <span className="ml-1">{message.status.replace('-', ' ')}</span>
+                  <span className="ml-1">{message.status}</span>
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground flex items-center">
@@ -128,48 +128,6 @@ export function ContactMessageCard({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {/* <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    'h-8 gap-1.5 text-xs',
-                    statusColors[message.status],
-                    'hover:bg-opacity-80',
-                    isUpdating && 'opacity-70'
-                  )}
-                  disabled={isUpdating}
-                >
-                  {isUpdating ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : <>{statusIcons[message.status]} </>}
-                  {message.status.replace('-', ' ')}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {Object.entries(statusColors).map(([statusKey, colorClass]) => (
-                  <DropdownMenuItem
-                    key={statusKey}
-                    className={cn('flex items-center gap-2', message.status === statusKey && 'font-semibold')}
-                    onClick={() => handleStatusChange(statusKey as ContactStatus)}
-                  >
-                    <span
-                      className={cn(
-                        'h-2 w-2 rounded-full',
-                        statusKey === 'new'
-                          ? 'bg-blue-500'
-                          : statusKey === 'in_progress'
-                            ? 'bg-yellow-500'
-                            : statusKey === 'resolved'
-                              ? 'bg-green-500'
-                              : 'bg-gray-500'
-                      )}
-                    />
-                    <span className="capitalize">{statusKey.replace('-', ' ')}</span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu> */}
           </div>
         </div>
       </CardHeader>
