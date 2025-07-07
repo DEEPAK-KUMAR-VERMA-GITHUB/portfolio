@@ -60,7 +60,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         updateData.status = 'in_progress';
       }
 
-      console.log('Sending email to:', originalMessage.email);
+      // console.log('Sending email to:', originalMessage.email);
       const emailContent = generateContactReplyEmail({
         recipientName: originalMessage.name,
         senderName: config.email.senderName,
@@ -79,7 +79,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         replyTo: config.email.replyTo,
       });
 
-      console.log('Email result:', emailResult);
+      // console.log('Email result:', emailResult);
 
       if (!emailResult.success) {
         console.error('Failed to send email:', emailResult.error);

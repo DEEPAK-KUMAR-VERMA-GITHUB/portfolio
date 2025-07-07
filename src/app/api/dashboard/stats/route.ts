@@ -12,7 +12,7 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const session = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
-  console.log(session);
+  // console.log(session);
   const userId = session.payload.userId as string;
   try {
     const stats = await prisma.$transaction([

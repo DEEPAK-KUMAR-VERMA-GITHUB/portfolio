@@ -124,7 +124,7 @@ export default function ProjectsPage() {
   const handleAdd = async (newProject: Project) => {
     try {
       if (editProject) {
-        console.log(newProject);
+        // console.log(newProject);
         const result = await updateProject({ ...newProject, id: editProject.id } as never);
         if (result.success) {
           toast.success('Project updated successfully');

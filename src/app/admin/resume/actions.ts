@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { Resume } from '@/types/types';
 
 export const addResumeAction = async (userId: string, data: any) => {
-  console.log(data);
+  // console.log(data);
   try {
     const resume = await prisma.media.create({
       data: {

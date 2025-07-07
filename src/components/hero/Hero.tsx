@@ -29,7 +29,7 @@ const Hero = () => {
       repeat: Infinity,
       repeatType: 'mirror',
     });
-    console.log(user);
+    // console.log(user);
   }, []);
 
   // Only render WebGL content in the browser

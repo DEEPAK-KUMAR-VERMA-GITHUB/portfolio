@@ -9,14 +9,14 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  output: 'standalone',
+  // output: 'standalone',
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**'
-      }
-    ]
+        hostname: '**',
+      },
+    ],
   },
 };
 export default nextConfig;

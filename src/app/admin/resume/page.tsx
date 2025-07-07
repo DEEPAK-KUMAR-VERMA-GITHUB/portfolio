@@ -55,7 +55,7 @@ export default function ResumePage() {
   }, [refreshTrigger]);
 
   const handleFileUpload = async (file: File) => {
-    console.log(file);
+    // console.log(file);
 
     try {
       setIsUploading(true);
@@ -72,7 +72,7 @@ export default function ResumePage() {
 
       // In a real app, you would upload the file to your server
       const result = await uploadFile(file);
-      console.log(result);
+      // console.log(result);
 
       clearInterval(progressInterval);
       setUploadProgress(100);
@@ -92,7 +92,7 @@ export default function ResumePage() {
         updatedAt: new Date(),
       };
 
-      console.log(newResume);
+      // console.log(newResume);
 
       await addResumeAction(user?.id as string, newResume);
       triggerRefresh();

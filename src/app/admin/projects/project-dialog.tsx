@@ -89,7 +89,7 @@ export default function ProjectDialog({
 
   const onSubmit = (data: ProjectFormValues) => {
     setLoading(true);
-    console.log(data);
+    // console.log(data);
     onSave(data as Project);
     setLoading(false);
   };

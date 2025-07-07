@@ -1,6 +1,6 @@
 'use server';
 
-import { Project } from '@/app/generated/prisma';
+import { Project } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 
 export async function addProject(project: Project, userId: string) {
@@ -19,7 +19,7 @@ export async function addProject(project: Project, userId: string) {
 }
 
 export async function updateProject(project: Project) {
-  console.log(project);
+  // console.log(project);
   try {
     const updatedProject = await prisma.project.update({
       where: {

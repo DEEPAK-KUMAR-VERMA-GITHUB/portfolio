@@ -79,7 +79,7 @@ export default function AboutPage() {
 
   useEffect(() => {
     if (user) {
-      console.log(user);
+      // // console.log(user);
       setValue('name', user.name || '');
       setValue('title', user.title || '');
       setValue('bio', user.bio || '');
@@ -103,7 +103,7 @@ export default function AboutPage() {
     setLoading(true);
     try {
       if (previewUrl) data.image = previewUrl;
-      console.log('Form submitted:', data);
+      // console.log('Form submitted:', data);
       await updateAboutInfoAction(user?.id as string, data);
       toast.success('About information updated successfully');
     } catch (error) {
@@ -119,7 +119,7 @@ export default function AboutPage() {
       const result = await uploadFile(file);
       setCurrentImage(result);
       setPreviewUrl(result.url);
-      console.log(result);
+      // console.log(result);
     } catch (error: any) {
       console.error('File upload failed:', error.message);
       toast.error('Failed to upload file');

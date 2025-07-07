@@ -12,7 +12,7 @@ export const useFileUpload = () => {
   } | null>(null);
 
   const removeUplaodedFile = async (filename: string) => {
-    console.log(filename);
+    // console.log(filename);
     try {
       const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
         method: 'DELETE',

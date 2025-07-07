@@ -4,7 +4,7 @@ import { config } from '@/lib/config';
 // Create a test account for development
 const createTestAccount = async () => {
   if (process.env.NODE_ENV === 'development') {
-    console.log('Creating test account...');
+    // console.log('Creating test account...');
     const testAccount = await nodemailer.createTestAccount();
     return {
       host: 'smtp.ethereal.email',
@@ -22,16 +22,18 @@ const createTestAccount = async () => {
 // Create transporter
 const createTransporter = async () => {
   const testAccountConfig = await createTestAccount();
-  
-  return nodemailer.createTransport(testAccountConfig || {
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.secure,
-    auth: {
-      user: config.email.auth.user,
-      pass: config.email.auth.pass,
-    },
-  });
+
+  return nodemailer.createTransport(
+    testAccountConfig || {
+      host: config.email.host,
+      port: config.email.port,
+      secure: config.email.secure,
+      auth: {
+        user: config.email.auth.user,
+        pass: config.email.auth.pass,
+      },
+    }
+  );
 };
 
 interface SendEmailOptions {
@@ -44,7 +46,7 @@ interface SendEmailOptions {
 export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions) {
   try {
     const transporter = await createTransporter();
-    
+
     const info = await transporter.sendMail({
       from: config.email.from,
       to,
@@ -55,15 +57,15 @@ export async function sendEmail({ to, subject, html, replyTo }: SendEmailOptions
 
     // Log the preview URL for development
     if (process.env.NODE_ENV === 'development') {
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     }
 
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('Error sending email:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to send email' 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to send email',
     };
   }
 }
