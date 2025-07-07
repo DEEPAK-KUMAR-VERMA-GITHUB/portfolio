@@ -4,7 +4,7 @@ import Contact from '@/components/contact/Contact';
 import Footer from '@/components/footer/Footer';
 import Hero from '@/components/hero/Hero';
 import Project from '@/components/project/Project';
-import Resume from '@/components/resume/Resume';
+import Resume from '@/components/resume/resume';
 
 export default function Home() {
   return (
