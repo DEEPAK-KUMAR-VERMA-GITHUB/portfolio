@@ -126,6 +126,24 @@ export default function ProjectsPage() {
       if (editProject) {
         // console.log(newProject);
         const result = await updateProject({ ...newProject, id: editProject.id } as never);
+
+        // if image is updated, delete the old image
+        if (editProject.image && newProject.image !== editProject.image) {
+          fetch('/api/cloudinary', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publicId: editProject.image }),
+          })
+            .then(async res => {
+              if (!res.ok) throw new Error('Failed to delete from Cloudinary');
+              toast.success('File deleted successfully');
+            })
+            .catch(() => {
+              toast.error('Failed to delete file from Cloudinary');
+            });
+          console.log(editProject);
+        }
+
         if (result.success) {
           toast.success('Project updated successfully');
           triggerRefresh();
@@ -175,6 +193,21 @@ export default function ProjectsPage() {
 
     setIsDeleting(true);
     try {
+      if (projectToDelete.image) {
+        fetch('/api/cloudinary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicId: projectToDelete.image }),
+        })
+          .then(async res => {
+            if (!res.ok) throw new Error('Failed to delete from Cloudinary');
+            toast.success('File deleted successfully');
+          })
+          .catch(() => {
+            toast.error('Failed to delete file from Cloudinary');
+          });
+        console.log(projectToDelete);
+      }
       await deleteProject(projectToDelete.id);
       toast.success('Project deleted successfully');
       triggerRefresh();

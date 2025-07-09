@@ -85,7 +85,7 @@ export default function Resume() {
 
                 {/* Timeline node with icon */}
                 <motion.div
-                  className="rounded-full absolute left-1/2 transform -translate-x-1/2 md:relative md:left-0 md:right-0 md:translate-x-0 z-10"
+                  className="rounded-full absolute left-1/2 transform -translate-x-1/2 md:relative md:left-0 md:right-0 md:translate-x-0"
                   whileHover={{ scale: 1.2 }}
                   animate={{
                     boxShadow: [

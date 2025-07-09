@@ -8,8 +8,14 @@ import { DataTable } from '@/app/admin/certifications/data-table';
 import { columns } from '@/app/admin/certifications/columns';
 import { CertificationForm } from '@/app/admin/certifications/certification-form';
 import { Toaster, toast } from 'react-hot-toast';
-import { addCertification, deleteCertification, getCertifications, updateCertification } from '@/app/admin/certifications/actions';
+import {
+  addCertification,
+  deleteCertification,
+  getCertifications,
+  updateCertification,
+} from '@/app/admin/certifications/actions';
 import { useAuth } from '@/contexts/auth-context';
+import { useFileUpload } from '@/hooks/useFileUpload';
 
 export type Certification = {
   id: string;
@@ -35,6 +41,7 @@ export default function CertificationsPage() {
   const [certificationToDelete, setCertificationToDelete] = useState<Certification | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const { user } = useAuth();
+  const { removeUplaodedFile } = useFileUpload();
 
   const fetchCertifications = useCallback(async () => {
     if (!user) return;
@@ -66,14 +73,18 @@ export default function CertificationsPage() {
     setIsFormOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (cert: Certification) => {
     if (!confirm('Are you sure you want to delete this certification? This action cannot be undone.')) {
       return;
     }
 
     try {
       setIsDeleting(true);
-      await deleteCertification(id);
+      console.log(cert);
+      if (cert.image) {
+        await removeUplaodedFile(cert.image);
+      }
+      await deleteCertification(cert.id);
       toast.success('Certification deleted successfully');
       triggerRefresh();
     } catch (error) {
@@ -92,6 +103,9 @@ export default function CertificationsPage() {
   const handleSave = async (cert: Certification) => {
     try {
       if (editingCert) {
+        if (editingCert.image && cert.image !== editingCert.image) {
+          await removeUplaodedFile(editingCert.image);
+        }
         await updateCertification(editingCert.id, cert);
         triggerRefresh();
         toast.success('Certification updated successfully');

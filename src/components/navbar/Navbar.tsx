@@ -38,7 +38,7 @@ const Navbar = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 flex items-center gap-2 relative z-10"
+            className="text-lg md:text-xl lg:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 flex items-center gap-2 relative z-10"
           >
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}>
               <Atom className="w-6 h-6 text-cyan-400" />
@@ -47,7 +47,7 @@ const Navbar = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8 relative z-10">
+          <div className="hidden lg:flex space-x-8 relative z-10">
             {navbarSections.map((section, index) => (
               <motion.button
                 key={section}
@@ -92,7 +92,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <motion.button
-            className="md:hidden text-white hover:text-cyan-400 transition-colors relative z-10"
+            className="lg:hidden text-white hover:text-cyan-400 transition-colors relative z-10"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -110,7 +110,7 @@ const Navbar = () => {
               initial={{ opacity: 0, y: -20, height: 0 }}
               animate={{ opacity: 1, y: 0, height: 'auto' }}
               exit={{ opacity: 0, y: -20, height: 0 }}
-              className="md:hidden py-4 space-y-2 border-t border-white/10 bg-black/40 backdrop-blur-xl"
+              className="lg:hidden py-4 space-y-2 border-t border-white/10 bg-black/40 backdrop-blur-xl"
             >
               {navbarSections.map((section, index) => (
                 <motion.button

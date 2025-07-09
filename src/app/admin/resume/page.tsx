@@ -19,7 +19,7 @@ export default function ResumePage() {
   const [activeTab, setActiveTab] = useState('upload');
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [resumeToDelete, setResumeToDelete] = useState<string | null>(null);
+  const [resumeToDelete, setResumeToDelete] = useState<Resume | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
@@ -119,8 +119,8 @@ export default function ResumePage() {
     }
   };
 
-  const handleDeleteClick = (id: string) => {
-    setResumeToDelete(id);
+  const handleDeleteClick = (resume: Resume) => {
+    setResumeToDelete(resume);
   };
 
   const handleDeleteConfirm = async () => {
@@ -129,17 +129,18 @@ export default function ResumePage() {
     setIsDeleting(true);
 
     try {
-      const result = await deleteResumeAction(resumeToDelete);
-      await removeUplaodedFile(result.data?.fileUrl.split('/').pop() as string);
+      const result = await deleteResumeAction(resumeToDelete.id as string);
+      await removeUplaodedFile(result.data?.fileUrl as string);
       triggerRefresh();
       toast.success('Resume deleted successfully');
       setResumes(prevResumes => {
-        const updatedResumes = prevResumes.filter(r => r.id !== resumeToDelete);
+        const updatedResumes = prevResumes.filter(r => r.id !== resumeToDelete.id);
 
         // If we deleted the default resume and there are other resumes,
         // set the first one as default
         if (updatedResumes.length > 0 && !updatedResumes.some(r => r.isDefault)) {
           updatedResumes[0].isDefault = true;
+          setDefaultResumeAction(updatedResumes[0].id as string);
         }
 
         return updatedResumes;

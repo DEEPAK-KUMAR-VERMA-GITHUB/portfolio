@@ -12,12 +12,24 @@ export const useFileUpload = () => {
   } | null>(null);
 
   const removeUplaodedFile = async (filename: string) => {
-    // console.log(filename);
+    console.log(filename);
     try {
-      const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
-        method: 'DELETE',
+      if (!filename.includes('portfolio_uploads')) {
+        // remove extension
+        filename = filename.substring(0, filename.lastIndexOf('.'));
+        filename = 'portfolio_uploads/' + filename;
+      }
+      console.log(filename);
+
+      const result = await fetch(`/api/cloudinary`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId: filename }),
       });
-      if (!response.ok) {
+
+      console.log(result);
+
+      if (!result.ok) {
         throw new Error('Failed to remove file');
       }
     } catch (err: any) {

@@ -60,7 +60,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-20 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10  ">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -96,8 +96,8 @@ export default function Contact() {
             viewport={{ once: true }}
           >
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="green">
-              <div className="p-8 flex flex-col gap-10">
-                <h3 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-white flex items-center gap-3">
+              <div className="p-8 flex flex-col md:gap-10  ">
+                <h3 className="text-xl md:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-white flex items-center gap-3">
                   <motion.div
                     animate={{
                       rotate: [0, 360],
@@ -109,7 +109,7 @@ export default function Contact() {
                   </motion.div>
                   Contact Information
                 </h3>
-                <div className="space-y-10 text-lg">
+                <div className="space-y-10 text-sm md:text-base lg:text-lg">
                   {[
                     { icon: Mail, text: user?.email, color: 'text-green-400' },
                     { icon: Phone, text: user?.phone, color: 'text-blue-400' },
@@ -135,7 +135,7 @@ export default function Contact() {
                 </div>
 
                 <div className="mt-10">
-                  <h4 className="text-2xl font-bold mb-5 text-white">Follow Me</h4>
+                  <h4 className="text-lg md:text-2xl font-bold mb-5 text-white">Follow Me</h4>
                   <div className="flex gap-4">
                     {[
                       { icon: Github, href: user?.githubUrl, color: 'from-gray-400 to-gray-600' },
@@ -180,7 +180,7 @@ export default function Contact() {
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="blue">
               <div className="p-8">
                 <div className="pb-6">
-                  <h3 className="text-3xl font-bold text-white">Send a Message</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white">Send a Message</h3>
                   <p className="text-white/70 text-base">
                     Fill out the form below and I'll get back to you as soon as possible.
                   </p>

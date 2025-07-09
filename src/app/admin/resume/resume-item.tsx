@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 interface ResumeItemProps {
   resume: Resume;
   onSetDefault: (id: string) => void;
-  onDelete: (id: string) => void;
+  onDelete: (resume: Resume) => void;
   isProcessing?: boolean;
 }
 
@@ -51,7 +51,16 @@ export default function ResumeItem({ resume, onSetDefault, onDelete, isProcessin
 
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="sm" asChild className="h-8">
-            <a href={resume.fileUrl} target="_blank" rel="noopener noreferrer" download>
+            <a
+              href={
+                resume.fileUrl.includes('.')
+                  ? resume.fileUrl
+                  : `${resume.fileUrl}.${resume.fileType?.split('/')[1] || 'pdf'}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              download={`${resume.title || 'resume'}.${resume.fileType?.split('/')[1] || 'pdf'}`}
+            >
               <Download className="h-4 w-4 md:mr-2" />
               <span className="hidden md:block">Download</span>
             </a>
@@ -75,7 +84,7 @@ export default function ResumeItem({ resume, onSetDefault, onDelete, isProcessin
             variant="ghost"
             size="icon"
             className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-            onClick={() => onDelete(resume.id!)}
+            onClick={() => onDelete(resume)}
             disabled={isProcessing}
           >
             <Trash2 className="h-4 w-4" />

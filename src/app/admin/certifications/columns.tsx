@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 export const columns = (
   onEdit: (cert: Certification) => void,
-  onDelete: (id: string) => void
+  onDelete: (cert: Certification) => void,
 ): ColumnDef<Certification>[] => [
   {
     accessorKey: 'image',
@@ -107,7 +107,7 @@ export const columns = (
             size="icon"
             onClick={e => {
               e.stopPropagation();
-              onDelete(cert.id);
+              onDelete(cert);
             }}
             className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
             title="Delete certification"

@@ -385,7 +385,7 @@ export const CertificateShowcase = ({
                     marginBottom: currentSpacing.nameBottom,
                   }}
                 >
-                  {certifications[active]?.title }
+                  {certifications[active]?.title}
                 </h3>
                 <p
                   style={{

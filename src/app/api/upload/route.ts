@@ -1,7 +1,5 @@
+import { deleteFromCloudinary, uploadToCloudinary } from '@/lib/cloudinary';
 import { NextResponse } from 'next/server';
-import mime from 'mime-types';
-import path from 'path';
-import fs from 'fs';
 
 export async function POST(req: Request) {
   try {
@@ -39,31 +37,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'File size too large' }, { status: 400 });
     }
 
-    // Generate a unique filename
-    const fileExtension = mime.extension(file.type) || '';
+    // Generate a unique filename for Cloudinary
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-
-    // use regex for replace all invalid characters from filename like space, special characters, etc
     const name = file.name.replace(/[^a-zA-Z0-9]/g, '_');
-
-    const filename = `${name}-${uniqueSuffix}.${fileExtension}`;
-    const uploadPath = path.join(process.cwd(), 'public', 'uploads');
-    const filePath = path.join(uploadPath, filename);
-
-    // ensure the upload directory exists
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
+    const filename = `${name}-${uniqueSuffix}`;
 
     // convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // save the file
-    await fs.promises.writeFile(filePath, buffer);
+    // Determine resource type for Cloudinary
+    const resourceType = file.type === 'application/pdf' ? 'raw' : 'image';
 
-    // return the file url
-    const fileUrl = `/uploads/${filename}`;
+    // Upload to Cloudinary
+    const uploadResult = await uploadToCloudinary(buffer, filename, resourceType);
 
     return NextResponse.json({
       success: true,
@@ -71,7 +58,8 @@ export async function POST(req: Request) {
         name: file.name,
         type: file.type,
         size: file.size,
-        url: fileUrl,
+        url: uploadResult.url,
+        cloudinary_public_id: uploadResult.public_id,
       },
     });
   } catch (error: any) {
@@ -87,21 +75,8 @@ export async function DELETE(req: Request) {
     if (!filename) {
       return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
     }
-    const filePath = path.join(process.cwd(), 'public', 'uploads', filename as string);
-
-    try {
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-      return NextResponse.json({ success: true });
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
-        return NextResponse.json({ error: 'File not found' }, { status: 404 });
-      }
-
-      console.error('Error removing file:', error);
-      throw error;
-    }
+    const result = await deleteFromCloudinary(filename);
+    return NextResponse.json({ success: true, result });
   } catch (error: any) {
     console.error('Error removing file:', error);
     return NextResponse.json({ error: error.message || 'Failed to remove file' }, { status: 500 });

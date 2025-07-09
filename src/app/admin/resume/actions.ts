@@ -35,6 +35,19 @@ export const deleteResumeAction = async (mediaId: string) => {
 
 export const setDefaultResumeAction = async (mediaId: string) => {
   try {
+    // if any other resume is already default then make that default resume false
+    await prisma.media.updateMany({
+      where: {
+        isDefault: true,
+        id: {
+          not: mediaId,
+        },
+      },
+      data: {
+        isDefault: false,
+      },
+    });
+
     const resume = await prisma.media.update({
       where: {
         id: mediaId,

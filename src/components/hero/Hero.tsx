@@ -126,27 +126,26 @@ const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Glitch name effect */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
             className="mb-6"
           >
-            <span className="max-w-3xl bg-gradient-to-br from-white via-cyan-200 to-purple-200 bg-clip-text text-center text-3xl font-bold leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
+            <span className="alignse  max-w-3xl bg-gradient-to-br from-white via-cyan-200 to-purple-200 bg-clip-text text-center font-bold leading-tight text-transparent leading-tight text-2xl md:text-4xl lg:text-6xl">
               {user?.name || 'Deepak Kumar Verma'}
             </span>
           </motion.div>
 
           {/* Animated subtitle */}
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+          <div className="flex flex-wrap items-center justify-center md:gap-x-4 md:gap-y-2">
             {user?.professionalTitles.map((subtitle, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 + i * 0.2, ease: 'easeOut' }}
-                className="text-xl md:text-3xl mb-8 font-medium flex items-center gap-1"
+                className="text-lg md:text-xl lg:text-3xl mb-8 font-medium flex items-center gap-1"
               >
                 <span className="text-white/80">{subtitle}</span>
                 {i !== 3 && (

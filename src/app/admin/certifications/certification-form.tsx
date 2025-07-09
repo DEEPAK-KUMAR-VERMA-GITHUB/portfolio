@@ -82,7 +82,7 @@ export function CertificationForm({ open, onOpenChangeAction, certification, onS
   const handleCancel = async () => {
     onOpenChangeAction(false);
     if (certificationImageUrl) {
-      await removeUplaodedFile(certificationImageUrl.split('/').pop() as string);
+      await removeUplaodedFile(certificationImageUrl as string);
     }
   };
 

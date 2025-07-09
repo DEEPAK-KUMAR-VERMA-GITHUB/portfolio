@@ -1,20 +1,23 @@
 'use client';
 
 import NeonBorder from '@/components/hero/NeonBorder';
-import { HeartHandshake, Lightbulb, Terminal } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { skills } from '@/constants/constants';
 import { Progress } from '@/components/ui/progress';
-import { motion } from 'framer-motion';
-import { useEffect, useState, useRef } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useLandingPageContext } from '@/contexts/landing-page-context';
 import { highlightPresets, highlightText } from '@/lib/text-utils';
+import { motion } from 'framer-motion';
+import { HeartHandshake, Lightbulb, Terminal } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function About() {
   const [boxHeight, setBoxHeight] = useState<number>(500);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
+
+  const categories = ['frontend', 'backend', 'language', 'framework', 'database', 'tools'];
+  const [selectedCategory, setSelectedCategory] = useState<string>('frontend');
 
   const { user, skills } = useLandingPageContext();
 
@@ -62,7 +65,7 @@ export default function About() {
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         />
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -109,8 +112,8 @@ export default function About() {
             transition={{ duration: 0.8 }}
           >
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="cyan">
-              <div className="p-8 flex flex-col justify-evenly gap-3 " ref={leftRef} style={{ minHeight: boxHeight }}>
-                <h3 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white flex items-center gap-3">
+              <div className="p-4 md:p-8 flex flex-col justify-evenly gap-3 text-justify " ref={leftRef} style={{ minHeight: boxHeight }}>
+                <h3 className="text-xl md:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white flex items-center gap-3">
                   <motion.div
                     animate={{ rotate: [0, 360] }}
                     transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
@@ -191,9 +194,29 @@ export default function About() {
                   </motion.div>
                   Skills & Technologies
                 </h3>
-                <Tabs defaultValue="frontend" className="w-full">
-                  <TabsList className="grid w-full grid-cols-6 bg-black/40 rounded-lg p-1 mb-4 border border-white/10 gap-1 ">
-                    {['frontend', 'backend', 'language', 'framework', 'database', 'tools'].map((category, index) => (
+                <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
+                  {/* Dropdown for mobile */}
+                  <div className="block md:hidden mb-4 relative">
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger className="w-full rounded-lg bg-neutral-900 border border-neutral-700 shadow-lg focus:ring-2 focus:ring-cyan-400/60 transition-all duration-200 px-4 py-2.5 text-white/90 capitalize">
+                        <SelectValue className="capitalize" />
+                      </SelectTrigger>
+                      <SelectContent className="w-full rounded-lg bg-neutral-900 border border-neutral-700 mt-2 p-1 shadow-xl">
+                        {categories.map((category: string) => (
+                          <SelectItem
+                            key={category}
+                            value={category}
+                            className="capitalize rounded-md px-4 py-2 transition-all duration-150 cursor-pointer text-white/90 data-[state=checked]:bg-cyan-600 data-[state=checked]:text-white data-[state=checked]:font-semibold hover:bg-neutral-700 hover:text-white focus:bg-cyan-700/80"
+                          >
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {/* Tab bar for desktop */}
+                  <TabsList className="hidden md:grid w-full grid-cols-6 bg-black/40 rounded-lg p-1 mb-4 border border-white/10 gap-1 ">
+                    {categories.map((category: string, index: number) => (
                       <TabsTrigger
                         key={category}
                         value={category}
@@ -204,11 +227,11 @@ export default function About() {
                     ))}
                   </TabsList>
 
-                  {['frontend', 'backend', 'language', 'framework', 'database', 'tools'].map(category => (
+                  {categories.map((category: string) => (
                     <TabsContent key={category} value={category} className="space-y-5 pt-2">
                       {skills
-                        .filter(skill => skill.category === category)
-                        .map((skill, index) => (
+                        .filter((skill: any) => skill.category === category)
+                        .map((skill: any, index: number) => (
                           <motion.div
                             key={skill.name}
                             initial={{ opacity: 0, x: -20 }}
