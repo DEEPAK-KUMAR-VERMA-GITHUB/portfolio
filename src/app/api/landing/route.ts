@@ -31,7 +31,6 @@ export async function GET() {
     const projects = await prisma.project.findMany({
       where: {
         status: 'published',
-        featured: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -56,14 +55,14 @@ export async function GET() {
     // Fetch achievements
     const achievements = await prisma.achievement.findMany({
       orderBy: {
-        createdAt: 'desc',
+        date: 'desc',
       },
     });
 
     // fetch certifications
     const certifications = await prisma.certification.findMany({
       orderBy: {
-        createdAt: 'desc',
+        date: 'desc',
       },
     });
 

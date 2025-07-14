@@ -42,7 +42,7 @@ const availableTechnologies = [
   { id: 'node', label: 'Node.js' },
 ];
 
-const projectCategories = ['Web Application', 'Mobile App', 'Desktop App', 'API', 'Library', 'Other'];
+const projectCategories = ['fullstack', 'frontend', 'backend', 'mobile', 'desktop', 'api', 'other'];
 
 export default function ProjectDialog({
   project,
@@ -205,6 +205,7 @@ export default function ProjectDialog({
                           label: availableTechnologies.find(t => t.id === tag)?.label || tag,
                         }))}
                         onChange={tags => field.onChange(tags.map(tag => tag.id))}
+                        allowCustomTags
                       />
                     </FormControl>
                     <FormMessage />

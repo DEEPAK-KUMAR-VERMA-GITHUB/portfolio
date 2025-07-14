@@ -7,9 +7,10 @@ interface TagSelectorProps {
   availableTags: Tag[];
   selectedTags: Tag[];
   onChange: (tags: Tag[]) => void;
+  allowCustomTags?: boolean;
 }
 
-export function TagSelector({ availableTags, selectedTags, onChange }: TagSelectorProps) {
+export function TagSelector({ availableTags, selectedTags, onChange, allowCustomTags = false }: TagSelectorProps) {
   const [inputValue, setInputValue] = useState('');
 
   const handleSelect = (tag: Tag) => {
@@ -30,10 +31,35 @@ export function TagSelector({ availableTags, selectedTags, onChange }: TagSelect
     <div className="space-y-2">
       <input
         type="text"
-        placeholder="Search tags..."
+        placeholder={allowCustomTags ? 'Add new tag...' : 'Search tags...'}
         className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
         value={inputValue}
         onChange={e => setInputValue(e.target.value)}
+        onKeyDown={e => {
+          if ((e.key === 'Enter' || e.key === ',') && inputValue.trim()) {
+            e.preventDefault();
+            const rawTags = inputValue.split(',').map(t => t.trim()).filter(Boolean);
+            const newTags: Tag[] = [];
+            rawTags.forEach(val => {
+              // Try to find in availableTags
+              const found = availableTags.find(tag => tag.label.toLowerCase() === val.toLowerCase());
+              if (found && !selectedTags.some(t => t.id === found.id) && !newTags.some(t => t.id === found.id)) {
+                newTags.push(found);
+              } else if (
+                allowCustomTags &&
+                !selectedTags.some(t => t.label.toLowerCase() === val.toLowerCase()) &&
+                !newTags.some(t => t.label.toLowerCase() === val.toLowerCase())
+              ) {
+                // Add as custom tag
+                newTags.push({ id: val, label: val });
+              }
+            });
+            if (newTags.length > 0) {
+              onChange([...selectedTags, ...newTags]);
+            }
+            setInputValue('');
+          }
+        }}
       />
 
       {filtered.length > 0 && (

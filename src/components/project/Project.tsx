@@ -96,9 +96,9 @@ export default function Project() {
                   className="h-full grid grid-flow-row overflow-hidden transform transition-all duration-500 group"
                   glowColor="cyan"
                 >
-                  <div className="relative overflow-hidden   ">
+                  <div className="relative overflow-hidden">
                     <motion.img
-                      src={project.image}
+                      src={project.image || '@/no-image.png'}
                       alt={project.title}
                       className="w-full h-52 object-cover aspect-video "
                       whileHover={{ scale: 1.1 }}
@@ -108,7 +108,7 @@ export default function Project() {
 
                     {project.featured && (
                       <motion.div
-                        className="absolute top-3 right-3"
+                        className="absolute top-3 right-3 rounded-full"
                         animate={{
                           boxShadow: [
                             '0 0 0 rgba(255, 215, 0, 0)',
@@ -133,7 +133,7 @@ export default function Project() {
 
                   <div className="p-6 flex flex-col ">
                     <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
-                    <p className="text-white/70 text-sm mb-4 flex-grow text-justify line-clamp-4 ">
+                    <p className="text-white/70 text-sm mb-4 flex-grow text-justify line-clamp-8 ">
                       {project.description}
                     </p>
 
@@ -154,28 +154,32 @@ export default function Project() {
                     </div>
 
                     <div className="flex gap-3">
-                      <motion.a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 px-4 py-2 bg-black/40 border border-white/20 text-white text-sm font-medium rounded-lg hover:border-cyan-400/50 transition-all duration-300 flex items-center justify-center gap-2"
-                        whileHover={{ scale: 1.02, y: -1 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <Github className="w-4 h-4" />
-                        Code
-                      </motion.a>
-                      <motion.a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/50 text-white text-sm font-medium rounded-lg hover:from-cyan-500/30 hover:to-purple-500/30 transition-all duration-300 flex items-center justify-center gap-2"
-                        whileHover={{ scale: 1.02, y: -1 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Live Demo
-                      </motion.a>
+                      {project.githubUrl && (
+                        <motion.a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 px-4 py-2 bg-black/40 border border-white/20 text-white text-sm font-medium rounded-lg hover:border-cyan-400/50 transition-all duration-300 flex items-center justify-center gap-2"
+                          whileHover={{ scale: 1.02, y: -1 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <Github className="w-4 h-4" />
+                          Code
+                        </motion.a>
+                      )}
+                      {project.liveUrl && (
+                        <motion.a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/50 text-white text-sm font-medium rounded-lg hover:from-cyan-500/30 hover:to-purple-500/30 transition-all duration-300 flex items-center justify-center gap-2"
+                          whileHover={{ scale: 1.02, y: -1 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Live Demo
+                        </motion.a>
+                      )}
                     </div>
                   </div>
                 </NeonBorder>

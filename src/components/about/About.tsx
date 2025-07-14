@@ -29,7 +29,9 @@ export default function About() {
       setBoxHeight(maxHeight);
     }
   };
+
   useEffect(() => {
+    calculateHeight();
     window.addEventListener('resize', calculateHeight);
 
     return () => {
@@ -112,7 +114,11 @@ export default function About() {
             transition={{ duration: 0.8 }}
           >
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="cyan">
-              <div className="p-4 md:p-8 flex flex-col justify-evenly gap-3 text-justify " ref={leftRef} style={{ minHeight: boxHeight }}>
+              <div
+                className="p-4 md:p-8 flex flex-col justify-evenly gap-3 text-justify "
+                ref={leftRef}
+                style={{ minHeight: boxHeight }}
+              >
                 <h3 className="text-xl md:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-white flex items-center gap-3">
                   <motion.div
                     animate={{ rotate: [0, 360] }}
@@ -127,12 +133,33 @@ export default function About() {
                   highlightText({
                     text: user.journey,
                     highlights: {
-                      'web development': 'text-cyan-400 font-semibold',
-                      "Master's degree": 'text-purple-400 font-semibold',
-                      'full-stack developer': 'text-pink-400 font-semibold',
-                      'continuous learning': 'text-pink-400 font-semibold',
-                      'impactful digital solutions': 'text-cyan-400 font-semibold',
-                      'real-world problems': 'text-purple-400 font-semibold',
+                      'tech enthusiast': 'text-cyan-400 font-semibold',
+                      'curiosity and discipline': 'text-purple-400 font-semibold',
+                      'Ramgarh': 'text-pink-400 font-semibold',
+                      'Matriculation': 'text-purple-400 font-semibold',
+                      'BCA': 'text-cyan-400 font-semibold',
+                      'Gold Medalist': 'text-pink-400 font-semibold',
+                      'C++': 'text-purple-400 font-semibold',
+                      'Python': 'text-cyan-400 font-semibold',
+                      'Java': 'text-purple-400 font-semibold',
+                      'SQL': 'text-cyan-400 font-semibold',
+                      'OS,': 'text-purple-400 font-semibold',
+                      'Full-Stack Web Development': 'text-pink-400 font-semibold',
+                      'HackerRank': 'text-cyan-400 font-semibold',
+                      'C,': 'text-purple-400 font-semibold',
+                      'JavaScript': 'text-cyan-400 font-semibold',
+                      'Problem Solving': 'text-pink-400 font-semibold',
+                      'MCA': 'text-purple-400 font-semibold',
+                      'Gopal Narayan Singh University': 'text-cyan-400 font-semibold',
+                      'CKD Prediction System': 'text-pink-400 font-semibold',
+                      'LMS platform': 'text-cyan-400 font-semibold',
+                      'UGC NET': 'text-purple-400 font-semibold',
+                      'GATE CS 2025': 'text-cyan-400 font-semibold',
+                      'Microsoft (AICTE)': 'text-pink-400 font-semibold',
+                      'AI internship': 'text-purple-400 font-semibold',
+                      'NAAC': 'text-cyan-400 font-semibold',
+                      'IQAC': 'text-purple-400 font-semibold',
+                      'Micro Teaching': 'text-cyan-400 font-semibold',
                     },
                   })
                 ) : (

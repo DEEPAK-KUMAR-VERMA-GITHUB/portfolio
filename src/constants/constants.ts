@@ -110,7 +110,6 @@ export const achievements: Achievement[] = [
     icon: '🥇',
     description: 'Best final year project in computer applications',
   },
-  
 ];
 
 export const timeline: TimelineItem[] = [
@@ -157,6 +156,10 @@ export const categories = [
   { id: 'fullstack', label: 'Full Stack' },
   { id: 'frontend', label: 'Frontend' },
   { id: 'backend', label: 'Backend' },
+  { id: 'api', label: 'API' },
+  { id: 'other', label: 'Other' },
+  { id: 'mobile', label: 'Mobile' },
+  { id: 'desktop', label: 'Desktop' },
 ];
 
 export const certifications: Certification[] = [

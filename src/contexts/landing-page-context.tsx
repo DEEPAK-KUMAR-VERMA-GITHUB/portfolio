@@ -62,7 +62,7 @@ type Resume = {
   id: string;
   name: string;
   type: string;
-  url: string;
+  fileUrl: string;
   isDefault: boolean;
 };
 

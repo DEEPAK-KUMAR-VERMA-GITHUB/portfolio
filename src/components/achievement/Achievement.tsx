@@ -45,7 +45,7 @@ export default function Achievement() {
           </motion.p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex flex-wrap gap-6 justify-center">
           {achievements.map((achievement, index) => (
             <motion.div
               key={achievement.title}
@@ -55,7 +55,7 @@ export default function Achievement() {
               viewport={{ once: true }}
               whileHover={{ y: -10, rotateY: 5 }}
             >
-              <NeonBorder className="h-full grid grid-cols-1 transform transition-all duration-500" glowColor="yellow">
+              <NeonBorder className="h-full w-96 grid grid-cols-1 transform transition-all duration-500" glowColor="yellow">
                 <div className="p-6 text-center h-full flex flex-col justify-between">
                   <div className="pb-4">
                     <motion.div

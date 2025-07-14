@@ -4,18 +4,27 @@ import NeonBorder from '@/components/hero/NeonBorder';
 import { useLandingPageContext } from '@/contexts/landing-page-context';
 import { motion } from 'framer-motion';
 import { Briefcase, Code, Download, GraduationCap } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Resume() {
   const { resume, timeline } = useLandingPageContext();
-  const downloadResume = () => {
+  const downloadResume = async () => {
     if (!resume) return;
-    const link = document.createElement('a');
-    link.href = resume.fileUrl as string;
-    link.setAttribute('download', `${resume.title}.pdf`);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      const response = await fetch(resume.fileUrl as string);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Resume-Deepak-Kumar-Verma.pdf'; // Guaranteed .pdf extension
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      toast.success('Resume downloaded successfully');
+    } catch (error) {
+      toast.error('Failed to download resume');
+    }
   };
 
   return (
