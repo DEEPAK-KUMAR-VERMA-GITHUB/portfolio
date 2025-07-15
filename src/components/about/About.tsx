@@ -16,7 +16,7 @@ export default function About() {
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
 
-  const categories = ['frontend', 'backend', 'language', 'framework', 'database', 'tools'];
+  const categories = ['frontend', 'backend', 'language', 'database', 'tools', 'others'];
   const [selectedCategory, setSelectedCategory] = useState<string>('frontend');
 
   const { user, skills } = useLandingPageContext();
@@ -135,21 +135,21 @@ export default function About() {
                     highlights: {
                       'tech enthusiast': 'text-cyan-400 font-semibold',
                       'curiosity and discipline': 'text-purple-400 font-semibold',
-                      'Ramgarh': 'text-pink-400 font-semibold',
-                      'Matriculation': 'text-purple-400 font-semibold',
-                      'BCA': 'text-cyan-400 font-semibold',
+                      Ramgarh: 'text-pink-400 font-semibold',
+                      Matriculation: 'text-purple-400 font-semibold',
+                      BCA: 'text-cyan-400 font-semibold',
                       'Gold Medalist': 'text-pink-400 font-semibold',
                       'C++': 'text-purple-400 font-semibold',
-                      'Python': 'text-cyan-400 font-semibold',
-                      'Java': 'text-purple-400 font-semibold',
-                      'SQL': 'text-cyan-400 font-semibold',
+                      Python: 'text-cyan-400 font-semibold',
+                      Java: 'text-purple-400 font-semibold',
+                      SQL: 'text-cyan-400 font-semibold',
                       'OS,': 'text-purple-400 font-semibold',
                       'Full-Stack Web Development': 'text-pink-400 font-semibold',
-                      'HackerRank': 'text-cyan-400 font-semibold',
+                      HackerRank: 'text-cyan-400 font-semibold',
                       'C,': 'text-purple-400 font-semibold',
-                      'JavaScript': 'text-cyan-400 font-semibold',
+                      JavaScript: 'text-cyan-400 font-semibold',
                       'Problem Solving': 'text-pink-400 font-semibold',
-                      'MCA': 'text-purple-400 font-semibold',
+                      MCA: 'text-purple-400 font-semibold',
                       'Gopal Narayan Singh University': 'text-cyan-400 font-semibold',
                       'CKD Prediction System': 'text-pink-400 font-semibold',
                       'LMS platform': 'text-cyan-400 font-semibold',
@@ -157,8 +157,8 @@ export default function About() {
                       'GATE CS 2025': 'text-cyan-400 font-semibold',
                       'Microsoft (AICTE)': 'text-pink-400 font-semibold',
                       'AI internship': 'text-purple-400 font-semibold',
-                      'NAAC': 'text-cyan-400 font-semibold',
-                      'IQAC': 'text-purple-400 font-semibold',
+                      NAAC: 'text-cyan-400 font-semibold',
+                      IQAC: 'text-purple-400 font-semibold',
                       'Micro Teaching': 'text-cyan-400 font-semibold',
                     },
                   })
@@ -208,7 +208,7 @@ export default function About() {
             viewport={{ once: true }}
           >
             <NeonBorder className="transform hover:scale-[1.02] transition-transform duration-300" glowColor="purple">
-              <div className="p-8 flex flex-col justify-evenly " ref={rightRef} style={{ minHeight: boxHeight }}>
+              <div className="p-8 flex flex-col " ref={rightRef} style={{ minHeight: boxHeight }}>
                 <h3 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-white flex items-center gap-3">
                   <motion.div
                     animate={{
